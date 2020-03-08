@@ -1,36 +1,115 @@
-import React from 'react';
-import { Box, Button, Container, Grid, TextField, Typography, positions } from '@material-ui/core/';
+import React, { useState } from 'react';
+import { Avatar, Button, Container, TextField, Typography, CssBaseline, Paper } from '@material-ui/core/';
 import { makeStyles } from '@material-ui/core/styles';
-import '../css/login.css';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
 const useStyles = makeStyles(theme => ({
-    root: {
-      flexGrow: 1,
+    text: {
+        padding: theme.spacing(1),
+        textAlign: 'center',
+        color: theme.palette.text.secondary,
+        width: '50%',
+        margin: '0 25%',
     },
-    paper: {
-      padding: theme.spacing(2),
-      textAlign: 'center',
-      color: theme.palette.text.secondary,
+    box: {
+        backgroundColor: 'whitesmoke',
+        borderRadius: '5px',
+        width: '50%',
+        marginTop: theme.spacing(8),
+        marginLeft: '25%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        alignSelf: 'center',
     },
-  }));
+    avatar: {
+        margin: theme.spacing(1),
+        backgroundColor: theme.palette.secondary.main,
+        border: 'solid',
+        borderColor: 'lightgrey',
+        borderWidth: '1px',
+    },
+    loginButton: {
+        color: 'white',
+        border: 'solid',
+        borderColor: 'black',
+        borderWidth: '1px',
+        margin: theme.spacing(3, 0, 2),
+    },
+    loginHeader: {
+        width: '40%',
+        color: 'black',
+        textAlign: 'center',
+        alignContent: 'center',
+    },
+    form: {
+        width: '100%', // Fix IE 11 issue.
+        marginTop: theme.spacing(1),
+    },
+}));
 
 function Login() {
     const classes = useStyles();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const emailInput = event => {
+        setEmail(event.target.value);
+      };
+    const passwordInput = event => {
+    setPassword(event.target.value);
+    };
+    const login = event => {
+        console.log('Email: ' + email + " Password: " + password)
+    }
+
     return (
-        <Container maxWidth='lg' style={{ backgroundColor: '#cfe8fc', height: '100vh' }}>
-            <Box id="loginBox">
-                <Grid container spacing={1}>
-                    <Grid item xs={12}>
-                        <TextField id="email" label="Email" />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <TextField id="password" label="Password" />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <Button id="subCreds">Login</Button>
-                    </Grid>
-                </Grid>
-            </Box>
+        <Container maxWidth='lg'>
+            <CssBaseline />
+            <Paper className={classes.box}>
+                <Avatar className={classes.avatar}>
+                    <LockOutlinedIcon />
+                </Avatar>
+                <Typography className={classes.loginHeader} variant='h2'>Sign In</Typography>
+                <form className={classes.form} noValidate>
+                    <TextField
+                        className={classes.text}
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="email"
+                        label="Email Address"
+                        name="email"
+                        autoComplete="email"
+                        value={email}
+                        onChange={emailInput}
+                        autoFocus
+                    />
+                    <TextField
+                        className={classes.text}
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        name="password"
+                        label="Password"
+                        value={password}
+                        onChange={passwordInput}
+                        type="password"
+                        id="password"
+                        autoComplete="current-password"
+                    />
+                </form>
+                <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    className={classes.loginButton}
+                    onClick={login}
+                >
+                    Sign In
+                </Button>
+            </Paper>
         </Container>
     )
 }
