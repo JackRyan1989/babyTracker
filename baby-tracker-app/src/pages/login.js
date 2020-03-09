@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { Stitch, RemoteMongoClient, UserPasswordCredential } from "mongodb-stitch-browser-sdk";
 
-
+// Styling:
 const useStyles = makeStyles(theme => ({
     text: {
         padding: theme.spacing(1),
@@ -51,34 +51,43 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function Login() {
-    // const [client, setClient] = useState('');
-    // const [app, setApp] = useState('');
-    // const [db, setDB] = useState('');
-    // Stitch.initializeDefaultAppClient("baldytracker-slqit").then(client => {
-    //     setClient(client)
-
-    //     // Define MongoDB Service Client
-    //     // Used to log in and communicate with Stitch
-    //     const mongodb = client.getServiceClient(
-    //         RemoteMongoClient.factory,
-    //         "mongodb-atlas"
-    //     );
-    //     setApp(Stitch.defaultAppClient);
-    //     setDB(mongodb.db("babytracker"));
-    // });
-
+    //Initial variable creation:
+    const [app, setApp] = useState('');
+    const [db, setDB] = useState('');
+    const [loginError, setError] = useState('');
     const classes = useStyles();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+
+    //Setup Mongo Stitch App:
+    useEffect(() => {
+        const client = Stitch.initializeDefaultAppClient("baldytracker-slqit");
+        const mongodb = client.getServiceClient(
+            RemoteMongoClient.factory,
+            "mongodb-atlas"
+        );
+        setDB(mongodb.db('babytracker'));
+        setApp(Stitch.defaultAppClient);
+    }, []);
+
+    //Functions:
     const emailInput = event => {
         setEmail(event.target.value);
-      };
-    const passwordInput = event => {
-    setPassword(event.target.value);
     };
-
+    const passwordInput = event => {
+        setPassword(event.target.value);
+    };
     const login = event => {
-        console.log('Email: ' + email + " Password: " + password)
+        const credential = new UserPasswordCredential(email, password);
+        console.log(credential);
+        app.auth.loginWithCredential(credential)
+            .then(authedUser => {
+                console.log(`successfully logged in with id: ${authedUser.id}`)
+            })
+            .catch(err => {
+                console.error(`login failed with error: ${err}`)
+                setError(err);
+            })
     }
 
     return (
