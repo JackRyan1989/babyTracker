@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Avatar, Button, Container, TextField, Typography, CssBaseline, Paper } from '@material-ui/core/';
 import { makeStyles } from '@material-ui/core/styles';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import { Stitch, RemoteMongoClient, UserPasswordCredential } from "mongodb-stitch-browser-sdk";
+
 
 const useStyles = makeStyles(theme => ({
     text: {
@@ -49,6 +51,22 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function Login() {
+    // const [client, setClient] = useState('');
+    // const [app, setApp] = useState('');
+    // const [db, setDB] = useState('');
+    // Stitch.initializeDefaultAppClient("baldytracker-slqit").then(client => {
+    //     setClient(client)
+
+    //     // Define MongoDB Service Client
+    //     // Used to log in and communicate with Stitch
+    //     const mongodb = client.getServiceClient(
+    //         RemoteMongoClient.factory,
+    //         "mongodb-atlas"
+    //     );
+    //     setApp(Stitch.defaultAppClient);
+    //     setDB(mongodb.db("babytracker"));
+    // });
+
     const classes = useStyles();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -58,6 +76,7 @@ function Login() {
     const passwordInput = event => {
     setPassword(event.target.value);
     };
+
     const login = event => {
         console.log('Email: ' + email + " Password: " + password)
     }
