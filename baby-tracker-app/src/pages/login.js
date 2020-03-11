@@ -64,8 +64,7 @@ const useStyles = makeStyles(theme => ({
 
 function Login() {
     //Initial variable creation:
-    const [app, setApp] = useState('');
-    const [db, setDB] = useState('');
+    const [users, setUsers] = useState('');
     const [loginError, setError] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -75,14 +74,13 @@ function Login() {
     //Setup Mongo Stitch App:
     useEffect(() => {
         const client = Stitch.initializeDefaultAppClient("baldytracker-vlawr");
+        console.log(client.auth);
         const mongodb = client.getServiceClient(
             RemoteMongoClient.factory,
             "mongodb-atlas"
         );
-        const db = mongodb.db('baldyData');
-        setDB(db);
-        const app = Stitch.defaultAppClient;
-        setApp(app);
+        const users = mongodb.db('baldyData').collection('userCreds');
+        setUsers(users);
     }, []);
 
     //Functions:
@@ -93,7 +91,7 @@ function Login() {
         setPassword(event.target.value);
     };
     const login = () => {
-        console.log(email, password);
+        const app = Stitch.defaultAppClient;
         const credential = new UserPasswordCredential(email, password);
         app.auth.loginWithCredential(credential)
             .then(authedUser => {
