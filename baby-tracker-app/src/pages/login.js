@@ -11,8 +11,18 @@ const useStyles = makeStyles(theme => ({
         padding: theme.spacing(1),
         textAlign: 'center',
         color: theme.palette.text.secondary,
-        width: '50%',
-        margin: '0 25%',
+        [theme.breakpoints.down('sm')]: {
+            width: '85%',
+            margin: '0 10%',
+        },
+        [theme.breakpoints.up('md')]: {
+            width: '50%',
+            margin: '0 25%',
+        },
+        [theme.breakpoints.up('lg')]: {
+            width: '50%',
+            margin: '0 25%',
+        },
     },
     box: {
         backgroundColor: 'whitesmoke',
@@ -44,6 +54,18 @@ const useStyles = makeStyles(theme => ({
         color: 'black',
         textAlign: 'center',
         alignContent: 'center',
+        [theme.breakpoints.down('sm')]: {
+            fontSize: '22px',
+        },
+        [theme.breakpoints.up('md')]: {
+            fontSize: '36px',
+        },
+        [theme.breakpoints.up('lg')]: {
+            fontSize: '52px',
+        },
+    },
+    link: {
+        padding: '5%',
     },
     errorHeader: {
         width: '40%',
@@ -84,11 +106,11 @@ function Login() {
     useEffect(() => {
         // Initialize Stitch App Client
         const client = Stitch.initializeDefaultAppClient("baldytracker-vlawr");
-        
+
         const mongodb = client.getServiceClient(
             RemoteMongoClient.factory,
             "mongodb-atlas"
-            );
+        );
         const users = mongodb.db('baldyData').collection('userCreds');
         setClient(client);
         setDB(users);
@@ -167,12 +189,14 @@ function Login() {
                     >
                         Sign In
                 </Button>
-                        <Link to={{
-                            pathname: '/signup',
-                            client,
-                            db,
-                            mongodbClient,
-                        }} activeClassName="active">First time user? Click here to Sign Up</Link>
+                    <Link to={{
+                        pathname: '/signup',
+                        client,
+                        db,
+                        mongodbClient,
+                    }} activeClassName="active"
+                    className={classes.link}
+                    >First time user? Click here to Sign Up</Link>
                 </Paper>
             </Container>
         )

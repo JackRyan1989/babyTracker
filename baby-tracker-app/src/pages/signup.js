@@ -11,8 +11,18 @@ const useStyles = makeStyles(theme => ({
         padding: theme.spacing(1),
         textAlign: 'center',
         color: theme.palette.text.secondary,
-        width: '50%',
-        margin: '0 25%',
+        [theme.breakpoints.down('sm')]: {
+            width: '85%',
+            margin: '0 10%',
+        },
+        [theme.breakpoints.up('md')]: {
+            width: '50%',
+            margin: '0 25%',
+        },
+        [theme.breakpoints.up('lg')]: {
+            width: '50%',
+            margin: '0 25%',
+        },
     },
     box: {
         backgroundColor: 'whitesmoke',
@@ -44,6 +54,15 @@ const useStyles = makeStyles(theme => ({
         color: 'black',
         textAlign: 'center',
         alignContent: 'center',
+        [theme.breakpoints.down('sm')]: {
+            fontSize: '22px',
+        },
+        [theme.breakpoints.up('md')]: {
+            fontSize: '36px',
+        },
+        [theme.breakpoints.up('lg')]: {
+            fontSize: '52px',
+        },
     },
     errorHeader: {
         width: '40%',
