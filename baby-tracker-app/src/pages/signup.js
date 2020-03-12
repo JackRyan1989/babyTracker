@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import { Avatar, Button, Container, TextField, Typography, CssBaseline, Paper } from '@material-ui/core/';
 import { makeStyles } from '@material-ui/core/styles';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import { Stitch, RemoteMongoClient, UserPasswordCredential } from "mongodb-stitch-browser-sdk";
+import { Stitch, UserPasswordCredential, UserPasswordAuthProviderClient } from "mongodb-stitch-browser-sdk";
 
 // Styling:
 const useStyles = makeStyles(theme => ({
@@ -60,21 +60,16 @@ const useStyles = makeStyles(theme => ({
         width: '100%', // Fix IE 11 issue.
         marginTop: theme.spacing(1),
     },
-    signupButton: {
-        color: 'white',
-        border: 'solid',
-        borderColor: 'black',
-        borderWidth: '1px',
-        margin: theme.spacing(1),
-    },
 }));
 
-function Login() {
+function SignUp(props) {
     //Initial variable creation:
     const [client, setClient] = useState('');
-    const [mongodbClient, setMongoDBClient] = useState('');
+    const [mongdbClient, setMongoDBClient] = useState('');
     const [db, setDB] = useState('');
-    const [loginError, setError] = useState('');
+    const [loginError, setLoginError] = useState(false);
+    const [signupError, setsignupError] = useState(false);
+    const [error, setError] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [redirect, setRedirect] = useState(false);
@@ -82,18 +77,11 @@ function Login() {
 
     //Setup Mongo Stitch App:
     useEffect(() => {
-        // Initialize Stitch App Client
-        const client = Stitch.initializeDefaultAppClient("baldytracker-vlawr");
-        
-        const mongodb = client.getServiceClient(
-            RemoteMongoClient.factory,
-            "mongodb-atlas"
-            );
-        const users = mongodb.db('baldyData').collection('userCreds');
-        setClient(client);
-        setDB(users);
-        setMongoDBClient(mongodb);
-    }, []);
+        console.log(props.location);
+        setClient(props.location.client);
+        setMongoDBClient(props.location.mongdbClient);
+        setDB(props.location.db);
+    }, [props.location]);
 
     //Functions:
     const emailInput = event => {
@@ -108,13 +96,40 @@ function Login() {
         app.auth.loginWithCredential(credential)
             .then(authedUser => {
                 console.log(`successfully logged in with id: ${authedUser.id}`)
-                setRedirect(true);
+                createUser(authedUser.id);
             })
             .catch(err => {
                 console.error(`login failed with error: ${err}`)
-                setError(err);
+                setLoginError(err);
             })
     }
+    const signIn = () => {
+        const emailPasswordClient = client.auth.getProviderClient(UserPasswordAuthProviderClient.factory);
+        emailPasswordClient.registerWithEmail(email, password)
+            .then(() => {
+                login()
+            })
+            .catch(err => {
+                setsignupError(true); 
+                setError(err);  
+            });
+    }
+    const createUser = (id) => {
+        db
+            .insertOne({
+                owner_id: id,
+                email: email,
+                password: password,
+            })
+            .then(() =>{
+                setRedirect(true);
+            })
+            .catch((err)=>{
+                console.log('Create User Error ' + err)
+                setsignupError(true); 
+                setError(err);  
+            });
+    };
 
     if (redirect) {
         return <Redirect to={{ pathname: '/add', state: { test: 'test' } }} />
@@ -126,7 +141,7 @@ function Login() {
                     <Avatar className={classes.avatar}>
                         <LockOutlinedIcon />
                     </Avatar>
-                    <Typography className={classes.loginHeader} variant='h2'>Sign In</Typography>
+                    <Typography className={classes.loginHeader} variant='h3'>New User Sign In</Typography>
                     <form className={classes.form} noValidate>
                         <TextField
                             className={classes.text}
@@ -157,26 +172,20 @@ function Login() {
                             autoComplete="current-password"
                         />
                     </form>
-                    {loginError ? <Typography className={classes.errorHeader}>Invalid Credentials</Typography> : null}
+        {signupError ? <Typography className={classes.errorHeader}>{error.message}</Typography> : null}
                     <Button
                         type="submit"
                         variant="contained"
                         color="primary"
                         className={classes.loginButton}
-                        onClick={login}
+                        onClick={signIn}
                     >
-                        Sign In
+                        Create User
                 </Button>
-                        <Link to={{
-                            pathname: '/signup',
-                            client,
-                            db,
-                            mongodbClient,
-                        }} activeClassName="active">First time user? Click here to Sign Up</Link>
                 </Paper>
             </Container>
         )
     }
 }
 
-export default Login;
+export default SignUp;
