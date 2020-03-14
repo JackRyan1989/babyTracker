@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
+import { Redirect } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
 import AppBar from '@material-ui/core/AppBar';
 import PropTypes from 'prop-types';
 import Toolbar from '@material-ui/core/Toolbar';
-import Button from '@material-ui/core/Button';
 import useScrollTrigger from '@material-ui/core/useScrollTrigger';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -13,23 +13,23 @@ import { withStyles } from '@material-ui/core/styles';
 
 const StyledMenu = withStyles({
     paper: {
-      border: '1px solid #d3d4d5',
+        border: '1px solid #d3d4d5',
     },
-  })(props => (
+})(props => (
     <Menu
-      elevation={0}
-      getContentAnchorEl={null}
-      anchorOrigin={{
-        vertical: 'bottom',
-        horizontal: 'center',
-      }}
-      transformOrigin={{
-        vertical: 'top',
-        horizontal: 'center',
-      }}
-      {...props}
+        elevation={0}
+        getContentAnchorEl={null}
+        anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'center',
+        }}
+        transformOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+        }}
+        {...props}
     />
-  ));
+));
 
 function ElevationScroll(props) {
     const { children } = props;
@@ -50,20 +50,27 @@ ElevationScroll.propTypes = {
 
 export default function HeaderHideScroll(props) {
     const [anchorEl, setAnchorEl] = useState(null);
+    const [redirect, setRedirect] = useState(false);
     const handleClick = event => {
-        console.log('clicked');
         setAnchorEl(event.currentTarget);
     };
     const handleClose = () => {
         setAnchorEl(null);
     };
+    const handleLogout = (event) => {
+        setAnchorEl(event.currentTarget)
+        setRedirect(true)
+    };
 
-    return (
-        <ElevationScroll {...props}>
-            <AppBar>
-                <Toolbar>
-                    <IconButton edge="start" color="inherit" aria-label="menu">
-                        <MenuIcon onClick={handleClick} />
+    if (redirect) {
+        return <Redirect to={{ pathname: '/logout'}} />
+    } else {
+        return (
+            <ElevationScroll {...props}>
+                <AppBar>
+                    <Toolbar>
+                        <IconButton edge="start" color="inherit" aria-label="menu">
+                            <MenuIcon onClick={handleClick} />
                             <StyledMenu
                                 id="simple-menu"
                                 anchorEl={anchorEl}
@@ -71,14 +78,15 @@ export default function HeaderHideScroll(props) {
                                 open={Boolean(anchorEl)}
                                 onClose={handleClose}
                             >
-                                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                                <MenuItem onClick={handleClose}>My account</MenuItem>
-                                <MenuItem onClick={handleClose}>Logout</MenuItem>
+                                <MenuItem onClick={handleClose}>Placeholder</MenuItem>
+                                <MenuItem onClick={handleClose}>Placeholder 2</MenuItem>
+                                <MenuItem onClick={handleLogout}>Logout</MenuItem>
                             </StyledMenu>
-                    </IconButton>
-                    <Typography variant="h5" component="div">BabyTracker App</Typography>
-                </Toolbar>
-            </AppBar>
-        </ElevationScroll>
-    )
+                        </IconButton>
+                        <Typography variant="h5" component="div">BabyTracker App</Typography>
+                    </Toolbar>
+                </AppBar>
+            </ElevationScroll>
+        )
+    }
 }

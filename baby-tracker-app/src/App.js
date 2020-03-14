@@ -5,6 +5,7 @@ import help from './pages/help';
 import Login from './pages/login';
 import viewData from './pages/viewData';
 import Signup from './pages/signup';
+import Logout from './pages/logoutPage';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route exact path="/add" component={AddData}/>
         <Route exact path="/view" component={viewData}/>
         <Route exact path="/help" component={help}/>
+        <Route exact path="/logout" component={Logout}/>
       </Switch>
     </Router>
   );
