@@ -85,7 +85,7 @@ function SignUp(props) {
     //Initial variable creation:
     const [app, setApp] = useState('');
     const [client, setClient] = useState('');
-    const [mongdbClient, setMongoDBClient] = useState('');
+    const [mongodbClient, setMongoDBClient] = useState('');
     const [db, setDB] = useState('');
     const [loginError, setLoginError] = useState(false);
     const [signupError, setsignupError] = useState(false);
@@ -151,7 +151,7 @@ function SignUp(props) {
     };
 
     if (redirect) {
-        return <Redirect to={{ pathname: '/add', state: { test: 'test' } }} />
+        return <Redirect to={{ pathname: '/add', app, client, db, mongodbClient }} />
     } else {
         return (
             <Container maxWidth='lg'>

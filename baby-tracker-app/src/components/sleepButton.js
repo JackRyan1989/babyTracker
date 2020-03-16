@@ -20,9 +20,10 @@ const useStyles = makeStyles(theme => ({
 );
 
 
-export default function SleepButton() {
+export default function SleepButton(props) {
     const classes = useStyles();
-    const sleepTimeStamp = () => {
+    console.log(props.location);
+    const sleepTimeStamp = (props) => {
         console.log('Sleep time stamp clicked.');
     };
     return (

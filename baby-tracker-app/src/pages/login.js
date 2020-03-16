@@ -141,7 +141,7 @@ function Login() {
     }
 
     if (redirect) {
-        return <Redirect to={{ pathname: '/add', state: { test: 'test' } }} />
+        return <Redirect to={{ pathname: '/add', app, client, db, mongodbClient }} />
     } else {
         return (
             <Container maxWidth='lg'>

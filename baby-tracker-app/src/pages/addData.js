@@ -15,15 +15,14 @@ const useStyles = makeStyles(theme => ({
 );
 
 function AddData(props) {
-    console.log(props);
     const classes = useStyles();
     return (
         <>
             <HeaderHideScroll></HeaderHideScroll>
             <Grid container spacing={2}>
                 <Grid item xs={12} sm={2} md={3}></Grid>
-                <Grid item xs={12} sm={4} md={3} className={classes.button}><SleepButton /></Grid>
-                <Grid item xs={12} sm={4} md={3} className={classes.button}><WakeButton /></Grid>
+                <Grid item xs={12} sm={4} md={3} className={classes.button}><SleepButton {...props} /></Grid>
+                <Grid item xs={12} sm={4} md={3} className={classes.button}><WakeButton {...props} /></Grid>
                 <Grid item xs={12} sm={2} md={3}></Grid>
             </Grid>
         </>
