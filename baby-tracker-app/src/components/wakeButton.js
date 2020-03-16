@@ -19,10 +19,17 @@ const useStyles = makeStyles(theme => ({
 })
 );
 
-export default function WakeButton() {
+export default function WakeButton(props) {
     const classes = useStyles();
     const wakeTimeStamp = () => {
-        console.log('Wake time stamp clicked.');
+        const mongodb = props.location.mongodbClient;
+        const sleepData = mongodb.db("baldyData").collection("sleepData");
+        const userID = props.location.user;
+        sleepData.insertOne({
+            sleep: false,
+            current_date: new Date(),
+            user: userID
+        }).catch(console.error);
     };
     return (
         <>

@@ -22,10 +22,17 @@ const useStyles = makeStyles(theme => ({
 
 export default function SleepButton(props) {
     const classes = useStyles();
-    console.log(props.location);
-    const sleepTimeStamp = (props) => {
-        console.log('Sleep time stamp clicked.');
+    const sleepTimeStamp = () => {
+        const mongodb = props.location.mongodbClient;
+        const sleepData = mongodb.db("baldyData").collection("sleepData");
+        const userID = props.location.user;
+        sleepData.insertOne({
+            sleep: true,
+            current_date: new Date(),
+            user: userID
+        }).catch(console.error);
     };
+
     return (
         <>
             <Button

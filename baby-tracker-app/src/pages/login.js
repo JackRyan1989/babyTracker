@@ -101,6 +101,7 @@ function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [redirect, setRedirect] = useState(false);
+    const [user, setUserID] = useState('');
     const classes = useStyles();
 
     //Setup Mongo Stitch App:
@@ -132,6 +133,7 @@ function Login() {
         app.auth.loginWithCredential(credential)
             .then(authedUser => {
                 console.log(`successfully logged in with id: ${authedUser.id}`)
+                setUserID(authedUser.id);
                 setRedirect(true);
             })
             .catch(err => {
@@ -141,7 +143,7 @@ function Login() {
     }
 
     if (redirect) {
-        return <Redirect to={{ pathname: '/add', app, client, db, mongodbClient }} />
+        return <Redirect to={{ pathname: '/add', app, client, db, mongodbClient, user }} />
     } else {
         return (
             <Container maxWidth='lg'>
