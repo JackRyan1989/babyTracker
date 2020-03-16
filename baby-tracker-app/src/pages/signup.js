@@ -83,6 +83,7 @@ const useStyles = makeStyles(theme => ({
 
 function SignUp(props) {
     //Initial variable creation:
+    const [app, setApp] = useState('');
     const [client, setClient] = useState('');
     const [mongdbClient, setMongoDBClient] = useState('');
     const [db, setDB] = useState('');
@@ -96,10 +97,10 @@ function SignUp(props) {
 
     //Setup Mongo Stitch App:
     useEffect(() => {
-        console.log(props.location);
         setClient(props.location.client);
         setMongoDBClient(props.location.mongdbClient);
         setDB(props.location.db);
+        setApp(props.location.app);
     }, [props.location]);
 
     //Functions:
@@ -110,7 +111,6 @@ function SignUp(props) {
         setPassword(event.target.value);
     };
     const login = () => {
-        const app = Stitch.defaultAppClient;
         const credential = new UserPasswordCredential(email, password);
         app.auth.loginWithCredential(credential)
             .then(authedUser => {

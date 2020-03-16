@@ -93,6 +93,7 @@ const useStyles = makeStyles(theme => ({
 
 function Login() {
     //Initial variable creation:
+    const [app, setApp] = useState('');
     const [client, setClient] = useState('');
     const [mongodbClient, setMongoDBClient] = useState('');
     const [db, setDB] = useState('');
@@ -112,9 +113,11 @@ function Login() {
             "mongodb-atlas"
         );
         const users = mongodb.db('baldyData').collection('userCreds');
+        const app = Stitch.defaultAppClient;
         setClient(client);
         setDB(users);
         setMongoDBClient(mongodb);
+        setApp(app);
     }, []);
 
     //Functions:
@@ -125,7 +128,6 @@ function Login() {
         setPassword(event.target.value);
     };
     const login = () => {
-        const app = Stitch.defaultAppClient;
         const credential = new UserPasswordCredential(email, password);
         app.auth.loginWithCredential(credential)
             .then(authedUser => {
@@ -191,10 +193,11 @@ function Login() {
                 </Button>
                     <Link to={{
                         pathname: '/signup',
+                        app,
                         client,
                         db,
                         mongodbClient,
-                    }} activeClassName="active"
+                    }}
                     className={classes.link}
                     >First time user? Click here to Sign Up</Link>
                 </Paper>

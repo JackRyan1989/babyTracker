@@ -1,20 +1,31 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { Avatar, Button, Container, TextField, Typography, CssBaseline, Paper } from '@material-ui/core/';
+import { Grid } from '@material-ui/core/';
+import { makeStyles } from '@material-ui/core/styles';
 import HeaderHideScroll from '../components/headerHideScroll';
 import SleepButton from '../components/sleepButton';
 import WakeButton from '../components/wakeButton';
 
-function AddData(props) {
+const useStyles = makeStyles(theme => ({
+    button: {
+        marginTop: '15%',
+        padding: theme.spacing(1),
+        textAlign: 'center',
+    },
+})
+);
 
+function AddData(props) {
+    console.log(props);
+    const classes = useStyles();
     return (
         <>
-        <HeaderHideScroll></HeaderHideScroll>
-        <Typography>Hi</Typography>
-        <Typography>Hi</Typography>
-        <Typography>Hi</Typography>
-        <SleepButton />
-        <WakeButton />
+            <HeaderHideScroll></HeaderHideScroll>
+            <Grid container spacing={2}>
+                <Grid item xs={12} sm={2} md={3}></Grid>
+                <Grid item xs={12} sm={4} md={3} className={classes.button}><SleepButton /></Grid>
+                <Grid item xs={12} sm={4} md={3} className={classes.button}><WakeButton /></Grid>
+                <Grid item xs={12} sm={2} md={3}></Grid>
+            </Grid>
         </>
     )
 

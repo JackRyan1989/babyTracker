@@ -1,13 +1,36 @@
 import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import NightsStayIcon from '@material-ui/icons/NightsStay';
-import Button from '@material-ui/core/Button';
+import { Button, Typography } from '@material-ui/core/';
+
+const useStyles = makeStyles(theme => ({
+    icon: {
+        fontSize: '8rem',
+        color: '#7164f9',
+    },
+    text: {
+        fontSize: '2rem',
+        borderBottomStyle: 'solid',
+        borderBottomColor: 'grey',
+        borderBottom: '1px',
+        width: '75%',
+        marginLeft: '14.5%',
+    },
+})
+);
+
 
 export default function SleepButton() {
-
+    const classes = useStyles();
+    const sleepTimeStamp = () => {
+        console.log('Sleep time stamp clicked.');
+    };
     return (
         <>
-            <Button><NightsStayIcon/></Button>
+            <Button
+                onClick = {sleepTimeStamp}
+            ><NightsStayIcon className={classes.icon} /></Button>
+            <Typography className={classes.text}>Sleep</Typography>
         </>
     )
-
 }
