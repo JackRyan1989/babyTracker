@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -12,8 +12,11 @@ export default function DataAddedDialog(props) {
     const [open, setOpen] = useState(false);
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
-    setOpen(props.openDialog);
     const dataType = props.dataType;
+
+    useEffect(() =>{
+        setOpen(props.openDialog);
+    }, []);
   
     const handleClose = () => {
       setOpen(false);

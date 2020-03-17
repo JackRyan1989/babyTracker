@@ -33,8 +33,8 @@ export default function SleepButton(props) {
             sleep: true,
             current_date: new Date(),
             user: userID
-        }).then(thing => {
-            console.log('Thing')
+        }).then(() => {
+            setDialog(true);
         }).catch(console.error);
     };
 
