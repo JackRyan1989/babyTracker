@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import NightsStayIcon from '@material-ui/icons/NightsStay';
 import { Button, Typography } from '@material-ui/core/';
+import DataAddedDialog from './dataAddedDialog';
 
 const useStyles = makeStyles(theme => ({
     icon: {
@@ -22,14 +23,18 @@ const useStyles = makeStyles(theme => ({
 
 export default function SleepButton(props) {
     const classes = useStyles();
+    const [dispDialog, setDialog] = useState(false);
     const sleepTimeStamp = () => {
         const mongodb = props.location.mongodbClient;
         const sleepData = mongodb.db("baldyData").collection("sleepData");
         const userID = props.location.user;
+        setDialog(true);
         sleepData.insertOne({
             sleep: true,
             current_date: new Date(),
             user: userID
+        }).then(thing => {
+            console.log('Thing')
         }).catch(console.error);
     };
 
@@ -39,6 +44,7 @@ export default function SleepButton(props) {
                 onClick = {sleepTimeStamp}
             ><NightsStayIcon className={classes.icon} /></Button>
             <Typography className={classes.text}>Sleep</Typography>
+            {dispDialog ? <DataAddedDialog openDialog={dispDialog} dataType={'sleep'} ></DataAddedDialog> : null}
         </>
     )
 }

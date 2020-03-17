@@ -78,8 +78,7 @@ export default function HeaderHideScroll(props) {
                                 open={Boolean(anchorEl)}
                                 onClose={handleClose}
                             >
-                                <MenuItem onClick={handleClose}>Placeholder</MenuItem>
-                                <MenuItem onClick={handleClose}>Placeholder 2</MenuItem>
+                                <MenuItem onClick={handleClose}>Dashboard</MenuItem>
                                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
                             </StyledMenu>
                         </IconButton>
