@@ -68,6 +68,11 @@ export default function HeaderHideScroll(props) {
         setRedirect(true)
         setTarget('/dashboard')
     }
+    const addData = (event) => {
+        setAnchorEl(event.currentTarget)
+        setRedirect(true)
+        setTarget('/add')
+    }
 
     if (redirect) {
         return <Redirect to={{ pathname: target}} />
@@ -85,6 +90,7 @@ export default function HeaderHideScroll(props) {
                                 open={Boolean(anchorEl)}
                                 onClose={handleClose}
                             >
+                                <MenuItem onClick={addData}>Add Data</MenuItem>
                                 <MenuItem onClick={dashboard}>Dashboard</MenuItem>
                                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
                             </StyledMenu>
