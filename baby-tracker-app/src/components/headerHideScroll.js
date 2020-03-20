@@ -51,6 +51,7 @@ ElevationScroll.propTypes = {
 export default function HeaderHideScroll(props) {
     const [anchorEl, setAnchorEl] = useState(null);
     const [redirect, setRedirect] = useState(false);
+    const [target, setTarget] = useState('');
     const handleClick = event => {
         setAnchorEl(event.currentTarget);
     };
@@ -60,10 +61,16 @@ export default function HeaderHideScroll(props) {
     const handleLogout = (event) => {
         setAnchorEl(event.currentTarget)
         setRedirect(true)
+        setTarget('/logout')
     };
+    const dashboard = (event) => {
+        setAnchorEl(event.currentTarget)
+        setRedirect(true)
+        setTarget('/dashboard')
+    }
 
     if (redirect) {
-        return <Redirect to={{ pathname: '/logout'}} />
+        return <Redirect to={{ pathname: target}} />
     } else {
         return (
             <ElevationScroll {...props}>
@@ -78,7 +85,7 @@ export default function HeaderHideScroll(props) {
                                 open={Boolean(anchorEl)}
                                 onClose={handleClose}
                             >
-                                <MenuItem onClick={handleClose}>Dashboard</MenuItem>
+                                <MenuItem onClick={dashboard}>Dashboard</MenuItem>
                                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
                             </StyledMenu>
                         </IconButton>
