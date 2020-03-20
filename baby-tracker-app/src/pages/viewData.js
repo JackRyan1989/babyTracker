@@ -1,10 +1,10 @@
 import React from 'react';
 import HeaderHideScroll from '../components/headerHideScroll';
 
-export default function ViewData() {
+export default function ViewData(props) {
     return (
         <>
-        <HeaderHideScroll></HeaderHideScroll>
+        <HeaderHideScroll {...props}></HeaderHideScroll>
         </>
     )
 };

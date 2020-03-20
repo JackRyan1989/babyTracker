@@ -18,7 +18,7 @@ function AddData(props) {
     const classes = useStyles();
     return (
         <>
-            <HeaderHideScroll></HeaderHideScroll>
+            <HeaderHideScroll {...props}></HeaderHideScroll>
             <Grid container spacing={2}>
                 <Grid item xs={12} sm={2} md={3}></Grid>
                 <Grid item xs={12} sm={4} md={3} className={classes.button}><SleepButton {...props} /></Grid>
