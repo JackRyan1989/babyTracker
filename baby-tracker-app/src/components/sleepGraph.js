@@ -1,93 +1,39 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import { Group } from '@vx/group';
-import { GlyphDot } from '@vx/glyph';
-import { LinePath } from '@vx/shape';
-import { genDateValue } from '@vx/mock-data';
-import { scaleTime, scaleLinear } from '@vx/scale';
-import { curveMonotoneX, curveBasis } from '@vx/curve';
+import Paper from '@material-ui/core/Paper';
 
 const useStyles = makeStyles(theme => ({
     container: {
-        margin: '0 2% 2% 5%',
+        margin: '0 2.5% 5% 2.5%',
         backgroundColor: '#eceff1',
         padding: '5px',
         border: 'none',
         borderRadius: '2px',
     },
+    heading: {
+        fontSize: '2rem',
+        textAlign: 'center',
+        color: '#1a237e',
+        margin: '2% 0 2% 0',
+    },
 }));
 
-const data = genDateValue(15);
-
-// accessors
-const date = d => d.date;
-const value = d => d.value;
-
-// scales
-const xScale = scaleTime({
-  domain: [Math.min(...data.map(date)), Math.max(...data.map(date))]
-});
-const yScale = scaleLinear({
-  domain: [0, Math.max(...data.map(value))]
-});
-
-// positions
-const x = d => xScale(date(d));
-const y = d => yScale(value(d));
-
-// colors
-const primary = '#8921e0';
-const secondary = '#00f2ff';
-const contrast = '#ffffff';
-
 export default function SleepGraph(props) {
-    //dimensions
-    const width = 500;
-    const height = 500;
-    const margin = 1;
+    console.log(props);
+    const [data, setData] = useState({});
+    const [app, setApp] = useState(props.location.app);
+    const [client, setClient] = useState(props.location.client);
+    const [mongodbClient, setMongodbClient] = useState(props.location.mongodbClient);
 
-    // bounds
-  const xMax = width - margin.left - margin.right;
-  const yMax = height - margin.top - margin.bottom;
+    const getData = () => {
+        
+    }
 
-  // update scale range to match bounds
-  xScale.range([0, xMax]);
-  yScale.range([yMax, 0]);
-
-  return (
-    <svg width={width} height={height}>
-      <rect x={0} y={0} width={width} height={height} fill={secondary} rx={14} />
-      <Group top={margin.top}>
-        <LinePath
-          data={data}
-          x={x}
-          y={y}
-          stroke={primary}
-          strokeWidth={2}
-          strokeDasharray="2,2"
-          curve={curveBasis}
-        />
-        <LinePath
-          data={data}
-          x={x}
-          y={y}
-          stroke={primary}
-          strokeWidth={3}
-          curve={curveMonotoneX}
-        />
-        {data.map((d, i) => {
-          const cx = x(d);
-          const cy = y(d);
-          return (
-            <g key={`line-point-${i}`}>
-              <GlyphDot cx={cx} cy={cy} r={6} fill={contrast} stroke={secondary} strokeWidth={10} />
-              <GlyphDot cx={cx} cy={cy} r={6} fill={secondary} stroke={primary} strokeWidth={3} />
-              <GlyphDot cx={cx} cy={cy} r={4} fill={contrast} />
-            </g>
-          );
-        })}
-      </Group>
-    </svg>
-  );
+    const classes = useStyles();
+    return (
+        <Paper elevation={3} className={classes.container}>
+            <Typography className={classes.heading}>Sleep Timeline</Typography>
+        </Paper>
+    );
 };

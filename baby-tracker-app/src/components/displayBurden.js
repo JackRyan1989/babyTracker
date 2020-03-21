@@ -38,7 +38,7 @@ export default function DisplayBurden(props) {
     const classes = useStyles();
 return (
     <>
-        <Paper className={classes.container}>
+        <Paper elevation={3} className={classes.container}>
             <Typography className={classes.heading}>Effort</Typography>
             <Grid className={classes.flex} container spacing={3}>
                 <Grid className={classes.name} item xs={3} sm={3} md={3} lg={3}><Typography>Ash</Typography></Grid>
