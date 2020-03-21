@@ -39,7 +39,7 @@ export default function DisplayBurden(props) {
     const classes = useStyles();
 return (
     <>
-        <div className={classes.container}>
+        <Paper className={classes.container}>
             <Typography className={classes.heading}>Effort</Typography>
             <Grid className={classes.flex} container spacing={3}>
                 <Grid className={classes.name} item xs={3} sm={3} md={3} lg={3}><Typography>Ash</Typography></Grid>
@@ -49,7 +49,7 @@ return (
                 <Grid className={classes.name} item xs={3} sm={3} md={3} lg={3}><Typography>Jack</Typography></Grid>
                 <Grid className={classes.name} item xs={8} sm={8} md={8} lg={8}><Typography>%</Typography></Grid>
             </Grid>
-        </div>
+        </Paper>
     </>
 )
 
