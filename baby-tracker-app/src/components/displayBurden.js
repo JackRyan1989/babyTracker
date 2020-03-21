@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
@@ -7,7 +7,6 @@ import { makeStyles } from '@material-ui/core/styles';
 const useStyles = makeStyles(theme => ({
     container: {
         margin: '15% 5% 5% 5%',
-        padding: theme.spacing(2),
         backgroundColor: '#eceff1',
         padding: '5px',
         border: 'none',
