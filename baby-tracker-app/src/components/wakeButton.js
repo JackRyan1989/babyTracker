@@ -33,7 +33,7 @@ export default function WakeButton(props) {
         const userID = props.location.user;
         const now = {
             month: moment().format('MMMM'),
-            day: moment().format('dddd'),
+            date: moment().format('dddd Do'),
             year: moment().format('YYYY'),
             time: moment().format('h:mm:ss a'),
         };

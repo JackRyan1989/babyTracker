@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
+import { RemoteMongoClient } from "mongodb-stitch-browser-sdk";
+import {Pie} from 'react-chartjs-2';
 
 const useStyles = makeStyles(theme => ({
     container: {
@@ -35,19 +36,66 @@ const useStyles = makeStyles(theme => ({
 );
 
 export default function DisplayBurden(props) {
+    const [data, setData] = useState(undefined);
+    const app = props.location.app;
+
+    function getData() {
+        const mongodb = app.getServiceClient(RemoteMongoClient.factory, "mongodb-atlas");
+        const sleepCollection = mongodb.db("baldyData").collection("sleepData");
+        sleepCollection.find({}).toArray()
+            .then((data) =>{
+                setData(data);
+            })
+            .catch((err)=> err);
+    }
+
+    function calculateEffort() {
+        if (data){
+            let jackCount = 0;
+            for (let i = 0; i < data.length; i++){
+                if (data[i].user === '5e698b195dabe06755978529') {
+                    jackCount++;
+                }
+            }
+            let jackEff = (jackCount/data.length)*100;
+            let ashEff = 100 - jackEff;
+            return [ashEff.toFixed(2), jackEff.toFixed(2)];
+        } else {
+            return [0, 0]; 
+        }
+    }
+
+    useEffect(()=>{
+        getData();
+        }, [data]);
+
     const classes = useStyles();
+    const [ashEffort, jackEffort] = calculateEffort();
+
+    const pieData = {
+        labels: [
+            'Ashley Effort',
+            'Jack Effort',
+        ],
+        datasets: [{
+            data: [ashEffort, jackEffort],
+            backgroundColor: [
+            '#FF6384',
+            '#36A2EB',
+            ],
+            hoverBackgroundColor: [
+            '#FF6384',
+            '#36A2EB',
+            ]
+        }]
+    };
+
+
 return (
     <>
         <Paper elevation={3} className={classes.container}>
             <Typography className={classes.heading}>Effort</Typography>
-            <Grid className={classes.flex} container spacing={3}>
-                <Grid className={classes.name} item xs={3} sm={3} md={3} lg={3}><Typography>Ash</Typography></Grid>
-                <Grid className={classes.name} item xs={8} sm={8} md={8} lg={8}><Typography>%</Typography></Grid>
-            </Grid>
-            <Grid className={classes.flex} container spacing={3}>
-                <Grid className={classes.name} item xs={3} sm={3} md={3} lg={3}><Typography>Jack</Typography></Grid>
-                <Grid className={classes.name} item xs={8} sm={8} md={8} lg={8}><Typography>%</Typography></Grid>
-            </Grid>
+            <Pie data={pieData}/>
         </Paper>
     </>
 )
