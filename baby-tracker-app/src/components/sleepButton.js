@@ -32,7 +32,12 @@ export default function SleepButton(props) {
         const mongodb = props.location.mongodbClient;
         const sleepData = mongodb.db("baldyData").collection("sleepData");
         const userID = props.location.user;
-        const now = moment().format('MMMM Do YYYY, h:mm:ss a');
+        const now = {
+            month: moment().format('MMMM'),
+            day: moment().format('dddd'),
+            year: moment().format('YYYY'),
+            time: moment().format('h:mm:ss a'),
+        };
         setDialog(true);
         sleepData.insertOne({
             sleep: true,

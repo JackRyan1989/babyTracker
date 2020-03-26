@@ -22,11 +22,11 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function SleepGraph(props) {
-    console.log(props);
     const [sleepData, setSleep] = useState({});
     const [wakeData, setWake] = useState({});
     const app = props.location.app;
 
+    //Needs to be asynchronous
     const getData = () => {
         const mongodb = app.getServiceClient(RemoteMongoClient.factory, "mongodb-atlas");
         const sleepCollection = mongodb.db("baldyData").collection("sleepData");
@@ -47,6 +47,7 @@ export default function SleepGraph(props) {
 
     useEffect(()=>{
         getData();
+        console.log(sleepData);
     }, []);
 
     const data = {
@@ -77,7 +78,6 @@ export default function SleepGraph(props) {
       };
 
     const classes = useStyles();
-    console.log(sleepData);
     return (
         <Paper elevation={3} className={classes.container}>
             <Typography className={classes.heading}>Sleep Timeline</Typography>

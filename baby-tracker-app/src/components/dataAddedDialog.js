@@ -19,7 +19,7 @@ export default function DataAddedDialog(props) {
         setOpen(props.openDialog);
     }, [props.openDialog]);
   
-    let now = moment().format('MMMM Do YYYY, h:mm:ss a');
+    let thisMoment = moment().format('MMMM Do YYYY, h:mm:ss a');
 
     return (
         <div>
@@ -32,7 +32,7 @@ export default function DataAddedDialog(props) {
             <DialogTitle id="responsive-dialog-title">{"Data Added!"}</DialogTitle>
             <DialogContent>
               <DialogContentText>
-                Baldy {dataType} at {now}.
+                Baldy {dataType} at {thisMoment}.
               </DialogContentText>
             </DialogContent>
             <DialogActions>
