@@ -1,6 +1,6 @@
 {
   "homepage": "https://JackRyan1989.github.io/babyTracker",
-  "name": "baby-tracker-app",
+  "name": "babyTracker",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
