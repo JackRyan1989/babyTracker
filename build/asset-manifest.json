@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/babyTracker/static/css/main.5ecd60fb.chunk.css",
-    "main.js": "/babyTracker/static/js/main.c3c79eb0.chunk.js",
-    "main.js.map": "/babyTracker/static/js/main.c3c79eb0.chunk.js.map",
+    "main.js": "/babyTracker/static/js/main.b9100775.chunk.js",
+    "main.js.map": "/babyTracker/static/js/main.b9100775.chunk.js.map",
     "runtime-main.js": "/babyTracker/static/js/runtime-main.9f0d2acf.js",
     "runtime-main.js.map": "/babyTracker/static/js/runtime-main.9f0d2acf.js.map",
     "static/js/2.e873d607.chunk.js": "/babyTracker/static/js/2.e873d607.chunk.js",
     "static/js/2.e873d607.chunk.js.map": "/babyTracker/static/js/2.e873d607.chunk.js.map",
     "index.html": "/babyTracker/index.html",
-    "precache-manifest.ee460bd7aab795baa7d06dd829fd2422.js": "/babyTracker/precache-manifest.ee460bd7aab795baa7d06dd829fd2422.js",
+    "precache-manifest.f08eee9b4f45c9d845970840e3db82a8.js": "/babyTracker/precache-manifest.f08eee9b4f45c9d845970840e3db82a8.js",
     "service-worker.js": "/babyTracker/service-worker.js",
     "static/css/main.5ecd60fb.chunk.css.map": "/babyTracker/static/css/main.5ecd60fb.chunk.css.map",
     "static/js/2.e873d607.chunk.js.LICENSE.txt": "/babyTracker/static/js/2.e873d607.chunk.js.LICENSE.txt"
@@ -17,6 +17,6 @@
     "static/js/runtime-main.9f0d2acf.js",
     "static/js/2.e873d607.chunk.js",
     "static/css/main.5ecd60fb.chunk.css",
-    "static/js/main.c3c79eb0.chunk.js"
+    "static/js/main.b9100775.chunk.js"
   ]
 }
