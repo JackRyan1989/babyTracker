@@ -11,7 +11,7 @@ import { ThemeProvider } from 'styled-components';
 const useStyles = makeStyles(theme => ({
     container: {
         margin: '2.5% 5% 5% 5%',
-        backgroundColor: '#fff2cc',
+        backgroundColor: '#eceff1',
         padding: '5px',
         border: 'none',
         borderRadius: '2px',

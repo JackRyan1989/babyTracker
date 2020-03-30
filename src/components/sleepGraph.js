@@ -61,7 +61,7 @@ export default function SleepGraph(props) {
                 let dur = (moment
                     .duration(moment(endTime, 'h:mm:ss a')
                     .diff(moment(startTime, 'h:mm:ss a')))
-                    .asSeconds())/1000;
+                    .asSeconds())/60;
                 hours.push(dur);
             }
             return [hours, days];
