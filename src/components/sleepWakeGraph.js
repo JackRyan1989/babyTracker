@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import { RemoteMongoClient } from "mongodb-stitch-browser-sdk";
+import moment from 'moment';
 
 const useStyles = makeStyles(theme => ({
     container: {
@@ -52,40 +53,28 @@ export default function SleepWakeGraph(props) {
 
     function calculateCounts() {
         if (sleepData && wakeData){
-            let sleepCount = [];
-            let wakeCount = [];
-            let one;
-            let two;
-            let three;
-            let four;
-            let five;
-            let six;
-            let seven;
-            let eight;
-            let nine;
-            let ten;
-            let eleven;
-            let twelve;
-            let thirteen;
-            let fourteen;
-            let fifteen;
-            let sixteen;
-            let seventeen;
-            let eightteen;
-            let nineteen;
-            let twenty;
-            let twentyone;
-            let twentytwo;
-            let twentythree;
-            let twentyfour;
+            let sleepTimes = new Array(24).fill(0);;
+            let wakeTimes = new Array(24).fill(0);
+            for (let i=0; i< sleepData.length; i++){
+                let sleepHour = moment(sleepData[i].timeStamp.time, 'h:mm:ss a').format('HH');
+                console.log(sleepData[i].timeStamp.time);
+                console.log(sleepHour);
+                let wakeHour = moment(wakeData[i].timeStamp.time, 'h:mm:ss a').format('HH');
+                sleepTimes.splice(sleepHour, 0, sleepHour)
+                wakeTimes.splice(wakeHour, 0, wakeHour)
+            }
+            return [sleepTimes, wakeTimes];
         } else {
-            let sleepCount = [0];
-            let wakeCount = [0];
+            let sleepTimes = [0];
+            let wakeTimes = [0];
+            return [sleepTimes, wakeTimes];
         }
     };
 
+    const [sleepTimes, wakeTimes] = calculateCounts();
+
     const sleepCountData = {
-        labels: ['1 a.m.', '2 a.m.', '3 a.m.', '4 a.m.', '5 a.m.', '6 a.m.', '7 a.m.', '8 a.m.', '9 a.m.', '10 a.m.', '11 a.m.', '12 p.m.', '1 p.m.', '2 p.m.', '3 p.m.', '4 p.m.', '5 p.m.', '6  p.m.', '7 p.m.', '8 p.m.', '9 p.m.', '10 p.m.', '11 p.m.', '12 p.m.'],
+        labels: ['12 a.m.', '1 a.m.', '2 a.m.', '3 a.m.', '4 a.m.', '5 a.m.', '6 a.m.', '7 a.m.', '8 a.m.', '9 a.m.', '10 a.m.', '11 a.m.', '12 p.m.', '1 p.m.', '2 p.m.', '3 p.m.', '4 p.m.', '5 p.m.', '6  p.m.', '7 p.m.', '8 p.m.', '9 p.m.', '10 p.m.', '11 p.m.'],
         datasets: [
             {
             label: 'Sleep Frequency',
@@ -106,7 +95,7 @@ export default function SleepWakeGraph(props) {
             pointHoverBorderWidth: 2,
             pointRadius: 1,
             pointHitRadius: 10,
-            data: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,171,81,92,20,21,22,24,24],
+            data: sleepTimes,
             }
         ]
         };
