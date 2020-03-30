@@ -58,10 +58,10 @@ export default function SleepGraph(props) {
                 days.push(sleepData[i].timeStamp.date)
                 let startTime = sleepData[i].timeStamp.time;
                 let endTime = wakeData[i].timeStamp.time;
-                let dur = moment
+                let dur = (moment
                     .duration(moment(endTime, 'h:mm:ss a')
                     .diff(moment(startTime, 'h:mm:ss a')))
-                    .asSeconds();
+                    .asSeconds())/1000;
                 hours.push(dur);
             }
             return [hours, days];
