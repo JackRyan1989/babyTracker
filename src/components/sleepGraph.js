@@ -9,7 +9,7 @@ import moment from 'moment';
 
 const useStyles = makeStyles(theme => ({
     container: {
-        margin: '15% 5% 5% 5%',
+        margin: '2.5% 5% 5% 5%',
         backgroundColor: '#eceff1',
         padding: '5px',
         border: 'none',

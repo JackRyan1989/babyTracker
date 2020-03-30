@@ -6,10 +6,11 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import { RemoteMongoClient } from "mongodb-stitch-browser-sdk";
 import moment from 'moment';
+import { ThemeProvider } from 'styled-components';
 
 const useStyles = makeStyles(theme => ({
     container: {
-        margin: '15% 5% 5% 5%',
+        margin: '2.5% 5% 5% 5%',
         backgroundColor: '#eceff1',
         padding: '5px',
         border: 'none',
@@ -27,6 +28,9 @@ const useStyles = makeStyles(theme => ({
 export default function SleepWakeGraph(props) {
     const [sleepData, setSleep] = useState(undefined);
     const [wakeData, setWake] = useState(undefined);
+    const [sleepHours, setHours] = useState([]);
+    const [complete, setComplete] = useState(false);
+    const [graphData, setData] = useState(undefined);
     const app = props.location.app;
 
     function getData() {
@@ -45,61 +49,152 @@ export default function SleepWakeGraph(props) {
                 setWake(data);
             })
             .catch((err) => err)
-    }
-
-    useEffect(() => {
-        getData();
-    }, [sleepData]);
+    };
 
     function calculateCounts() {
-        if (sleepData && wakeData){
-            let sleepTimes = new Array(24).fill(0);;
-            let wakeTimes = new Array(24).fill(0);
-            for (let i=0; i< sleepData.length; i++){
+        if (sleepData && wakeData && ! complete){
+            let sleepTimes = [];
+            let zero = 0;
+            let one = 0;
+            let two = 0;
+            let three = 0;
+            let four = 0;
+            let five = 0;
+            let six = 0;
+            let seven = 0;
+            let eight = 0;
+            let nine = 0;
+            let ten = 0;
+            let eleven = 0;
+            let twelve = 0;
+            let thirteen = 0;
+            let fourteen = 0;
+            let fifteen = 0;
+            let sixteen = 0;
+            let seventeen = 0;
+            let eightteen = 0;
+            let nineteen = 0;
+            let twenty = 0;
+            let twentyone = 0;
+            let twentytwo = 0;
+            let twentythree = 0;
+            for (let i=0; i < sleepData.length; i++){
                 let sleepHour = moment(sleepData[i].timeStamp.time, 'h:mm:ss a').format('HH');
-                console.log(sleepData[i].timeStamp.time);
-                console.log(sleepHour);
-                let wakeHour = moment(wakeData[i].timeStamp.time, 'h:mm:ss a').format('HH');
-                sleepTimes.splice(sleepHour, 0, sleepHour)
-                wakeTimes.splice(wakeHour, 0, wakeHour)
+                switch (sleepHour) {
+                    case '00':
+                        zero ++;
+                        break;
+                    case '01':
+                        one ++;
+                        break;
+                    case '02':
+                        two++;
+                        break;
+                    case '03':
+                        three++;
+                        break;
+                    case '04':
+                        four ++;
+                        break;
+                    case '05':
+                        five ++;
+                        break;
+                    case '06':
+                        six++;
+                        break;
+                    case '07':
+                        seven++;
+                        break;
+                    case '08':
+                        eight ++;
+                        break;
+                    case '09':
+                        nine ++;
+                        break;
+                    case '10':
+                        ten ++;
+                        break;
+                    case '11':
+                        eleven++;
+                        break;
+                    case '12':
+                        twelve ++;
+                        break;
+                    case '13':
+                        thirteen ++;
+                        break;
+                    case '14':
+                        fourteen++;
+                        break;
+                    case '15':
+                        fifteen++;
+                        break;
+                    case '16':
+                        sixteen ++;
+                        break;
+                    case '17':
+                        seventeen ++;
+                        break;
+                    case '18':
+                        eightteen++;
+                        break;
+                    case '19':
+                        nineteen++;
+                        break;
+                    case '20':
+                        twenty ++;
+                        break;
+                    case '21':
+                        twentyone ++;
+                        break;
+                    case '22':
+                        twentytwo++;
+                        break;
+                    case '23':
+                        twentythree++;
+                        break;
+                }
             }
-            return [sleepTimes, wakeTimes];
+            sleepTimes.push(zero, one, two, three, four, five, six, seven, eight, nine, ten, eleven, twelve, thirteen, fourteen, fifteen, sixteen, seventeen, eightteen, nineteen, twenty, twentyone, twentytwo, twentythree);
+            setHours(sleepTimes);
+            const sleepCountData = {
+                labels: ['12 a.m.', '1 a.m.', '2 a.m.', '3 a.m.', '4 a.m.', '5 a.m.', '6 a.m.', '7 a.m.', '8 a.m.', '9 a.m.', '10 a.m.', '11 a.m.', '12 p.m.', '1 p.m.', '2 p.m.', '3 p.m.', '4 p.m.', '5 p.m.', '6  p.m.', '7 p.m.', '8 p.m.', '9 p.m.', '10 p.m.', '11 p.m.'],
+                datasets: [
+                    {
+                    label: 'Sleep Frequency',
+                    fill: false,
+                    lineTension: 0.1,
+                    backgroundColor: 'rgba(75,192,192,0.4)',
+                    borderColor: 'rgba(75,192,192,1)',
+                    borderCapStyle: 'butt',
+                    borderDash: [],
+                    borderDashOffset: 0.0,
+                    borderJoinStyle: 'miter',
+                    pointBorderColor: 'rgba(75,192,192,1)',
+                    pointBackgroundColor: '#fff',
+                    pointBorderWidth: 1,
+                    pointHoverRadius: 5,
+                    pointHoverBackgroundColor: 'rgba(75,192,192,1)',
+                    pointHoverBorderColor: 'rgba(220,220,220,1)',
+                    pointHoverBorderWidth: 2,
+                    pointRadius: 1,
+                    pointHitRadius: 10,
+                    data: sleepTimes,
+                    }
+                ]
+                };
+            setData(sleepCountData);
+            setComplete(true);
         } else {
             let sleepTimes = [0];
-            let wakeTimes = [0];
-            return [sleepTimes, wakeTimes];
+            setHours(sleepTimes);
         }
     };
 
-    const [sleepTimes, wakeTimes] = calculateCounts();
-
-    const sleepCountData = {
-        labels: ['12 a.m.', '1 a.m.', '2 a.m.', '3 a.m.', '4 a.m.', '5 a.m.', '6 a.m.', '7 a.m.', '8 a.m.', '9 a.m.', '10 a.m.', '11 a.m.', '12 p.m.', '1 p.m.', '2 p.m.', '3 p.m.', '4 p.m.', '5 p.m.', '6  p.m.', '7 p.m.', '8 p.m.', '9 p.m.', '10 p.m.', '11 p.m.'],
-        datasets: [
-            {
-            label: 'Sleep Frequency',
-            fill: false,
-            lineTension: 0.1,
-            backgroundColor: 'rgba(75,192,192,0.4)',
-            borderColor: 'rgba(75,192,192,1)',
-            borderCapStyle: 'butt',
-            borderDash: [],
-            borderDashOffset: 0.0,
-            borderJoinStyle: 'miter',
-            pointBorderColor: 'rgba(75,192,192,1)',
-            pointBackgroundColor: '#fff',
-            pointBorderWidth: 1,
-            pointHoverRadius: 5,
-            pointHoverBackgroundColor: 'rgba(75,192,192,1)',
-            pointHoverBorderColor: 'rgba(220,220,220,1)',
-            pointHoverBorderWidth: 2,
-            pointRadius: 1,
-            pointHitRadius: 10,
-            data: sleepTimes,
-            }
-        ]
-        };
-
+    useEffect(() => {
+        getData();
+        calculateCounts();
+    }, [sleepData]);
 
     const classes = useStyles();
     if (!app) {
@@ -107,8 +202,8 @@ export default function SleepWakeGraph(props) {
     } else {
         return (
             <Paper elevation={3} className={classes.container}>
-                <Typography className={classes.heading}>When does he Sleep?</Typography>
-                {sleepData && wakeData ? <Line data={sleepCountData} /> : <Typography>Loading...</Typography>}
+                <Typography className={classes.heading}>When does he sleep?</Typography>
+                {graphData && complete ? <Line data={graphData} /> : <Typography>Loading...</Typography>}
             </Paper>
         );
     }
