@@ -26,6 +26,8 @@ const useStyles = makeStyles(theme => ({
 export default function SleepGraph(props) {
     const [sleepData, setSleep] = useState(undefined);
     const [wakeData, setWake] = useState(undefined);
+    const [complete, setComplete] = useState(false);
+    const [data, setData] = useState(undefined);
     const app = props.location.app;
 
     function getData() {
@@ -46,12 +48,9 @@ export default function SleepGraph(props) {
             .catch((err)=> err)
     }
 
-    useEffect(()=>{
-        getData();
-        }, [sleepData]);
-
     function calculateDuration() {
-        if (sleepData && wakeData){
+        if (sleepData && wakeData && ! complete){
+            console.log('Calculating...');
             let hours = [];
             let days = [];
             for (let i=0; i< sleepData.length; i++){
@@ -64,42 +63,44 @@ export default function SleepGraph(props) {
                     .asSeconds())/60;
                 hours.push(dur);
             }
-            return [hours, days];
+            const graphData = {
+                labels: days,
+                datasets: [
+                    {
+                    label: 'Sleep Duration',
+                    fill: false,
+                    lineTension: 0.1,
+                    backgroundColor: 'rgba(75,192,192,0.4)',
+                    borderColor: 'rgba(75,192,192,1)',
+                    borderCapStyle: 'butt',
+                    borderDash: [],
+                    borderDashOffset: 0.0,
+                    borderJoinStyle: 'miter',
+                    pointBorderColor: 'rgba(75,192,192,1)',
+                    pointBackgroundColor: '#fff',
+                    pointBorderWidth: 1,
+                    pointHoverRadius: 5,
+                    pointHoverBackgroundColor: 'rgba(75,192,192,1)',
+                    pointHoverBorderColor: 'rgba(220,220,220,1)',
+                    pointHoverBorderWidth: 2,
+                    pointRadius: 1,
+                    pointHitRadius: 10,
+                    data: hours,
+                    }
+                ]
+                };
+                setData(graphData);
+                setComplete(true);
         } else {
-            let hours = [];
-            let days = [];
-            return [hours, days];
+            return
         }
-    }    
-    
-    const [hours, days] = calculateDuration();
+    };  
 
-    const data = {
-        labels: days,
-        datasets: [
-            {
-            label: 'Sleep Duration',
-            fill: false,
-            lineTension: 0.1,
-            backgroundColor: 'rgba(75,192,192,0.4)',
-            borderColor: 'rgba(75,192,192,1)',
-            borderCapStyle: 'butt',
-            borderDash: [],
-            borderDashOffset: 0.0,
-            borderJoinStyle: 'miter',
-            pointBorderColor: 'rgba(75,192,192,1)',
-            pointBackgroundColor: '#fff',
-            pointBorderWidth: 1,
-            pointHoverRadius: 5,
-            pointHoverBackgroundColor: 'rgba(75,192,192,1)',
-            pointHoverBorderColor: 'rgba(220,220,220,1)',
-            pointHoverBorderWidth: 2,
-            pointRadius: 1,
-            pointHitRadius: 10,
-            data: hours,
-            }
-        ]
-        };
+    useEffect(()=>{
+        getData();
+        calculateDuration();
+        }, [sleepData]);
+
 
     const classes = useStyles();
     if (!app) {
