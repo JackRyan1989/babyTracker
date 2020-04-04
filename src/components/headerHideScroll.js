@@ -53,6 +53,7 @@ export default function HeaderHideScroll(props) {
     const client = props.location.client;
     const mongodbClient = props.location.mongodbClient;
     const db = props.location.db;
+    const user = props.location.user;
     const [anchorEl, setAnchorEl] = useState(null);
     const [redirect, setRedirect] = useState(false);
     const [target, setTarget] = useState('');
@@ -79,7 +80,7 @@ export default function HeaderHideScroll(props) {
     }
 
     if (redirect) {
-        return <Redirect to={{ pathname: target, app, client, mongodbClient, db }} />
+        return <Redirect to={{ pathname: target, app, client, mongodbClient, db, user }} />
     } else {
         return (
             <ElevationScroll {...props}>

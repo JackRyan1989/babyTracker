@@ -132,7 +132,6 @@ function Login() {
         const credential = new UserPasswordCredential(email, password);
         app.auth.loginWithCredential(credential)
             .then(authedUser => {
-                console.log(`successfully logged in with id: ${authedUser.id}`)
                 setUserID(authedUser.id);
                 setRedirect(true);
             })
