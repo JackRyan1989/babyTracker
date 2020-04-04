@@ -50,10 +50,15 @@ export default function SleepGraph(props) {
 
     function calculateDuration() {
         if (sleepData && wakeData && ! complete){
-            console.log('Calculating...');
             let hours = [];
             let days = [];
-            for (let i=0; i< sleepData.length; i++){
+            let length;
+            if (sleepData.length !== wakeData.length) {
+                sleepData.length < wakeData.length ? length = sleepData.length : length = wakeData.length;
+            } else {
+                length = sleepData.length;
+            }
+            for (let i=0; i< length; i++){
                 days.push(sleepData[i].timeStamp.date)
                 let startTime = sleepData[i].timeStamp.time;
                 let endTime = wakeData[i].timeStamp.time;
