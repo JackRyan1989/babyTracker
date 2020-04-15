@@ -57,6 +57,7 @@ export default function HeaderHideScroll(props) {
     const [anchorEl, setAnchorEl] = useState(null);
     const [redirect, setRedirect] = useState(false);
     const [target, setTarget] = useState('');
+    const page = props.thePage;
     const handleClick = event => {
         setAnchorEl(event.currentTarget);
     };
@@ -95,8 +96,8 @@ export default function HeaderHideScroll(props) {
                                 open={Boolean(anchorEl)}
                                 onClose={handleClose}
                             >
-                                <MenuItem onClick={addData}>Add Data</MenuItem>
-                                <MenuItem onClick={dashboard}>Dashboard</MenuItem>
+                                {page === 'viewData' ? <MenuItem onClick={addData}>Add Data</MenuItem> : null}
+                                {page === 'addData' ? <MenuItem onClick={dashboard}>Dashboard</MenuItem> : null}
                                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
                             </StyledMenu>
                         </IconButton>
