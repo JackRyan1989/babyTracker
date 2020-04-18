@@ -2,9 +2,6 @@ import React from 'react';
 import { Grid } from '@material-ui/core/';
 import { makeStyles } from '@material-ui/core/styles';
 import HeaderHideScroll from '../components/headerHideScroll';
-import SleepButton from '../components/sleepButton';
-import WakeButton from '../components/wakeButton';
-import MovementButton from '../components/movementButton';
 import AddDataButton from '../components/button';
 
 const useStyles = makeStyles(theme => ({
