@@ -26,7 +26,6 @@ const useStyles = makeStyles(theme => ({
 
 export default function SleepWakeGraph(props) {
     const [sleepData, setSleep] = useState(undefined);
-    const [wakeData, setWake] = useState(undefined);
     const [sleepHours, setHours] = useState([]);
     const [complete, setComplete] = useState(false);
     const [graphData, setData] = useState(undefined);
@@ -34,7 +33,6 @@ export default function SleepWakeGraph(props) {
 
     function getData() {
         const options = { 'sort': { "current_date": -1 }, };
-        const wakeQuery = { "sleep": 'false' };
         const sleepQuery = { "sleep": 'true' };
         const mongodb = app.getServiceClient(RemoteMongoClient.factory, "mongodb-atlas");
         const sleepCollection = mongodb.db("baldyData").collection("sleepData");
@@ -43,15 +41,10 @@ export default function SleepWakeGraph(props) {
                 setSleep(data);
             })
             .catch((err) => err);
-        sleepCollection.find(wakeQuery, options).toArray()
-            .then((data) => {
-                setWake(data);
-            })
-            .catch((err) => err)
     };
 
     function calculateCounts() {
-        if (sleepData && wakeData && ! complete){
+        if (sleepData && ! complete){
             let sleepTimes = [];
             let zero = 0;
             let one = 0;
