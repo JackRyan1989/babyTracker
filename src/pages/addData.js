@@ -5,6 +5,7 @@ import HeaderHideScroll from '../components/headerHideScroll';
 import SleepButton from '../components/sleepButton';
 import WakeButton from '../components/wakeButton';
 import MovementButton from '../components/movementButton';
+import AddDataButton from '../components/button';
 
 const useStyles = makeStyles(theme => ({
     button: {
@@ -22,9 +23,9 @@ function AddData(props) {
         <>
             <HeaderHideScroll {...props} thePage={'addData'}></HeaderHideScroll>
             <Grid container spacing={2}>
-                <Grid item xs={12} sm={4} md={3} className={classes.button}><SleepButton {...props} /></Grid>
-                <Grid item xs={12} sm={4} md={3} className={classes.button}><WakeButton {...props} /></Grid>
-                <Grid item xs={12} sm={4} md={3} className={classes.button}><MovementButton {...props} /></Grid>
+                <Grid item xs={12} sm={4} md={3} className={classes.button}><AddDataButton collection='sleepData' sleep='true' buttonType='sleep' {...props} /></Grid>
+                <Grid item xs={12} sm={4} md={3} className={classes.button}><AddDataButton collection='sleepData' sleep='false' buttonType='wake' {...props} /></Grid>
+                <Grid item xs={12} sm={4} md={3} className={classes.button}><AddDataButton collection='movementData' sleep='false' buttonType='movement' {...props} /></Grid> 
             </Grid>
         </>
     )

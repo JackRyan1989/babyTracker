@@ -34,8 +34,8 @@ export default function SleepWakeGraph(props) {
 
     function getData() {
         const options = { 'sort': { "current_date": -1 }, };
-        const wakeQuery = { "sleep": false };
-        const sleepQuery = { "sleep": true };
+        const wakeQuery = { "sleep": 'false' };
+        const sleepQuery = { "sleep": 'true' };
         const mongodb = app.getServiceClient(RemoteMongoClient.factory, "mongodb-atlas");
         const sleepCollection = mongodb.db("baldyData").collection("sleepData");
         sleepCollection.find(sleepQuery, options).toArray()
