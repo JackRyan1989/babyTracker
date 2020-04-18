@@ -24,35 +24,30 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-export default function SleepWakeGraph(props) {
-    const [sleepData, setSleep] = useState(undefined);
-    const [wakeData, setWake] = useState(undefined);
-    const [sleepHours, setHours] = useState([]);
+export default function MovementGraph(props) {
+    const [movementData, setMove] = useState(undefined);
+    // const [wakeData, setWake] = useState(undefined);
+    // const [sleepHours, setHours] = useState([]);
     const [complete, setComplete] = useState(false);
     const [graphData, setData] = useState(undefined);
     const app = props.location.app;
 
     function getData() {
         const options = { 'sort': { "current_date": -1 }, };
-        const wakeQuery = { "sleep": false };
-        const sleepQuery = { "sleep": true };
+        // const wakeQuery = { "sleep": false };
+        // const sleepQuery = { "sleep": true };
         const mongodb = app.getServiceClient(RemoteMongoClient.factory, "mongodb-atlas");
-        const sleepCollection = mongodb.db("baldyData").collection("sleepData");
-        sleepCollection.find(sleepQuery, options).toArray()
+        const moveCollection = mongodb.db("baldyData").collection("movementData");
+        moveCollection.find({}, options).toArray()
             .then((data) => {
-                setSleep(data);
+                setMove(data);
             })
             .catch((err) => err);
-        sleepCollection.find(wakeQuery, options).toArray()
-            .then((data) => {
-                setWake(data);
-            })
-            .catch((err) => err)
     };
 
     function calculateCounts() {
-        if (sleepData && wakeData && ! complete){
-            let sleepTimes = [];
+        if (movementData && ! complete){
+            let moveTimes = [];
             let zero = 0;
             let one = 0;
             let two = 0;
@@ -77,9 +72,9 @@ export default function SleepWakeGraph(props) {
             let twentyone = 0;
             let twentytwo = 0;
             let twentythree = 0;
-            for (let i=0; i < sleepData.length; i++){
-                let sleepHour = moment(sleepData[i].timeStamp.time, 'h:mm:ss a').format('HH');
-                switch (sleepHour) {
+            for (let i=0; i < movementData.length; i++){
+                let moveHour = moment(movementData[i].timeStamp.time, 'h:mm:ss a').format('HH');
+                switch (moveHour) {
                     case '00':
                         zero ++;
                         break;
@@ -154,13 +149,13 @@ export default function SleepWakeGraph(props) {
                         break;
                 }
             }
-            sleepTimes.push(zero, one, two, three, four, five, six, seven, eight, nine, ten, eleven, twelve, thirteen, fourteen, fifteen, sixteen, seventeen, eightteen, nineteen, twenty, twentyone, twentytwo, twentythree);
-            setHours(sleepTimes);
-            const sleepCountData = {
+            moveTimes.push(zero, one, two, three, four, five, six, seven, eight, nine, ten, eleven, twelve, thirteen, fourteen, fifteen, sixteen, seventeen, eightteen, nineteen, twenty, twentyone, twentytwo, twentythree);
+            //setHours(moveTimes);
+            const moveCountData = {
                 labels: ['12 a.m.', '1 a.m.', '2 a.m.', '3 a.m.', '4 a.m.', '5 a.m.', '6 a.m.', '7 a.m.', '8 a.m.', '9 a.m.', '10 a.m.', '11 a.m.', '12 p.m.', '1 p.m.', '2 p.m.', '3 p.m.', '4 p.m.', '5 p.m.', '6  p.m.', '7 p.m.', '8 p.m.', '9 p.m.', '10 p.m.', '11 p.m.'],
                 datasets: [
                     {
-                    label: 'Sleep Frequency',
+                    label: 'Movement Frequency',
                     fill: true,
                     lineTension: 0.25,
                     backgroundColor: 'rgba(134, 191, 214, 0.27)',
@@ -178,30 +173,30 @@ export default function SleepWakeGraph(props) {
                     pointHoverBorderWidth: 2,
                     pointRadius: 1,
                     pointHitRadius: 10,
-                    data: sleepTimes,
+                    data: moveTimes,
                     }
                 ]
                 };
-            setData(sleepCountData);
+            setData(moveCountData);
             setComplete(true);
         } else {
-            let sleepTimes = [0];
-            setHours(sleepTimes);
+            let moveTimes = [0];
+            //setHours(moveTimes);
         }
     };
 
     useEffect(() => {
         getData();
         calculateCounts();
-    }, [sleepData]);
+    }, [movementData]);
 
     const classes = useStyles();
     if (!app) {
-        return <Redirect to={{ pathname: '/logout' }} />
+        return <Redirect to={{ pathname: '/' }} />
     } else {
         return (
             <Paper elevation={3} className={classes.container}>
-                <Typography className={classes.heading}>When does he sleep?</Typography>
+                <Typography className={classes.heading}>When does he move?</Typography>
                 {graphData && complete ? <Line data={graphData} /> : <Typography>Loading...</Typography>}
             </Paper>
         );
