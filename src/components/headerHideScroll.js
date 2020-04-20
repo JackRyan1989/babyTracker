@@ -101,8 +101,8 @@ export default function HeaderHideScroll(props) {
                                 open={Boolean(anchorEl)}
                                 onClose={handleClose}
                             >
-                                {page === 'viewData' ? <MenuItem onClick={addData}>Add Data</MenuItem> : null}
-                                {page === 'addData' ? <MenuItem onClick={dashboard}>Dashboard</MenuItem> : null}
+                                {page === 'viewData' || 'getData' ? <MenuItem onClick={addData}>Add Data</MenuItem> : null}
+                                {page === 'addData' || 'getData' ? <MenuItem onClick={dashboard}>Dashboard</MenuItem> : null}
                                 {page === 'addData' || 'viewData' ? <MenuItem onClick={getData}>Download Data</MenuItem> : null}
                                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
                             </StyledMenu>
