@@ -21,27 +21,45 @@ export default function DownloadButton(props) {
     const mongodb = app.getServiceClient(RemoteMongoClient.factory, "mongodb-atlas");
     const sleepCollection = mongodb.db("baldyData").collection("sleepData");
     const movementCollection = mongodb.db("baldyData").collection("movementData");
-    const options = {'sort' : {"current_date": -1},}; 
+    const options = { 'sort': { "current_date": -1 }, };
     const [sleepData, setSleep] = useState(undefined);
     const [movementData, setMove] = useState(undefined);
     const [complete, setComplete] = useState(false);
-    
+
     function grabData() {
         sleepCollection.find({}, options).toArray()
-            .then((data) =>{
+            .then((data) => {
                 setSleep(data);
             })
-            .catch((err)=> err);
+            .catch((err) => err);
         movementCollection.find({}, options).toArray()
-        .then((data) =>{
-            setMove(data);
-        })
-        .catch((err)=> err);
+            .then((data) => {
+                setMove(data);
+            })
+            .catch((err) => err);
     }
 
     function downloadFile() {
         if (sleepData && movementData && !complete) {
-            download(new Blob([sleepData, movementData]), "dezzyData.json", 'json');
+            let userRow = [];
+            let sleepRow = [];
+            let timeRow = [];
+            sleepData.forEach(function (row) {
+                userRow.push(row.user);
+                sleepRow.push(row.sleep);
+                timeRow.push(`${row.timeStamp.date} ${row.timeStamp.month} ${row.timeStamp.time} ${row.timeStamp.year}`)
+            })
+            let moveUserRow = [];
+            let moveTimeRow = [];
+            movementData.forEach(function (row) {
+                moveUserRow.push(row.user)
+                moveTimeRow.push(`${row.timeStamp.date} ${row.timeStamp.month} ${row.timeStamp.time} ${row.timeStamp.year}`)
+            })
+            let dataArray = [userRow, sleepRow, timeRow, moveUserRow, moveTimeRow]
+            let csvContent = "data:text/csv;charset=utf-8," + dataArray.map(e => e.join(",")).join("\n");
+
+            download(csvContent, "dezzySleepData.csv", 'csv');
+
             setComplete(true);
         }
     }
