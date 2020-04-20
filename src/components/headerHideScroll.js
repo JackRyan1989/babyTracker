@@ -79,6 +79,11 @@ export default function HeaderHideScroll(props) {
         setRedirect(true)
         setTarget('/add')
     }
+    const getData = (event) => {
+        setAnchorEl(event.currentTarget)
+        setRedirect(true)
+        setTarget('/download')
+    }
 
     if (redirect) {
         return <Redirect to={{ pathname: target, app, client, mongodbClient, db, user }} />
@@ -98,6 +103,7 @@ export default function HeaderHideScroll(props) {
                             >
                                 {page === 'viewData' ? <MenuItem onClick={addData}>Add Data</MenuItem> : null}
                                 {page === 'addData' ? <MenuItem onClick={dashboard}>Dashboard</MenuItem> : null}
+                                {page === 'addData' || 'viewData' ? <MenuItem onClick={getData}>Download Data</MenuItem> : null}
                                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
                             </StyledMenu>
                         </IconButton>
