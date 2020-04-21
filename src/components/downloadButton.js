@@ -55,8 +55,8 @@ export default function DownloadButton(props) {
                 moveUserRow.push(row.user)
                 moveTimeRow.push(`${row.timeStamp.date} ${row.timeStamp.month} ${row.timeStamp.time} ${row.timeStamp.year}`)
             })
-            let dataArray = [userRow, sleepRow, timeRow, moveUserRow, moveTimeRow]
-            let csvContent = "data:text/csv;charset=utf-8," + dataArray.map(e => e.join(",")).join("\n");
+            let dataArray = [userRow, ['X'] , sleepRow, ['XX'] , timeRow, ['XXX'] , moveUserRow, ['XXXX'] , moveTimeRow]
+            let csvContent = "data:text/csv;charset=utf-8," + dataArray.map(e => e.join(", \n"));
 
             download(csvContent, "dezzySleepData.csv", 'csv');
 
