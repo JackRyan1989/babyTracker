@@ -1,4 +1,5 @@
-import csv
+import csv, pendulum
+from collections import namedtuple
 from importData import grabData
 from userFileInput import userInput
 
@@ -47,25 +48,77 @@ def calcEffort():
         sleepObj[k] = round((v/total)*100, 2)
     
     return sleepObj
+                
+def cleanTimeList(theList):
+    # Clean up the lists. Abstract this into another function when done.
+    monthDict = {
+        'Jan': '1',
+        'Feb': '2',
+        'March': '3',
+        'Apr': '4',
+        'May': '5',
+        'June': '6',
+        'July': '7',
+        'Aug': '8',
+        'Sept': '9',
+        'Oct': '10',
+        'Nov': '11',
+        'Dec': '12',
+    }
+    month = ''
+    day = ''
+    hour = ''
+    year = '' 
+    timeVector = []
+    for i in range(len(theList)):
+        spaceInd = theList[i].index(' ')
+        theList[i] = theList[i][spaceInd + 1:]
+        thInd = theList[i].index('th')
+        day = theList[i][ : thInd]
+        for k, v in monthDict.items():
+            if k in theList[i]:
+                month = v
+        year = theList[i][-4:]
+        try:
+            amInd = theList[i].index('am')
+            hour = theList[i][amInd-9: amInd +2]
+        except:
+            pmInd = theList[i].index('pm')
+            hour = theList[i][pmInd-9: pmInd +2]
+        if hour[0] == ' ':
+            hour = hour[1:]
+        timeVector.append([year, month, day, hour])
+    return timeVector
 
-def typicalSleepWakeTimes():
+def createLists():
     # Initially we'll make a sleep time list and a wake time list. Then we can focus on cleaning up the times and creating an average.
     sleepList = []
     wakeList = []
+    # Make the lists:
     for i in range(len(isAsleep)):
-        if (isAsleep[i][0] == ' '):
-            isAsleep[i] = isAsleep[i][1:]
+        if (sleepTime[i][0] == ' '):
             sleepTime[i] = sleepTime[i][1:]
-        
         if (isAsleep[i] == 'true' or isAsleep[i] == 'TRUE'):
             sleepList.append(sleepTime[i])
         elif (isAsleep[i] == 'false' or isAsleep[i] == 'FALSE' ):
             wakeList.append(sleepTime[i])
-    
-    print(sleepList)
-    print(wakeList)
+    sleepVector = cleanTimeList(sleepList)
+    wakeVector = cleanTimeList(wakeList)
+    TimeVectors = namedtuple('TimeVectors', ['x', 'y'])
+    t = TimeVectors(sleepVector, wakeVector)
+    return t
 
-        
+def calcDurations():
+    time = createLists()
+    if len(time.x) > len(time.y):
+        length = len(time.y)
+    else:
+        length = len(time.x)
+    for t in range(length):
+        print(time.x[t])
+        # Figure out how to format last bit
+        bedTime = pendulum.datetime(int(time.x[t][0]), int(time.x[t][1]), int(time.x[t][2]), time.x[t][3])
+        print(bedTime)
 
 effort = calcEffort()
-typicalSleepWakeTimes()
+calcDurations()
