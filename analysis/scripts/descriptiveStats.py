@@ -68,26 +68,30 @@ def cleanTimeList(theList):
     month = ''
     day = ''
     hour = ''
+    minute = ''
+    second = ''
     year = '' 
     timeVector = []
     for i in range(len(theList)):
         spaceInd = theList[i].index(' ')
         theList[i] = theList[i][spaceInd + 1:]
         thInd = theList[i].index('th')
-        day = theList[i][ : thInd]
+        day = int(theList[i][ : thInd])
         for k, v in monthDict.items():
             if k in theList[i]:
-                month = v
-        year = theList[i][-4:]
+                month = int(v)
+        year = int(theList[i][-4:])
         try:
             amInd = theList[i].index('am')
-            hour = theList[i][amInd-9: amInd +2]
+            hour = int(theList[i][amInd-9: amInd - 7])
+            minute = int(theList[i][amInd-6: amInd - 4])
+            second = int(theList[i][amInd-3: amInd])
         except:
             pmInd = theList[i].index('pm')
-            hour = theList[i][pmInd-9: pmInd +2]
-        if hour[0] == ' ':
-            hour = hour[1:]
-        timeVector.append([year, month, day, hour])
+            hour = int(theList[i][pmInd-9: pmInd - 7]) + 12
+            minute = int(theList[i][pmInd-6: pmInd - 4])
+            second = int(theList[i][pmInd-3: pmInd])
+        timeVector.append([year, month, day, hour, minute, second])
     return timeVector
 
 def createLists():
@@ -114,11 +118,12 @@ def calcDurations():
         length = len(time.y)
     else:
         length = len(time.x)
+    difference = []
     for t in range(length):
-        print(time.x[t])
-        # Figure out how to format last bit
-        bedTime = pendulum.datetime(int(time.x[t][0]), int(time.x[t][1]), int(time.x[t][2]), time.x[t][3])
-        print(bedTime)
+        #Figure out how to format last bit
+        bedTime = pendulum.datetime(time.x[t][0], time.x[t][1], time.x[t][2], time.x[t][3], time.x[t][4], time.x[t][5])
+        wakeTime = pendulum.datetime(time.y[t][0], time.y[t][1], time.y[t][2], time.y[t][3], time.y[t][4], time.y[t][5])
+        bedTime.diff(wakeTime).in_minutes
 
 effort = calcEffort()
 calcDurations()
