@@ -3,7 +3,7 @@ from collections import namedtuple
 from importData import grabData
 from userFileInput import userInput
 
-filename = userInput(False)
+filename = userInput(False)   
 
 data = grabData(filename)
 userID = data[0]
@@ -27,28 +27,28 @@ def calcEffort():
         if (userID[person][0] == ' '):
             userID[person] = userID[person][1:]
             isAsleep[person] = isAsleep[person][1:]
-        if (userID[person] == ash and (isAsleep[person] == 'true' or isAsleep[person] == 'TRUE')):
+        if (userID[person] == ash and (isAsleep[person] == 'true' or isAsleep[person] == 'TRUE' )):
             sleepObj['ashSleep'] += 1
         elif (userID[person] == ash and (isAsleep[person] == 'false' or isAsleep[person] == 'FALSE')):
             sleepObj['ashWake'] += 1
         elif (userID[person] == jack and (isAsleep[person] == 'true' or isAsleep[person] == 'TRUE')):
-            sleepObj['jackSleep'] += 1
+            sleepObj['jackSleep'] +=1
         elif (userID[person] == jack and (isAsleep[person] == 'false' or isAsleep[person] == 'FALSE')):
             sleepObj['jackWake'] += 1
         elif (userID[person] == '' and (isAsleep[person] == 'true' or isAsleep[person] == 'TRUE')):
-            sleepObj['nullSleep'] += 1
+            sleepObj['nullSleep'] +=1
         elif (userID[person] == '' and (isAsleep[person] == 'false' or isAsleep[person] == 'FALSE')):
-            sleepObj['nullWake'] += 1
-
+            sleepObj['nullWake'] +=1
+    
     total = 0
     for v in sleepObj.values():
         total += v
-
+    
     for k, v in sleepObj.items():
         sleepObj[k] = round((v/total)*100, 2)
-
+    
     return sleepObj
-
+                
 def cleanTimeList(theList):
     # Clean up the lists. Abstract this into another function when done.
     monthDict = {
@@ -70,13 +70,13 @@ def cleanTimeList(theList):
     hour = ''
     minute = ''
     second = ''
-    year = ''
+    year = '' 
     timeVector = []
     for i in range(len(theList)):
         spaceInd = theList[i].index(' ')
         theList[i] = theList[i][spaceInd + 1:]
         thInd = theList[i].index('th')
-        day = int(theList[i][:thInd])
+        day = int(theList[i][ : thInd])
         for k, v in monthDict.items():
             if k in theList[i]:
                 month = int(v)
@@ -94,7 +94,6 @@ def cleanTimeList(theList):
         timeVector.append([year, month, day, hour, minute, second])
     return timeVector
 
-
 def createLists():
     # Initially we'll make a sleep time list and a wake time list. Then we can focus on cleaning up the times and creating an average.
     sleepList = []
@@ -105,14 +104,13 @@ def createLists():
             sleepTime[i] = sleepTime[i][1:]
         if (isAsleep[i] == 'true' or isAsleep[i] == 'TRUE'):
             sleepList.append(sleepTime[i])
-        elif (isAsleep[i] == 'false' or isAsleep[i] == 'FALSE'):
+        elif (isAsleep[i] == 'false' or isAsleep[i] == 'FALSE' ):
             wakeList.append(sleepTime[i])
     sleepVector = cleanTimeList(sleepList)
     wakeVector = cleanTimeList(wakeList)
     TimeVectors = namedtuple('TimeVectors', ['x', 'y'])
     t = TimeVectors(sleepVector, wakeVector)
     return t
-
 
 def calcDurations():
     time = createLists()
@@ -125,19 +123,19 @@ def calcDurations():
         bedTime = pendulum.datetime(time.x[t][0], time.x[t][1], time.x[t][2], time.x[t][3], time.x[t][4], time.x[t][5])
         wakeTime = pendulum.datetime(time.y[t][0], time.y[t][1], time.y[t][2], time.y[t][3], time.y[t][4], time.y[t][5])
         period = wakeTime - bedTime
-        duration = [(time.y[t][1], time.y[t][2]), (period.hours, period.minutes)]
+        duration = [(time.y[t][1], time.y[t][2]),(period.hours, period.minutes)]
         difference.append(duration)
     return difference
-
 
 def medianSleepDuration():
     sleepLength = calcDurations()
     totalLength = []
     for i in range(len(sleepLength)):
+        # I don't think this is actually correct
         totalLength.append((sleepLength[i][1][0] * 60) + (sleepLength[i][1][1]))
     medianLength = statistics.median(totalLength)
+    print(f'Dezzy\'s median sleep duration is for {medianLength} hours.')
     return [medianLength, sleepLength[0:]]
-
 
 def medianTimeOfSleep():
     time = createLists()
@@ -145,8 +143,15 @@ def medianTimeOfSleep():
     for t in range(len(time.x)):
         bedTime.append([time.x[t][3]])
     medianHour = statistics.median(bedTime)
-    return medianHour
+    print(f'Dezzy typically sleeps at {medianHour[0]}.')
 
+def createEffortPlot():
+    effort = calcEffort()
+    labels = ['Ash Sleep', 'Ash Wake', 'Jack Sleep', 'Jack Wake','Unaccounted for Sleep', 'Unaccounted for wake']
+    slices = [effort['ashSleep'], effort['ashWake'], effort['jackSleep'],effort['jackWake'], effort['nullSleep'], effort['nullWake']]
+    colors = ['red', 'yellow', 'green', 'blue', 'purple', 'orange']
+    plt.pie(slices, labels=labels, colors=colors, startangle=90,shadow=False, radius=1.2, autopct='%1.1f%%')
+    plt.show()
 
 def createDurationPlot():
     sleepDuration = medianSleepDuration()
@@ -163,15 +168,6 @@ def createDurationPlot():
     plt.title('Dezzy\'s Sleep Duration')
     plt.show()
 
-
-def createEffortPlot():
-    effort = calcEffort()
-    labels = ['Ash Sleep', 'Ash Wake', 'Jack Sleep', 'Jack Wake','Unaccounted for Sleep', 'Unaccounted for wake']
-    slices = [effort['ashSleep'], effort['ashWake'], effort['jackSleep'],effort['jackWake'], effort['nullSleep'], effort['nullWake']]
-    colors = ['red', 'yellow', 'green', 'blue', 'purple', 'orange']
-    plt.pie(slices, labels=labels, colors=colors, startangle=90,shadow=False, radius=1.2, autopct='%1.1f%%')
-    plt.show()
-
-
-createDurationPlot()
 createEffortPlot()
+createDurationPlot()
+medianTimeOfSleep()
