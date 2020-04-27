@@ -7,7 +7,7 @@ import {Pie} from 'react-chartjs-2';
 
 const useStyles = makeStyles(theme => ({
     container: {
-        margin: '15% 5% 5% 5%',
+        margin: '2.5% 1% 1% 1%',
         backgroundColor: '#eceff1',
         padding: '5px',
         border: 'none',
@@ -22,7 +22,7 @@ const useStyles = makeStyles(theme => ({
         fontSize: '2rem',
         textAlign: 'center',
         color: '#1a237e',
-        margin: '2% 0 2% 0',
+        margin: '2% 0 0% 0',
     },
     name: {
         backgroundColor: 'whitesmoke',
