@@ -10,6 +10,16 @@ userID = data[0]
 isAsleep = data[1]
 sleepTime = data[2]
 
+def cleanArrays():
+    ids = []
+    asleep = []
+    for i in range(len(userID)):
+        ids.append(userID[i])
+        asleep.append(isAsleep[i])
+        if (userID[i][0] == ' '):
+                ids[i] = userID[i][1:]
+                asleep[i] = isAsleep[i][1:]
+    return [ids, asleep]
 
 def calcEffort():
     jack = '5e698b195dabe06755978529'
@@ -23,21 +33,19 @@ def calcEffort():
         'nullSleep': 0,
         'nullWake': 0
     }
-    for person in range(len(userID)):
-        if (userID[person][0] == ' '):
-            userID[person] = userID[person][1:]
-            isAsleep[person] = isAsleep[person][1:]
-        if (userID[person] == ash and (isAsleep[person] == 'true' or isAsleep[person] == 'TRUE' )):
+    x = cleanArrays()
+    for i in range(len(x[0])):
+        if (x[0][i] == ash and (x[1][i] == 'true' or x[1][i] == 'TRUE' )):
             sleepObj['ashSleep'] += 1
-        elif (userID[person] == ash and (isAsleep[person] == 'false' or isAsleep[person] == 'FALSE')):
+        elif (x[0][i] == ash and (x[1][i] == 'false' or x[1][i] == 'FALSE')):
             sleepObj['ashWake'] += 1
-        elif (userID[person] == jack and (isAsleep[person] == 'true' or isAsleep[person] == 'TRUE')):
+        elif (x[0][i] == jack and (x[1][i] == 'true' or x[1][i] == 'TRUE')):
             sleepObj['jackSleep'] +=1
-        elif (userID[person] == jack and (isAsleep[person] == 'false' or isAsleep[person] == 'FALSE')):
+        elif (x[0][i] == jack and (x[1][i] == 'false' or x[1][i] == 'FALSE')):
             sleepObj['jackWake'] += 1
-        elif (userID[person] == '' and (isAsleep[person] == 'true' or isAsleep[person] == 'TRUE')):
+        elif (x[0][i] == '' and (x[1][i] == 'true' or x[1][i] == 'TRUE')):
             sleepObj['nullSleep'] +=1
-        elif (userID[person] == '' and (isAsleep[person] == 'false' or isAsleep[person] == 'FALSE')):
+        elif (x[0][i] == '' and (x[1][i] == 'false' or x[1][i] == 'FALSE')):
             sleepObj['nullWake'] +=1
     
     total = 0
@@ -95,16 +103,17 @@ def cleanTimeList(theList):
     return timeVector
 
 def createLists():
+    x = cleanArrays()
     # Initially we'll make a sleep time list and a wake time list. Then we can focus on cleaning up the times and creating an average.
     sleepList = []
     wakeList = []
     # Make the lists:
-    for i in range(len(isAsleep)):
+    for i in range(len(x[1])):
         if (sleepTime[i][0] == ' '):
             sleepTime[i] = sleepTime[i][1:]
-        if (isAsleep[i] == 'true' or isAsleep[i] == 'TRUE'):
+        if (x[1][i] == 'true' or x[1][i] == 'TRUE'):
             sleepList.append(sleepTime[i])
-        elif (isAsleep[i] == 'false' or isAsleep[i] == 'FALSE' ):
+        elif (x[1][i] == 'false' or x[1][i] == 'FALSE' ):
             wakeList.append(sleepTime[i])
     sleepVector = cleanTimeList(sleepList)
     wakeVector = cleanTimeList(wakeList)
@@ -168,6 +177,7 @@ def createDurationPlot():
     plt.title('Dezzy\'s Sleep Duration')
     plt.show()
 
-createEffortPlot()
-createDurationPlot()
+
 medianTimeOfSleep()
+createDurationPlot()
+createEffortPlot()
