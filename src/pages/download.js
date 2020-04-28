@@ -18,7 +18,7 @@ export default function Download(props) {
     const classes = useStyles();
     return (
         <>
-            <HeaderHideScroll {...props} thePage={'getData'}></HeaderHideScroll>
+            <HeaderHideScroll {...props}></HeaderHideScroll>
             <Grid className={classes.main} container spacing={2}>
                 <Grid item item xs={12} sm={12} md={12} lg={12}><DownloadButton {...props} /></Grid>
             </Grid>

@@ -18,7 +18,7 @@ function AddData(props) {
     const classes = useStyles();
     return (
         <>
-            <HeaderHideScroll {...props} thePage={'addData'}></HeaderHideScroll>
+            <HeaderHideScroll {...props}></HeaderHideScroll>
             <Grid container spacing={2}>
                 <Grid item xs={12} sm={4} md={1}></Grid>
                 <Grid item xs={12} sm={4} md={2} className={classes.button}><AddDataButton collection='movementData' sleep='false' buttonType='movement' {...props} /></Grid> 

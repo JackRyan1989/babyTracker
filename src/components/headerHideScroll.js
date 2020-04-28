@@ -49,15 +49,10 @@ ElevationScroll.propTypes = {
 };
 
 export default function HeaderHideScroll(props) {
-    const app = props.location.app;
-    const client = props.location.client;
-    const mongodbClient = props.location.mongodbClient;
-    const db = props.location.db;
-    const user = props.location.user;
+    const {app, client, mongodbClient, db, user} = props.location;
     const [anchorEl, setAnchorEl] = useState(null);
     const [redirect, setRedirect] = useState(false);
     const [target, setTarget] = useState('');
-    const page = props.thePage;
     const handleClick = event => {
         setAnchorEl(event.currentTarget);
     };
@@ -101,9 +96,9 @@ export default function HeaderHideScroll(props) {
                                 open={Boolean(anchorEl)}
                                 onClose={handleClose}
                             >
-                                {page === 'viewData' || 'getData' ? <MenuItem onClick={addData}>Add Data</MenuItem> : null}
-                                {page === 'addData' || 'getData' ? <MenuItem onClick={dashboard}>Dashboard</MenuItem> : null}
-                                {page === 'addData' || 'viewData' ? <MenuItem onClick={getData}>Download Data</MenuItem> : null}
+                                {props.location.pathname === '/dashboard' || props.location.pathname === '/download' ? <MenuItem onClick={addData}>Add Data</MenuItem> : null}
+                                {props.location.pathname === '/add' || props.location.pathname === '/download' ? <MenuItem onClick={dashboard}>Dashboard</MenuItem> : null}
+                                {props.location.pathname === '/add' || props.location.pathname === '/dashboard' ? <MenuItem onClick={getData}>Download Data</MenuItem> : null}
                                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
                             </StyledMenu>
                         </IconButton>

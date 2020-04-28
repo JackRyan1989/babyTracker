@@ -33,7 +33,7 @@ export default function ViewData(props) {
     const classes = useStyles();
     return (
         <>
-        <HeaderHideScroll {...props} thePage={'viewData'}></HeaderHideScroll>
+        <HeaderHideScroll {...props}></HeaderHideScroll>
         <Grid container spacing={2}>
             <Grid className={classes.graphTop} item xs={12} sm={12} md={6} lg={5}><SleepWakeGraph {...props}/></Grid>
             <Grid className={classes.graphTop} item xs={12} sm={12} md={6} lg={5}><MovementGraph {...props}/></Grid>
