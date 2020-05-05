@@ -19,6 +19,10 @@ const useStyles = makeStyles(theme => ({
         color: '#1a237e',
         margin: '2% 0 0% 0',
     },
+    listing: {
+        padding: '0.5%',
+        fontSize: '1.15em',
+    }
 }))
 
 export default function MovementListing(props) {
@@ -46,7 +50,7 @@ export default function MovementListing(props) {
         <Paper elevation={3} className={classes.container}>
                 <Typography className={classes.heading}>Movement List</Typography>
                 {movementData ? movementData.map(function(item){
-                    return <div><Typography>{item.timeStamp.time}, {item.timeStamp.date} {item.timeStamp.month} {item.timeStamp.year} </Typography></div>
+                    return <div><Typography className={classes.listing}>{item.timeStamp.time}, {item.timeStamp.date} {item.timeStamp.month} {item.timeStamp.year} </Typography></div>
                 }) : <Typography>Loading...</Typography>} 
         </Paper>
     )
