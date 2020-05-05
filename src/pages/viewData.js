@@ -6,6 +6,7 @@ import SleepGraph from '../components/sleepGraph';
 import SleepWakeGraph from '../components/sleepWakeGraph';
 import Grid from '@material-ui/core/Grid';
 import MovementGraph from '../components/movementGraph';
+import MovementListing from '../components/movementList';
 
 const useStyles = makeStyles(theme => ({
     graphTop: {
@@ -21,7 +22,11 @@ const useStyles = makeStyles(theme => ({
     },
     graphBottom: {
         marginLeft: '3%',
-        marginBottom: '5%',
+        padding: theme.spacing(1),
+        textAlign: 'center',
+    },
+    list: {
+        marginLeft: '3%',
         padding: theme.spacing(1),
         textAlign: 'center',
     }
@@ -40,6 +45,7 @@ export default function ViewData(props) {
             <Grid item xs={12} sm={12} md={6} lg={1}></Grid>
             <Grid className={classes.graphMiddle} item xs={12} sm={12} md={6} lg={5}><DisplayBurden {...props}/></Grid>
             <Grid className={classes.graphBottom} item xs={12} sm={12} md={6} lg={5}><SleepGraph {...props}/></Grid>
+            <Grid className={classes.list} item xs={12} sm={12} md={11} lg={11}><MovementListing {...props}/></Grid>
         </Grid>
         </>
     )
