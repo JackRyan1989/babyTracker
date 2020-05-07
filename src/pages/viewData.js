@@ -35,7 +35,7 @@ const useStyles = makeStyles(theme => ({
         textAlign: 'center',
     },
     list: {
-        marginLeft: '3%',
+        margin: '2% 0 0 3.5%',
         padding: theme.spacing(1),
         textAlign: 'center',
     }
@@ -68,7 +68,7 @@ export default function ViewData(props) {
             </>
             : null }
             {toggleList ? 
-            <Grid className={classes.list} item xs={12} sm={12} md={11} lg={11}><MovementListing {...props}/></Grid> : null }
+            <Grid className={classes.list} item xs={12} sm={12} md={11} lg={10}><MovementListing {...props}/></Grid> : null }
         </Grid>
         </>
     )
