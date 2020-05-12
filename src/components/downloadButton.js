@@ -10,6 +10,9 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: '#6666ff',
         width: '45%',
         height: '125%',
+        '&:hover': {
+            backgroundColor: '#008080',
+        },
     },
 })
 );
@@ -25,19 +28,6 @@ export default function DownloadButton(props) {
     const [sleepData, setSleep] = useState(undefined);
     const [movementData, setMove] = useState(undefined);
     const [complete, setComplete] = useState(false);
-
-    function grabData() {
-        sleepCollection.find({}, options).toArray()
-            .then((data) => {
-                setSleep(data);
-            })
-            .catch((err) => err);
-        movementCollection.find({}, options).toArray()
-            .then((data) => {
-                setMove(data);
-            })
-            .catch((err) => err);
-    }
 
     function downloadFile() {
         if (sleepData && movementData && !complete) {
@@ -55,7 +45,7 @@ export default function DownloadButton(props) {
                 moveUserRow.push(row.user)
                 moveTimeRow.push(`${row.timeStamp.date} ${row.timeStamp.month} ${row.timeStamp.time} ${row.timeStamp.year}`)
             })
-            let dataArray = [userRow, ['X'] , sleepRow, ['XX'] , timeRow, ['XXX'] , moveUserRow, ['XXXX'] , moveTimeRow]
+            let dataArray = [userRow, ['X'], sleepRow, ['XX'], timeRow, ['XXX'], moveUserRow, ['XXXX'], moveTimeRow]
             let csvContent = "data:text/csv;charset=utf-8," + dataArray.map(e => e.join(", \n"));
 
             download(csvContent, "dezzySleepData.csv", 'csv');
@@ -65,8 +55,17 @@ export default function DownloadButton(props) {
     }
 
     useEffect(() => {
-        grabData();
-    }, [])
+        sleepCollection.find({}, options).toArray()
+            .then((data) => {
+                setSleep(data);
+            })
+            .catch((err) => err);
+        movementCollection.find({}, options).toArray()
+            .then((data) => {
+                setMove(data);
+            })
+            .catch((err) => err);
+    }, [sleepCollection, movementCollection, options])
 
     return (
         <>

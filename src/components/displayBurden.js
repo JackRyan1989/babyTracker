@@ -39,16 +39,6 @@ export default function DisplayBurden(props) {
     const [data, setData] = useState(undefined);
     const app = props.location.app;
 
-    function getData() {
-        const mongodb = app.getServiceClient(RemoteMongoClient.factory, "mongodb-atlas");
-        const sleepCollection = mongodb.db("baldyData").collection("sleepData");
-        sleepCollection.find({}).toArray()
-            .then((data) =>{
-                setData(data);
-            })
-            .catch((err)=> err);
-    }
-
     function calculateEffort() {
         if (data){
             let jackCount = 0;
@@ -66,8 +56,14 @@ export default function DisplayBurden(props) {
     }
 
     useEffect(()=>{
-        getData();
-        }, [data]);
+        const mongodb = app.getServiceClient(RemoteMongoClient.factory, "mongodb-atlas");
+        const sleepCollection = mongodb.db("baldyData").collection("sleepData");
+        sleepCollection.find({}).toArray()
+            .then((data) =>{
+                setData(data);
+            })
+            .catch((err)=> err);
+        }, [app]);
 
     const classes = useStyles();
     const [ashEffort, jackEffort] = calculateEffort();

@@ -29,25 +29,7 @@ export default function SleepGraph(props) {
     const [complete, setComplete] = useState(false);
     const [data, setData] = useState(undefined);
     const app = props.location.app;
-
-    function getData() {
-        const options = {'sort' : {"current_date": -1},};
-        const wakeQuery = {"sleep": 'false'};
-        const sleepQuery = {"sleep": 'true'};
-        const mongodb = app.getServiceClient(RemoteMongoClient.factory, "mongodb-atlas");
-        const sleepCollection = mongodb.db("baldyData").collection("sleepData");
-        sleepCollection.find(sleepQuery, options).toArray()
-            .then((data) =>{
-                setSleep(data);
-            })
-            .catch((err)=> err);
-        sleepCollection.find(wakeQuery, options).toArray()
-            .then((data) =>{
-                setWake(data);
-            })
-            .catch((err)=> err)
-    }
-
+    
     function calculateDuration() {
         if (sleepData && wakeData && ! complete){
             let hours = [];
@@ -103,9 +85,23 @@ export default function SleepGraph(props) {
     };  
 
     useEffect(()=>{
-        getData();
+        const options = {'sort' : {"current_date": -1},};
+        const wakeQuery = {"sleep": 'false'};
+        const sleepQuery = {"sleep": 'true'};
+        const mongodb = app.getServiceClient(RemoteMongoClient.factory, "mongodb-atlas");
+        const sleepCollection = mongodb.db("baldyData").collection("sleepData");
+        sleepCollection.find(sleepQuery, options).toArray()
+            .then((data) =>{
+                setSleep(data);
+            })
+            .catch((err)=> err);
+        sleepCollection.find(wakeQuery, options).toArray()
+            .then((data) =>{
+                setWake(data);
+            })
+            .catch((err)=> err)
         calculateDuration();
-        }, [sleepData]);
+        }, [app, calculateDuration]);
 
 
     const classes = useStyles();

@@ -26,24 +26,9 @@ const useStyles = makeStyles(theme => ({
 
 export default function MovementGraph(props) {
     const [movementData, setMove] = useState(undefined);
-    // const [wakeData, setWake] = useState(undefined);
-    // const [sleepHours, setHours] = useState([]);
     const [complete, setComplete] = useState(false);
     const [graphData, setData] = useState(undefined);
     const app = props.location.app;
-
-    function getData() {
-        const options = { 'sort': { "current_date": -1 }, };
-        // const wakeQuery = { "sleep": false };
-        // const sleepQuery = { "sleep": true };
-        const mongodb = app.getServiceClient(RemoteMongoClient.factory, "mongodb-atlas");
-        const moveCollection = mongodb.db("baldyData").collection("movementData");
-        moveCollection.find({}, options).toArray()
-            .then((data) => {
-                setMove(data);
-            })
-            .catch((err) => err);
-    };
 
     function calculateCounts() {
         if (movementData && ! complete){
@@ -147,10 +132,11 @@ export default function MovementGraph(props) {
                     case '23':
                         twentythree++;
                         break;
+                    default:
+                        break;
                 }
             }
             moveTimes.push(zero, one, two, three, four, five, six, seven, eight, nine, ten, eleven, twelve, thirteen, fourteen, fifteen, sixteen, seventeen, eightteen, nineteen, twenty, twentyone, twentytwo, twentythree);
-            //setHours(moveTimes);
             const moveCountData = {
                 labels: ['12 a.m.', '1 a.m.', '2 a.m.', '3 a.m.', '4 a.m.', '5 a.m.', '6 a.m.', '7 a.m.', '8 a.m.', '9 a.m.', '10 a.m.', '11 a.m.', '12 p.m.', '1 p.m.', '2 p.m.', '3 p.m.', '4 p.m.', '5 p.m.', '6  p.m.', '7 p.m.', '8 p.m.', '9 p.m.', '10 p.m.', '11 p.m.'],
                 datasets: [
@@ -179,16 +165,20 @@ export default function MovementGraph(props) {
                 };
             setData(moveCountData);
             setComplete(true);
-        } else {
-            let moveTimes = [0];
-            //setHours(moveTimes);
-        }
+        } 
     };
 
     useEffect(() => {
-        getData();
+        const options = { 'sort': { "current_date": -1 }, };
+        const mongodb = app.getServiceClient(RemoteMongoClient.factory, "mongodb-atlas");
+        const moveCollection = mongodb.db("baldyData").collection("movementData");
+        moveCollection.find({}, options).toArray()
+            .then((data) => {
+                setMove(data);
+            })
+            .catch((err) => err);
         calculateCounts();
-    }, [movementData]);
+    }, [app, calculateCounts]);
 
     const classes = useStyles();
     if (!app) {

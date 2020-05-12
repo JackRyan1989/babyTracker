@@ -26,22 +26,9 @@ const useStyles = makeStyles(theme => ({
 
 export default function SleepWakeGraph(props) {
     const [sleepData, setSleep] = useState(undefined);
-    const [sleepHours, setHours] = useState([]);
     const [complete, setComplete] = useState(false);
     const [graphData, setData] = useState(undefined);
     const app = props.location.app;
-
-    function getData() {
-        const options = { 'sort': { "current_date": -1 }, };
-        const sleepQuery = { "sleep": 'true' };
-        const mongodb = app.getServiceClient(RemoteMongoClient.factory, "mongodb-atlas");
-        const sleepCollection = mongodb.db("baldyData").collection("sleepData");
-        sleepCollection.find(sleepQuery, options).toArray()
-            .then((data) => {
-                setSleep(data);
-            })
-            .catch((err) => err);
-    };
 
     function calculateCounts() {
         if (sleepData && ! complete){
@@ -148,7 +135,6 @@ export default function SleepWakeGraph(props) {
                 }
             }
             sleepTimes.push(zero, one, two, three, four, five, six, seven, eight, nine, ten, eleven, twelve, thirteen, fourteen, fifteen, sixteen, seventeen, eightteen, nineteen, twenty, twentyone, twentytwo, twentythree);
-            setHours(sleepTimes);
             const sleepCountData = {
                 labels: ['12 a.m.', '1 a.m.', '2 a.m.', '3 a.m.', '4 a.m.', '5 a.m.', '6 a.m.', '7 a.m.', '8 a.m.', '9 a.m.', '10 a.m.', '11 a.m.', '12 p.m.', '1 p.m.', '2 p.m.', '3 p.m.', '4 p.m.', '5 p.m.', '6  p.m.', '7 p.m.', '8 p.m.', '9 p.m.', '10 p.m.', '11 p.m.'],
                 datasets: [
@@ -177,16 +163,22 @@ export default function SleepWakeGraph(props) {
                 };
             setData(sleepCountData);
             setComplete(true);
-        } else {
-            let sleepTimes = [0];
-            setHours(sleepTimes);
-        }
+        } 
     };
 
     useEffect(() => {
-        getData();
+        const options = { 'sort': { "current_date": -1 }, };
+        const sleepQuery = { "sleep": 'true' };
+        const mongodb = app.getServiceClient(RemoteMongoClient.factory, "mongodb-atlas");
+        const sleepCollection = mongodb.db("baldyData").collection("sleepData");
+        sleepCollection.find(sleepQuery, options).toArray()
+            .then((data) => {
+                setSleep(data);
+            })
+            .catch((err) => err);
+
         calculateCounts();
-    }, [sleepData]);
+    }, [app, calculateCounts]);
 
     const classes = useStyles();
     if (!app) {

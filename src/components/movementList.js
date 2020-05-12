@@ -49,7 +49,7 @@ export default function MovementListing(props) {
     const [movementData, setMove] = useState(undefined);
     const app = props.location.app;
 
-    function getData() {
+    useEffect(() => {
         const options = { 'sort': { "current_date": -1 }, };
         const mongodb = app.getServiceClient(RemoteMongoClient.factory, "mongodb-atlas");
         const moveCollection = mongodb.db("baldyData").collection("movementData");
@@ -58,11 +58,7 @@ export default function MovementListing(props) {
                 setMove(data);
             })
             .catch((err) => err);
-    };
-    
-    useEffect(() => {
-        getData();
-    }, []);
+    }, [app]);
 
     const classes = useStyles();
 
