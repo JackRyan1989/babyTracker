@@ -1,8 +1,7 @@
-import React,  { useEffect, useState } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
-import { RemoteMongoClient } from "mongodb-stitch-browser-sdk";
 
 const useStyles = makeStyles(theme => ({
     container: {
@@ -46,20 +45,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function MovementListing(props) {
-    const [movementData, setMove] = useState(undefined);
+    const movementData = props.movementData;
     const app = props.location.app;
-
-    useEffect(() => {
-        const options = { 'sort': { "current_date": -1 }, };
-        const mongodb = app.getServiceClient(RemoteMongoClient.factory, "mongodb-atlas");
-        const moveCollection = mongodb.db("baldyData").collection("movementData");
-        moveCollection.find({}, options).toArray()
-            .then((data) => {
-                setMove(data);
-            })
-            .catch((err) => err);
-    }, [app]);
-
     const classes = useStyles();
 
     return (

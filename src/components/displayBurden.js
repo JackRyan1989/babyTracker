@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import { RemoteMongoClient } from "mongodb-stitch-browser-sdk";
 import {Pie} from 'react-chartjs-2';
 
 const useStyles = makeStyles(theme => ({
@@ -36,7 +35,7 @@ const useStyles = makeStyles(theme => ({
 );
 
 export default function DisplayBurden(props) {
-    const [data, setData] = useState(undefined);
+    const data = props.data;
     const app = props.location.app;
 
     function calculateEffort() {
@@ -54,16 +53,6 @@ export default function DisplayBurden(props) {
             return [0, 0]; 
         }
     }
-
-    useEffect(()=>{
-        const mongodb = app.getServiceClient(RemoteMongoClient.factory, "mongodb-atlas");
-        const sleepCollection = mongodb.db("baldyData").collection("sleepData");
-        sleepCollection.find({}).toArray()
-            .then((data) =>{
-                setData(data);
-            })
-            .catch((err)=> err);
-        }, [app]);
 
     const classes = useStyles();
     const [ashEffort, jackEffort] = calculateEffort();

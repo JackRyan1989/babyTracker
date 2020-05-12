@@ -3,7 +3,6 @@ import { Redirect } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
-import { RemoteMongoClient } from "mongodb-stitch-browser-sdk";
 import {Line} from 'react-chartjs-2';
 import moment from 'moment';
 
@@ -24,8 +23,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function SleepGraph(props) {
-    const [sleepData, setSleep] = useState(undefined);
-    const [wakeData, setWake] = useState(undefined);
+    const sleepData = props.sleepData;
+    const wakeData = props.wakeData;
     const [complete, setComplete] = useState(false);
     const [data, setData] = useState(undefined);
     const app = props.location.app;
@@ -85,23 +84,8 @@ export default function SleepGraph(props) {
     };  
 
     useEffect(()=>{
-        const options = {'sort' : {"current_date": -1},};
-        const wakeQuery = {"sleep": 'false'};
-        const sleepQuery = {"sleep": 'true'};
-        const mongodb = app.getServiceClient(RemoteMongoClient.factory, "mongodb-atlas");
-        const sleepCollection = mongodb.db("baldyData").collection("sleepData");
-        sleepCollection.find(sleepQuery, options).toArray()
-            .then((data) =>{
-                setSleep(data);
-            })
-            .catch((err)=> err);
-        sleepCollection.find(wakeQuery, options).toArray()
-            .then((data) =>{
-                setWake(data);
-            })
-            .catch((err)=> err)
         calculateDuration();
-        }, [app, calculateDuration]);
+        }, [app]);
 
 
     const classes = useStyles();

@@ -4,7 +4,6 @@ import { Redirect } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
-import { RemoteMongoClient } from "mongodb-stitch-browser-sdk";
 import moment from 'moment';
 
 const useStyles = makeStyles(theme => ({
@@ -25,10 +24,10 @@ const useStyles = makeStyles(theme => ({
 
 
 export default function SleepWakeGraph(props) {
-    const [sleepData, setSleep] = useState(undefined);
     const [complete, setComplete] = useState(false);
     const [graphData, setData] = useState(undefined);
     const app = props.location.app;
+    const sleepData = props.sleepData;
 
     function calculateCounts() {
         if (sleepData && ! complete){
@@ -167,18 +166,8 @@ export default function SleepWakeGraph(props) {
     };
 
     useEffect(() => {
-        const options = { 'sort': { "current_date": -1 }, };
-        const sleepQuery = { "sleep": 'true' };
-        const mongodb = app.getServiceClient(RemoteMongoClient.factory, "mongodb-atlas");
-        const sleepCollection = mongodb.db("baldyData").collection("sleepData");
-        sleepCollection.find(sleepQuery, options).toArray()
-            .then((data) => {
-                setSleep(data);
-            })
-            .catch((err) => err);
-
         calculateCounts();
-    }, [app, calculateCounts]);
+    }, [app]);
 
     const classes = useStyles();
     if (!app) {

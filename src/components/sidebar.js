@@ -19,7 +19,6 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import AddIcon from '@material-ui/icons/Add';
 import VisibilityIcon from '@material-ui/icons/Visibility';
-import GetAppIcon from '@material-ui/icons/GetApp';
 import Grid from '@material-ui/core/Grid';
 import AddDataButton from './button';
 import DisplayBurden from '../components/displayBurden';
@@ -99,6 +98,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function MiniDrawer(props) {
+    console.log(props);
     const classes = useStyles();
     const theme = useTheme();
     const [open, setOpen] = useState(false);
@@ -113,7 +113,6 @@ export default function MiniDrawer(props) {
 
     const [toggleData, setToggleData] = useState(true);
     const [toggleAdd, setToggleAdd] = useState(true);
-    const [toggleDownload, setToggleDownload] = useState(true);
     const [redirect, setRedirect] = useState(false);
     const [target, setTarget] = useState(null);
 
@@ -122,8 +121,6 @@ export default function MiniDrawer(props) {
             setToggleAdd(!toggleAdd);
         } else if (type === 'view') {
             setToggleData(!toggleData);
-        } else if (type === 'download') {
-            setToggleDownload(!toggleDownload);
         };
     }
 
@@ -189,8 +186,8 @@ export default function MiniDrawer(props) {
                             <ListItemIcon><VisibilityIcon /></ListItemIcon>
                             <ListItemText primary='View Data' />
                         </ListItem>
-                        <ListItem button key='downloadData' onClick={() => toggle('download')}>
-                            <ListItemIcon><GetAppIcon /></ListItemIcon>
+                        <ListItem button key='downloadData'>
+                            <ListItemIcon><DownloadButton {...props} data={props.data} movementData={props.movementData} /></ListItemIcon>
                             <ListItemText primary='Download Data' />
                         </ListItem>
                         <Divider/>
@@ -211,19 +208,16 @@ export default function MiniDrawer(props) {
                             </>
                             : null}
                     </Grid>
-                    <Grid container spacing={1}>
+                     <Grid container spacing={1}>
                         {toggleData ?
                             <>
-                                <Grid item xs={12} sm={12} md={6} lg={5}><SleepWakeGraph {...props} /></Grid>
-                                <Grid item xs={12} sm={12} md={6} lg={5}><MovementGraph {...props} /></Grid>
-                                <Grid item xs={12} sm={12} md={6} lg={5}><DisplayBurden {...props} /></Grid>
-                                <Grid item xs={12} sm={12} md={6} lg={5}><SleepGraph {...props} /></Grid>
-                                <Grid item xs={12} sm={12} md={11} lg={10}><MovementListing {...props} /></Grid>
+                                <Grid item xs={12} sm={12} md={6} lg={5}><SleepWakeGraph {...props} sleepData={props.sleepData} /></Grid>
+                                <Grid item xs={12} sm={12} md={6} lg={5}><SleepGraph {...props} sleepData={props.sleepData} wakeData={props.wakeData} /></Grid>
+                                <Grid item xs={12} sm={12} md={6} lg={5}><MovementGraph {...props} movementData={props.movementData} /></Grid>
+                                <Grid item xs={12} sm={12} md={6} lg={5}><DisplayBurden {...props} data={props.data} /></Grid>
+                                <Grid item xs={12} sm={12} md={11} lg={10}><MovementListing {...props} movementData={props.movementData} /></Grid>
                             </>
                             : null}
-                    </Grid>
-                    <Grid container spacing={1}>
-                        {toggleDownload ? <Grid item item xs={12} sm={12} md={12} lg={12}><DownloadButton {...props} /></Grid> : null}
                     </Grid>
                 </main>
             </div>
@@ -231,8 +225,3 @@ export default function MiniDrawer(props) {
     }
 }
 
-//className={classes.graphTop}
-//className={classes.graphTop}
-//className={classes.graphMiddle}
-//className={classes.graphBottom}
-//className={classes.list}

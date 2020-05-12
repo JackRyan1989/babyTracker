@@ -4,7 +4,6 @@ import { Redirect } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
-import { RemoteMongoClient } from "mongodb-stitch-browser-sdk";
 import moment from 'moment';
 
 const useStyles = makeStyles(theme => ({
@@ -25,7 +24,7 @@ const useStyles = makeStyles(theme => ({
 
 
 export default function MovementGraph(props) {
-    const [movementData, setMove] = useState(undefined);
+    const movementData = props.movementData;
     const [complete, setComplete] = useState(false);
     const [graphData, setData] = useState(undefined);
     const app = props.location.app;
@@ -169,16 +168,8 @@ export default function MovementGraph(props) {
     };
 
     useEffect(() => {
-        const options = { 'sort': { "current_date": -1 }, };
-        const mongodb = app.getServiceClient(RemoteMongoClient.factory, "mongodb-atlas");
-        const moveCollection = mongodb.db("baldyData").collection("movementData");
-        moveCollection.find({}, options).toArray()
-            .then((data) => {
-                setMove(data);
-            })
-            .catch((err) => err);
         calculateCounts();
-    }, [app, calculateCounts]);
+    }, [app]);
 
     const classes = useStyles();
     if (!app) {
