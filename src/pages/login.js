@@ -27,13 +27,33 @@ const dayStyles = makeStyles(theme => ({
     box: {
         backgroundColor: 'whitesmoke',
         borderRadius: '5px',
-        width: '50%',
-        marginTop: theme.spacing(8),
-        marginLeft: '25%',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         alignSelf: 'center',
+        [theme.breakpoints.down('sm')]: {
+            width: '100%',
+            height: '85%',
+            marginTop: '2.5%',
+            paddingBottom: '2.5%',
+            paddingTop: '2.5%',
+        },
+        [theme.breakpoints.up('md')]: {
+            width: '75%',
+            height: '100%',
+            paddingTop: '2.5%',
+            paddingBottom: '2.5%',
+            marginLeft: '7.5%',
+            marginTop: '2.5%'
+        },
+        [theme.breakpoints.up('lg')]: {
+            width: '75%',
+            height: '100%',
+            paddingTop: '2.5%',
+            paddingBottom: '2.5%',
+            marginLeft: '12.5%',
+            marginTop: '5%',
+        },
     },
     loginButton: {
         color: 'white',
