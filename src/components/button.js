@@ -7,33 +7,104 @@ import { Button, Typography } from '@material-ui/core/';
 import DataAddedDialog from './dataAddedDialog';
 import moment from 'moment';
 
-const useStyles = makeStyles(theme => ({
+const dayStyles = makeStyles(theme => ({
     sleep: {
-        fontSize: '8rem',
         color: '#7164f9',
+        fontSize: '8rem',
+        [theme.breakpoints.down('sm')]: {
+            border: 'solid lightgrey 1px',
+            borderRadius: '5px',
+        },
     },
     wake: {
-        fontSize: '8rem',
         color: '#b23f3f',
+        fontSize: '8rem',
+        [theme.breakpoints.down('sm')]: {
+            border: 'solid lightgrey 1px',
+            borderRadius: '5px',
+        },
     },
     move: {
-        fontSize: '8rem',
         color: '#EE6363',
+        fontSize: '8rem',
+        [theme.breakpoints.down('sm')]: {
+            border: 'solid lightgrey 1px',
+            borderRadius: '5px',
+        },
     },
     text: {
-        fontSize: '2rem',
-        borderBottomStyle: 'solid',
-        borderBottomColor: 'grey',
-        borderBottom: '1px',
         width: '75%',
-        marginLeft: '14.5%',
+        textAlign: 'center',
+        color: 'black',
+        fontWeight: '300',
+        [theme.breakpoints.down('sm')]: {
+            display: 'none',
+        },
+        [theme.breakpoints.up('md')]: {
+            fontSize: '2rem',
+        },
+        [theme.breakpoints.up('lg')]: {
+            fontSize: '2rem',
+        },
+    },
+})
+);
+
+const nightStyles = makeStyles(theme => ({
+    sleep: {
+        right: '260px',
+        color: '#7164f9',
+        backgroundColor: 'grey',
+        fontSize: '8rem',
+        [theme.breakpoints.down('sm')]: {
+            border: 'solid lightgrey 1px',
+            borderRadius: '5px',
+        },
+    },
+    wake: {
+        right: '260px',
+        color: '#b23f3f',
+        backgroundColor: 'grey',
+        fontSize: '8rem',
+        [theme.breakpoints.down('sm')]: {
+            border: 'solid lightgrey 1px',
+            borderRadius: '5px',
+        },
+    },
+    move: {
+        color: '#EE6363',
+        backgroundColor: 'grey',
+        fontSize: '8rem',
+        [theme.breakpoints.down('sm')]: {
+            border: 'solid lightgrey 1px',
+            borderRadius: '5px',
+        },
+
+    },
+    text: {
+        fontWeight: '300',
+        textAlign: 'center',
+        color: 'white',
+        [theme.breakpoints.down('sm')]: {
+            display: 'none',
+        },
+        [theme.breakpoints.up('md')]: {
+            fontSize: '2rem',
+            width: '75%',
+        },
+        [theme.breakpoints.up('lg')]: {
+            fontSize: '2rem',
+            width: '100%',
+        },
     },
 })
 );
 
 
 export default function AddDataButton(props) {
-    const classes = useStyles();
+    let classes;
+    const now = moment().format('H');
+    (now <= 6 || now >= 20 )? classes = nightStyles(): classes = dayStyles();
     const [dispDialog, setDialog] = useState(false);
     const handleClose = () => {
         setDialog(false);
@@ -57,13 +128,13 @@ export default function AddDataButton(props) {
     };
 
     return (
-        <>
+        <div>
             <Button
                 onClick = {timeStamp}
             >{props.buttonType === 'sleep' ? <NightsStayIcon className={classes.sleep} /> : props.buttonType === 'wake' ? <AlarmAddRoundedIcon className={classes.wake} /> : props.buttonType === 'movement' ? <DirectionsRunIcon className={classes.move} /> : null }
             </Button>
             <Typography className={classes.text}>{props.buttonType}</Typography>
             <DataAddedDialog openDialog={dispDialog} handleClose={handleClose} dataType={props.buttonType} />
-        </>
+        </div>
     )
 }

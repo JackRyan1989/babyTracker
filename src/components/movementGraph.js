@@ -8,17 +8,35 @@ import moment from 'moment';
 
 const useStyles = makeStyles(theme => ({
     container: {
-        margin: '2.5% 1% 1% 1%',
         backgroundColor: '#eceff1',
         padding: '5px',
         border: 'none',
         borderRadius: '2px',
+        [theme.breakpoints.down('sm')]: {
+            margin: '1%',
+            padding: '2.5px',
+        },
+        [theme.breakpoints.up('md')]: {
+            margin: '2.5% 1% 1% 1%',
+            padding: '5px',
+        },
+        [theme.breakpoints.up('lg')]: {
+            margin: '2.5% 1% 1% 1%',
+            padding: '5px',
+        },
     },
     heading: {
-        fontSize: '2rem',
+        fontWeight: '300',
         textAlign: 'center',
         color: '#1a237e',
-        margin: '2% 0 0% 0',
+        [theme.breakpoints.down('sm')]: {
+            fontSize: '1.5rem',
+            margin: '2% 0 0% 0',
+        },
+        [theme.breakpoints.up('md')]: {
+            fontSize: '2rem',
+            margin: '2% 0 0% 0',
+        },
     },
 }));
 
