@@ -378,8 +378,8 @@ export default function MiniDrawer(props) {
                                 <Grid item xs={12}><Typography className={classes.dataView}>View Data:</Typography></Grid>
                                 <Grid item xs={12} sm={12} md={6} lg={6}><SleepWakeGraph {...props} sleepData={props.sleepData} /></Grid>
                                 <Grid item xs={12} sm={12} md={6} lg={6}><SleepGraph {...props} sleepData={props.sleepData} wakeData={props.wakeData} /></Grid>
-                                <Grid item xs={12} sm={12} md={6} lg={6}><MovementGraph {...props} movementData={props.movementData} /></Grid>
                                 <Grid item xs={12} sm={12} md={6} lg={6}><DisplayBurden {...props} data={props.data} /></Grid>
+                                <Grid item xs={12} sm={12} md={6} lg={6}><MovementGraph {...props} movementData={props.movementData} /></Grid>
                                 <Grid item xs={12} sm={12} md={12} lg={12}><MovementListing {...props} movementData={props.movementData} /></Grid>
                             </>
                             : null}

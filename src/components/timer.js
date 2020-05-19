@@ -1,77 +1,122 @@
-import React, { useState } from "react";
+import React, { Component } from "react";
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import moment from 'moment';
-import { makeStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import { Typography } from "@material-ui/core";
 
-const styles = makeStyles((theme) => ({
+const useStyles = theme => ({
     timerContainer: {
-
+        backgroundColor: '#eceff1',
+        padding: '5px',
+        border: 'none',
+        borderRadius: '2px',
+        [theme.breakpoints.down('sm')]: {
+            margin: '1%',
+            padding: '2.5px',
+        },
+        [theme.breakpoints.up('md')]: {
+            margin: '2.5% 1% 1% 1%',
+            padding: '5px',
+        },
+        [theme.breakpoints.up('lg')]: {
+            margin: '2.5% 1% 1% 1%',
+            padding: '5px',
+        },
     },
-    mins: {
-
-    },
-    secs: {
-
-    },
-    centi: {
-
+    TimerText: {
+        fontSize: '1.75rem',
+        margin: '2% 0 0% 0',
+        textAlign: 'left',
+        border: 'none',
+        borderRadius: '2px',
+        padding: '5%',
+        backgroundColor: 'whitesmoke',
+        textAlign: 'center',
+        alignContent: 'center',
     },
     timeButton: {
-
+        backgroundColor: 'lightblue',
+        color: 'black',
+        marginTop: '5%',
+        marginBottom: '2.5%',
+        textAlign: 'center',
+        width: '100%',
     },
 
-}))
+});
 
-export default function SimpleTimer(props){
-    const [timerOn, setTimerOn] = useState(false);
-    const [timerStart, setTimerStartTime] = useState(0);
-    const [timerTime, setTimerTime] = useState(0);
-    const [timeList, setTimeList] = useState([]);
-    const [timerDurations, setDurations]= useState([]);
-    let timer;
-            
-    function startTimer() {
-        setTimerOn(true);
-        setTimerStartTime(Date.now() - timerStart);
-        setTimerTime(0);
-        setTimeList([...timeList, moment().format('MM-DD-YYYY')]);
-        console.log(timeList);
-        timer = setInterval(() => {
-            setTimerTime(Date.now() - timerStart);
+class SimpleTimer extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            timerOn: false,
+            timerStart: 0,
+            timerTime: 0,
+            timeList: [],
+            timerDurations: [],
+        }
+    };
+
+    startTimer = () => {
+        this.setState({
+            timerOn: true,
+            timerStart: Date.now() - this.state.timerStart,
+            timerTime: this.state.timerTime,
+            timeList: [...this.state.timeList, moment().format('MM-DD-YYYY')]
+        });
+        this.timer = setInterval(() => {
+            this.setState({
+                timerTime: Date.now() - this.state.timerStart
+            });
         }, 10);
     };
 
-    function stopTimer(mins, secs, centSecs) {
-        setTimerOn(false);
-        setDurations([...timerDurations, mins + ":" + secs + ":" + centSecs]);
-        console.log(timerDurations);
-        setTimerTime(0);
-        setTimerStartTime(0);
-        clearInterval(timer);
+    stopTimer = (mins, secs, centSecs) => {
+        this.setState({
+            timerOn: false,
+            timerDurations: [...this.state.timerDurations, mins + ":" + secs + ":" + centSecs],
+            timerTime: 0,
+            timerStart: 0,
+        });
+        clearInterval(this.timer);
     };
-    
-    const classes = styles();
-    let centiseconds = ("0" + (Math.floor(timerTime / 10) % 100)).slice(-2);
-    let seconds = ("0" + (Math.floor(timerTime / 1000) % 60)).slice(-2);
-    let minutes = ("0" + (Math.floor(timerTime / 60000) % 60)).slice(-2);
-    return (
-        <Grid container className={classes.timerContainer}>
-            <Grid item xs={2}></Grid>
-            {timerOn ?
-            <>
-                <Grid item xs={1} className={classes.mins}>{minutes}</Grid>
-                <Grid item xs={1} className={classes.secs}>:{seconds}</Grid>
-                <Grid item xs={1} className={classes.centi}>:{centiseconds}</Grid>
-                <Grid item xs={6} className={classes.timeButton}><Button onClick={() => stopTimer(minutes, seconds, centiseconds)}>Stop Timer</Button></Grid>
-            </> 
-            : 
-            <>
-                <Grid item xs={12}><Typography>Timer Ready</Typography></Grid>
-                <Grid item xs={6} className={classes.timeButton}><Button onClick={() => startTimer()}>Start Timer</Button></Grid> 
-                </>
+
+    render() {
+        const { classes } = this.props;
+        let centiseconds = ("0" + (Math.floor(this.state.timerTime / 10) % 100)).slice(-2);
+        let seconds = ("0" + (Math.floor(this.state.timerTime / 1000) % 60)).slice(-2);
+        let minutes = ("0" + (Math.floor(this.state.timerTime / 60000) % 60)).slice(-2);
+        return (
+            <Grid container className={classes.timerContainer}>
+                {this.state.timerOn ?
+                    <>
+                    <Grid item xs={3}></Grid>
+                    <Grid item xs={6}>
+                        <Typography className={classes.TimerText}>{minutes}:{seconds}:{centiseconds}</Typography>
+                    </Grid>
+                    <Grid item xs={3}></Grid>
+                    <Grid item xs={3}></Grid>
+                    <Grid item xs={6}>
+                        <Button className={classes.timeButton} onClick={() => this.stopTimer(minutes, seconds, centiseconds)}>Stop Timer</Button>
+                    </Grid>
+                    </>
+                    :
+                    <>
+                    <Grid item xs={3}></Grid>
+                    <Grid item xs={6}>
+                        <Typography className={classes.TimerText}>00:00:00</Typography>
+                    </Grid>
+                    <Grid item xs={3}></Grid>
+                    <Grid item xs={3}></Grid>
+                    <Grid item xs={6}>
+                        <Button className={classes.timeButton} onClick={() => this.startTimer()}>Start Timer</Button>
+                    </Grid>
+                    </>
                 }
-        </Grid>
-    );
+            </Grid>
+        );
+    }
 };
+
+export default withStyles(useStyles)(SimpleTimer);
