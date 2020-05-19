@@ -19,6 +19,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import AddIcon from '@material-ui/icons/Add';
 import VisibilityIcon from '@material-ui/icons/Visibility';
+import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import Grid from '@material-ui/core/Grid';
 import AddDataButton from './button';
 import DisplayBurden from '../components/displayBurden';
@@ -27,6 +28,7 @@ import SleepWakeGraph from '../components/sleepWakeGraph';
 import MovementGraph from '../components/movementGraph';
 import MovementListing from '../components/movementList';
 import DownloadButton from '../components/downloadButton';
+import SimpleTimer from '../components/timer';
 import moment from 'moment';
 
 const drawerWidth = 240;
@@ -269,6 +271,7 @@ export default function MiniDrawer(props) {
 
     const [toggleData, setToggleData] = useState(true);
     const [toggleAdd, setToggleAdd] = useState(true);
+    const [toggleTimer, setToggleTimer] = useState(false);
     const [redirect, setRedirect] = useState(false);
     const [target, setTarget] = useState(null);
 
@@ -277,7 +280,9 @@ export default function MiniDrawer(props) {
             setToggleAdd(!toggleAdd);
         } else if (type === 'view') {
             setToggleData(!toggleData);
-        };
+        } else if (type === 'timer') {
+            setToggleTimer(!toggleTimer);
+        }
     }
 
     function logout() {
@@ -342,6 +347,10 @@ export default function MiniDrawer(props) {
                             <ListItemIcon><VisibilityIcon /></ListItemIcon>
                             <ListItemText primary='View Data' />
                         </ListItem>
+                        <ListItem button key='viewTimer' onClick={() => toggle('timer')}>
+                            <ListItemIcon><AccessTimeIcon /></ListItemIcon>
+                            <ListItemText primary='View Timer' />
+                        </ListItem>
                         <ListItem button key='downloadData'>
                             <ListItemIcon><DownloadButton {...props} data={props.data} movementData={props.movementData} /></ListItemIcon>
                             <ListItemText primary='Download Data' />
@@ -356,7 +365,7 @@ export default function MiniDrawer(props) {
                 <main className={classes.content}>
                     <div className={classes.toolbar} />
                     <Grid container>
-                        {toggleAdd ?
+                        {toggleAdd && !toggleTimer ?
                             <>
                                 <Grid item xs={12}><Typography className={classes.dataAdd}>Record Data:</Typography></Grid>
                                 <Grid item xs={12} sm={4} md={4} className={classes.button}><AddDataButton collection='movementData' sleep='false' buttonType='movement' {...props} /></Grid>
@@ -364,7 +373,7 @@ export default function MiniDrawer(props) {
                                 <Grid item xs={12} sm={4} md={4} className={classes.button}><AddDataButton collection='sleepData' sleep='false' buttonType='wake' {...props} /></Grid>
                             </>
                             : null}
-                        {toggleData ?
+                        {toggleData && !toggleTimer ?
                             <>
                                 <Grid item xs={12}><Typography className={classes.dataView}>View Data:</Typography></Grid>
                                 <Grid item xs={12} sm={12} md={6} lg={6}><SleepWakeGraph {...props} sleepData={props.sleepData} /></Grid>
@@ -374,6 +383,13 @@ export default function MiniDrawer(props) {
                                 <Grid item xs={12} sm={12} md={12} lg={12}><MovementListing {...props} movementData={props.movementData} /></Grid>
                             </>
                             : null}
+                        {toggleTimer ?
+                            <>
+                                <Grid item xs={12}><Typography className={classes.dataView}>View Timer:</Typography></Grid>
+                                <Grid item xs={12} sm={12} md={6} lg={6}><SimpleTimer {...props} /></Grid>
+                            </>  
+                            : null  
+                         }
                     </Grid>
                 </main>
             </div>
