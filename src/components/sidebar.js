@@ -386,7 +386,7 @@ export default function MiniDrawer(props) {
                             : null}
                         {toggleTimer ?
                             <>
-                                <Grid item xs={12}><Typography className={classes.dataView}>View Timer:</Typography></Grid>
+                                <Grid item xs={12}><Typography className={classes.dataAdd}>View Timer:</Typography></Grid>
                                 <Grid item lg={1}></Grid>
                                 <Grid item xs={12} sm={12} md={10} lg={10}><SimpleTimer {...props} /></Grid>
                                 <Grid item lg={1}></Grid>
