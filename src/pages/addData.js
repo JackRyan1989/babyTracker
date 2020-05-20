@@ -9,7 +9,6 @@ export default function AddData(props) {
     const [sleepData, setSleep] = useState(undefined);
     const [wakeData, setWake] = useState(undefined);
     const [movementData, setMove] = useState(undefined);
-    const [contractionData, setContractData] = useState(undefined);
     const app = props.location.app;
 
     useEffect(()=>{
@@ -19,7 +18,6 @@ export default function AddData(props) {
         const mongodb = app.getServiceClient(RemoteMongoClient.factory, "mongodb-atlas");
         const sleepCollection = mongodb.db("baldyData").collection("sleepData");
         const moveCollection = mongodb.db("baldyData").collection("movementData");
-        const contractionCollection = mongodb.db("baldyData").collection("contractionData");
         moveCollection.find({}, options).toArray()
              .then((data) => {
                  setMove(data);
@@ -40,17 +38,12 @@ export default function AddData(props) {
                  setData(data);
               })
              .catch((err)=> err);
-        contractionCollection.find({}).toArray()
-              .then((data)=> {
-                  setContractData(data);
-              })
-              .catch((err) => err);
         }, [app]);
 
     if (data && sleepData && wakeData && movementData){
         return (
             <>
-                <MiniDrawer {...props} data={data} sleepData={sleepData} wakeData={wakeData} movementData={movementData}></MiniDrawer>
+                <MiniDrawer {...props} data={data} sleepData={sleepData} wakeData={wakeData} movementData={movementData} ></MiniDrawer>
             </>
         )
     } else {

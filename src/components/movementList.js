@@ -137,7 +137,6 @@ const useStyles = makeStyles(theme => ({
 
 export default function MovementListing(props) {
     const movementData = props.movementData;
-    const app = props.location.app;
     const classes = useStyles();
 
     return (

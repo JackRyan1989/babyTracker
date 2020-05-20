@@ -29,6 +29,7 @@ import MovementGraph from '../components/movementGraph';
 import MovementListing from '../components/movementList';
 import DownloadButton from '../components/downloadButton';
 import SimpleTimer from '../components/timer';
+import ContractionLog from '../components/contractionLog';
 import moment from 'moment';
 
 const drawerWidth = 240;
@@ -386,7 +387,12 @@ export default function MiniDrawer(props) {
                         {toggleTimer ?
                             <>
                                 <Grid item xs={12}><Typography className={classes.dataView}>View Timer:</Typography></Grid>
-                                <Grid item xs={12} sm={12} md={6} lg={6}><SimpleTimer {...props} /></Grid>
+                                <Grid item lg={1}></Grid>
+                                <Grid item xs={12} sm={12} md={10} lg={10}><SimpleTimer {...props} /></Grid>
+                                <Grid item lg={1}></Grid>
+                                <Grid item lg={1}></Grid>
+                                <Grid item xs={12} sm={12} md={10} lg={10}><ContractionLog {...props} /></Grid>
+                                <Grid item lg={1}></Grid>
                             </>  
                             : null  
                          }

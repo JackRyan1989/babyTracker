@@ -4,6 +4,7 @@ import Button from '@material-ui/core/Button';
 import moment from 'moment';
 import { withStyles } from '@material-ui/core/styles';
 import { Typography } from "@material-ui/core";
+import { Paper } from "@material-ui/core";
 
 const useStyles = theme => ({
     timerContainer: {
@@ -35,8 +36,16 @@ const useStyles = theme => ({
         textAlign: 'center',
         alignContent: 'center',
     },
-    timeButton: {
+    timeButtonInactive: {
         backgroundColor: 'lightblue',
+        color: 'black',
+        marginTop: '5%',
+        marginBottom: '2.5%',
+        textAlign: 'center',
+        width: '100%',
+    },
+    timeButtonActive: {
+        backgroundColor: 'pink',
         color: 'black',
         marginTop: '5%',
         marginBottom: '2.5%',
@@ -52,9 +61,7 @@ class SimpleTimer extends Component {
         this.state = {
             timerOn: false,
             timerStart: 0,
-            timerTime: 0,
-            timeList: [],
-            timerDurations: [],
+            timerTime: 0
         }
     };
 
@@ -63,7 +70,6 @@ class SimpleTimer extends Component {
             timerOn: true,
             timerStart: Date.now() - this.state.timerStart,
             timerTime: this.state.timerTime,
-            timeList: [...this.state.timeList, moment().format('MM-DD-YYYY')]
         });
         this.timer = setInterval(() => {
             this.setState({
@@ -75,11 +81,23 @@ class SimpleTimer extends Component {
     stopTimer = (mins, secs, centSecs) => {
         this.setState({
             timerOn: false,
-            timerDurations: [...this.state.timerDurations, mins + ":" + secs + ":" + centSecs],
             timerTime: 0,
             timerStart: 0,
         });
         clearInterval(this.timer);
+        const mongodb = this.props.location.mongodbClient;
+        const data = mongodb.db("baldyData").collection("contractionData");
+        const userID = this.props.location.user;
+        const now = {
+            month: moment().format('MMMM'),
+            date: moment().format('dddd Do'),
+            year: moment().format('YYYY'),
+            time: moment().format('h:mm:ss a'),
+        };
+        data.insertOne({
+            duration: mins + ":" + secs + ":" + centSecs,
+            timeStamp: now,
+        }).catch(console.error);
     };
 
     render() {
@@ -88,33 +106,35 @@ class SimpleTimer extends Component {
         let seconds = ("0" + (Math.floor(this.state.timerTime / 1000) % 60)).slice(-2);
         let minutes = ("0" + (Math.floor(this.state.timerTime / 60000) % 60)).slice(-2);
         return (
-            <Grid container className={classes.timerContainer}>
-                {this.state.timerOn ?
-                    <>
-                    <Grid item xs={3}></Grid>
-                    <Grid item xs={6}>
-                        <Typography className={classes.TimerText}>{minutes}:{seconds}:{centiseconds}</Typography>
-                    </Grid>
-                    <Grid item xs={3}></Grid>
-                    <Grid item xs={3}></Grid>
-                    <Grid item xs={6}>
-                        <Button className={classes.timeButton} onClick={() => this.stopTimer(minutes, seconds, centiseconds)}>Stop Timer</Button>
-                    </Grid>
-                    </>
-                    :
-                    <>
-                    <Grid item xs={3}></Grid>
-                    <Grid item xs={6}>
-                        <Typography className={classes.TimerText}>00:00:00</Typography>
-                    </Grid>
-                    <Grid item xs={3}></Grid>
-                    <Grid item xs={3}></Grid>
-                    <Grid item xs={6}>
-                        <Button className={classes.timeButton} onClick={() => this.startTimer()}>Start Timer</Button>
-                    </Grid>
-                    </>
-                }
-            </Grid>
+            <Paper elevation={3} className={classes.timerContainer}>
+                <Grid container>
+                    {this.state.timerOn ?
+                        <>
+                            <Grid item xs={3}></Grid>
+                            <Grid item xs={6}>
+                                <Typography className={classes.TimerText}>{minutes}:{seconds}:{centiseconds}</Typography>
+                            </Grid>
+                            <Grid item xs={3}></Grid>
+                            <Grid item xs={3}></Grid>
+                            <Grid item xs={6}>
+                                <Button className={classes.timeButtonActive} onClick={() => this.stopTimer(minutes, seconds, centiseconds)}>Stop Timer</Button>
+                            </Grid>
+                        </>
+                        :
+                        <>
+                            <Grid item xs={3}></Grid>
+                            <Grid item xs={6}>
+                                <Typography className={classes.TimerText}>00:00:00</Typography>
+                            </Grid>
+                            <Grid item xs={3}></Grid>
+                            <Grid item xs={3}></Grid>
+                            <Grid item xs={6}>
+                                <Button className={classes.timeButtonInactive} onClick={() => this.startTimer()}>Start Timer</Button>
+                            </Grid>
+                        </>
+                    }
+                </Grid>
+            </Paper>
         );
     }
 };
