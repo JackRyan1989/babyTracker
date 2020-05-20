@@ -54,26 +54,31 @@ export default function ContractionLog(props) {
     const classes = useStyles();
     const [comment, setComment] = useState(undefined);
     const [contractionData, setContractData] = useState(undefined);
+    const [update, setUpdate] = useState(true);
     const app = props.location.app;
     const mongodb = app.getServiceClient(RemoteMongoClient.factory, "mongodb-atlas");
     const contractionCollection = mongodb.db("baldyData").collection("contractionData");
 
-    useEffect(()=> {
-        contractionCollection.find({}).toArray()
-              .then((data)=> {
-                  setContractData(data);
-              })
-              .catch((err) => err);
-    }, []);
-    
-    const commentInput = event => {
-        setComment(event.target.value);
+    useEffect(() => {
+        if (update) {
+            contractionCollection.find({}).toArray()
+                .then((data) => {
+                    setContractData(data);
+                })
+                .catch((err) => err);
+            setUpdate(false);
+        }
+    }, [update]);
+
+    const commentInput = (e) => {
+        setComment(e);
     };
 
     const addComment = (id) => {
-        contractionCollection.updateOne({'_id': id},
-        {$set:{comment: comment}}, {upsert:true})
-        .catch(console.error);
+        contractionCollection.updateOne({ '_id': id },
+            { $set: { comment: comment } }, { upsert: true })
+            .catch(console.error);
+        setUpdate(true);
     }
 
     return (
@@ -86,9 +91,9 @@ export default function ContractionLog(props) {
                 {contractionData ? contractionData.map(function (item) {
                     return (
                         <>
-                        <Grid item xs={4}><Typography>{item.timeStamp.time}, {item.timeStamp.date} </Typography></Grid>
-                        <Grid item xs={4}><Typography>{item.duration}</Typography></Grid>
-                        <Grid item xs={4}>{item.comment ? <Typography>{item.comment}</Typography> : <form noValidate autoComplete="off"><TextField value={comment} onChange={commentInput} size="small" id="outlined-basic" label="Add Comment" variant="outlined"  /><Button className={classes.button} onClick={() => addComment(item._id)} variant="contained" color="primary" size='small'>Submit</Button></form>} </Grid>
+                            <Grid item xs={4}><Typography>{item.timeStamp.time}, {item.timeStamp.date} </Typography></Grid>
+                            <Grid item xs={4}><Typography>{item.duration}</Typography></Grid>
+                            <Grid item xs={4}>{item.comment ? <Typography>{item.comment}</Typography> : <form noValidate autoComplete="off"><TextField value={comment} onChange={(e) => commentInput(e.target.value)} size="small" id="outlined-basic" label="Add Comment" variant="outlined" /><Button className={classes.button} onClick={() => addComment(item._id)} variant="contained" color="primary" size='small'>Submit</Button></form>} </Grid>
                         </>
                     )
                 })

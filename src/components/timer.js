@@ -87,7 +87,6 @@ class SimpleTimer extends Component {
         clearInterval(this.timer);
         const mongodb = this.props.location.mongodbClient;
         const data = mongodb.db("baldyData").collection("contractionData");
-        const userID = this.props.location.user;
         const now = {
             month: moment().format('MMMM'),
             date: moment().format('dddd Do'),
