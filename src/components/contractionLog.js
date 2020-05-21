@@ -44,11 +44,33 @@ const useStyles = makeStyles(theme => ({
         fontWeight: '500',
         margin: '2.5% 0 1% 0',
         textDecoration: 'underline',
+        [theme.breakpoints.down('xs')]: {
+            fontSize: '1em',
+        },
+        [theme.breakpoints.up('sm')]: {
+            fontSize: '1.5em',
+        },
+        [theme.breakpoints.up('md')]: {
+            fontSize: '2.00em',
+        },
     },
     button: {
         margin: '2%',
     },
+    text: {
+        [theme.breakpoints.down('xs')]: {
+            fontSize: '1em',
+        },
+        [theme.breakpoints.up('sm')]: {
+            fontSize: '1.25em',
+            padding: '0 2%',
+        },
+        [theme.breakpoints.up('md')]: {
+            fontSize: '1.5em',
+        },
+    },
 }));
+
 
 export default function ContractionLog(props) {
     const classes = useStyles();
@@ -92,9 +114,9 @@ export default function ContractionLog(props) {
                 {contractionData ? contractionData.map(function (item) {
                     return (
                         <>
-                            <Grid item xs={4}><Typography>{item.timeStamp.time}, {item.timeStamp.date} </Typography></Grid>
-                            <Grid item xs={4}><Typography>{item.duration}</Typography></Grid>
-                            <Grid item xs={4}>{item.comment ? <Typography>{item.comment}</Typography> : <form noValidate autoComplete="off"><TextField value={comment} onChange={(e) => commentInput(e.target.value)} size="small" id="outlined-basic" label="Add Comment" variant="outlined" /><Button className={classes.button} onClick={() => addComment(item._id)} variant="contained" color="primary" size='small'>Submit</Button></form>} </Grid>
+                            <Grid item xs={4}><Typography className={classes.text}>{item.timeStamp.time}, {item.timeStamp.date} </Typography></Grid>
+                            <Grid item xs={4} ><Typography className={classes.text}>{item.duration}</Typography></Grid>
+                            <Grid item xs={4}>{item.comment ? <Typography>{item.comment}</Typography> : <form noValidate autoComplete="off"><TextField className={classes.TextField} value={comment} onChange={(e) => commentInput(e.target.value)} size="small" id="outlined-basic" margin="dense" label="Comment" variant="outlined" /><Button className={classes.button} onClick={() => addComment(item._id)} variant="contained" color="primary" size='small'>Submit</Button></form>} </Grid>
                         </>
                     )
                 })
