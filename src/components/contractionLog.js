@@ -9,7 +9,7 @@ import { RemoteMongoClient } from "mongodb-stitch-browser-sdk";
 
 const useStyles = makeStyles(theme => ({
     container: {
-        backgroundColor: '#eceff1',
+        backgroundColor: '#E7E6F0',
         padding: '5px',
         border: 'none',
         borderRadius: '2px',
@@ -58,9 +58,10 @@ export default function ContractionLog(props) {
     const app = props.location.app;
     const mongodb = app.getServiceClient(RemoteMongoClient.factory, "mongodb-atlas");
     const contractionCollection = mongodb.db("baldyData").collection("contractionData");
+    const dataAdded = props.dataAdded;
 
     useEffect(() => {
-        if (update) {
+        if ((update === true) || (dataAdded === true) ) {
             contractionCollection.find({}).toArray()
                 .then((data) => {
                     setContractData(data);
@@ -68,7 +69,7 @@ export default function ContractionLog(props) {
                 .catch((err) => err);
             setUpdate(false);
         }
-    }, [update]);
+    }, [update, dataAdded]);
 
     const commentInput = (e) => {
         setComment(e);
@@ -82,7 +83,7 @@ export default function ContractionLog(props) {
     }
 
     return (
-        <Paper elevation={3} className={classes.container}>
+        <Paper className={classes.container}>
             <Typography className={classes.heading}>Contraction Log</Typography>
             <Grid container>
                 <Grid xs={4} className={classes.subHeading}>Start Time</Grid>

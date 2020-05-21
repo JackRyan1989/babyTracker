@@ -5,6 +5,7 @@ import moment from 'moment';
 import { withStyles } from '@material-ui/core/styles';
 import { Typography } from "@material-ui/core";
 import { Paper } from "@material-ui/core";
+import ContractionLog from './contractionLog';
 
 const useStyles = theme => ({
     timerContainer: {
@@ -61,7 +62,8 @@ class SimpleTimer extends Component {
         this.state = {
             timerOn: false,
             timerStart: 0,
-            timerTime: 0
+            timerTime: 0,
+            timerOff: false,
         }
     };
 
@@ -70,6 +72,7 @@ class SimpleTimer extends Component {
             timerOn: true,
             timerStart: Date.now() - this.state.timerStart,
             timerTime: this.state.timerTime,
+            timerOff: false,
         });
         this.timer = setInterval(() => {
             this.setState({
@@ -83,6 +86,7 @@ class SimpleTimer extends Component {
             timerOn: false,
             timerTime: 0,
             timerStart: 0,
+            timerOff: true,
         });
         clearInterval(this.timer);
         const mongodb = this.props.location.mongodbClient;
@@ -100,6 +104,7 @@ class SimpleTimer extends Component {
     };
 
     render() {
+        const dataAdded = this.state.timerOff;
         const { classes } = this.props;
         let centiseconds = ("0" + (Math.floor(this.state.timerTime / 10) % 100)).slice(-2);
         let seconds = ("0" + (Math.floor(this.state.timerTime / 1000) % 60)).slice(-2);
@@ -132,6 +137,7 @@ class SimpleTimer extends Component {
                             </Grid>
                         </>
                     }
+                    <Grid item xs={12}><ContractionLog {...this.props} dataAdded={dataAdded} /></Grid>
                 </Grid>
             </Paper>
         );
