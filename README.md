@@ -26,4 +26,5 @@ I still need to figure out the best way to determine when his sleep patterns bec
 
 Anyway, here's some pics.
 
-![Login Screen](https://i.imgur.com/v3FvHCz.png)  ![Data Entry Buttons](https://i.imgur.com/70javQQ.png) ![View Graphs](https://i.imgur.com/HPdXdKP.png)   ![View Graphs Continued](https://i.imgur.com/LrTHyt8.png)
+![Imgur](https://i.imgur.com/ciHPbgY.png?1)  ![Imgur](https://i.imgur.com/1n0iCSw.png?1) 
+![Imgur](https://i.imgur.com/NIOMOfD.png?1)  ![Imgur](https://i.imgur.com/Z39gRhF.png)
