@@ -269,22 +269,32 @@ export default function MiniDrawer(props) {
         setOpen(false);
     };
 
-    const [toggleData, setToggleData] = useState(false);
-    const [toggleAdd, setToggleAdd] = useState(true);
+    const [toggleSleep, setToggleSleep] = useState(false);
+    const [toggleMove, setToggleMove] = useState(true);
     const [toggleTimer, setToggleTimer] = useState(false);
     const [redirect, setRedirect] = useState(false);
     const [target, setTarget] = useState(null);
 
     function toggle(type) {
-        if (type === 'add') {
-            setToggleAdd(!toggleAdd);
-            setToggleData(!toggleData);
-        } else if (type === 'view') {
-            setToggleData(!toggleData);
-            setToggleAdd(!toggleAdd);
-        } else if (type === 'timer') {
-            setToggleTimer(!toggleTimer);
+        // Probably do a switch
+        switch (type){
+            case 'move':
+                setToggleMove(true);
+                setToggleSleep(false);
+                setToggleTimer(false);
+            break;
+            case 'sleep':
+                setToggleMove(false);
+                setToggleSleep(true);
+                setToggleTimer(false);
+            break;
+            case 'timer':
+                setToggleMove(false);
+                setToggleSleep(false);
+                setToggleTimer(true);
+            break;
         }
+
     }
 
     function logout() {
@@ -341,11 +351,11 @@ export default function MiniDrawer(props) {
                     </div>
                     <Divider />
                     <List>
-                        <ListItem button key='addData' onClick={() => toggle('add')}>
+                        <ListItem button key='addData' onClick={() => toggle('move')}>
                             <ListItemIcon><DirectionsRunIcon /></ListItemIcon>
                             <ListItemText primary='Sleep' />
                         </ListItem>
-                        <ListItem button key='ViewData' onClick={() => toggle('view')}>
+                        <ListItem button key='ViewData' onClick={() => toggle('sleep')}>
                             <ListItemIcon><LocalHotelIcon /></ListItemIcon>
                             <ListItemText primary='Movement' />
                         </ListItem>
@@ -367,7 +377,7 @@ export default function MiniDrawer(props) {
                 <main className={classes.content}>
                     <div className={classes.toolbar} />
                     <Grid container>
-                        {toggleAdd && !toggleTimer ?
+                        {toggleMove ?
                             <>
                                 <Grid item xs={12}><Typography className={classes.dataAdd}>Movement:</Typography></Grid>
                                 <Grid item xs={12} sm={4} md={4} className={classes.button}><AddDataButton collection='movementData' sleep='false' buttonType='movement' {...props} /></Grid>
@@ -375,7 +385,7 @@ export default function MiniDrawer(props) {
                                 <Grid item xs={12} sm={12} md={6} lg={6}><MovementListing {...props} movementData={props.movementData} /></Grid>
                             </>
                             : null}
-                        {toggleData && !toggleTimer ?
+                        {toggleSleep ?
                             <>
                                 <Grid item xs={12}><Typography className={classes.dataAdd}>Sleep:</Typography></Grid>
                                 <Grid item xs={12} sm={4} md={4} className={classes.button}><AddDataButton collection='sleepData' sleep='true' buttonType='sleep' {...props} /></Grid>
