@@ -27,14 +27,6 @@ const dayStyles = makeStyles(theme => ({
             borderRadius: '5px',
         },
     },
-    move: {
-        color: '#EE6363',
-        fontSize: '8rem',
-        [theme.breakpoints.down('sm')]: {
-            border: 'solid lightgrey 1px',
-            borderRadius: '5px',
-        },
-    },
     text: {
         width: '75%',
         textAlign: 'center',
@@ -73,16 +65,6 @@ const nightStyles = makeStyles(theme => ({
             border: 'solid lightgrey 1px',
             borderRadius: '5px',
         },
-    },
-    move: {
-        color: '#EE6363',
-        backgroundColor: 'grey',
-        fontSize: '8rem',
-        [theme.breakpoints.down('sm')]: {
-            border: 'solid lightgrey 1px',
-            borderRadius: '5px',
-        },
-
     },
     text: {
         fontWeight: '300',
@@ -170,27 +152,27 @@ export default function SleepContainer(props) {
 
     return (
         <Grid container>
-            <Grid item xs={12} sm={6} md={6} >
+            <Grid item xs={6}>
                 <Button
                     onClick={() => timeStamp('true')}
-                ><NightsStayIcon />
+                ><NightsStayIcon className={classes.sleep} />
                 </Button>
                 <Typography className={classes.text}>{props.buttonType}</Typography>
                 <DataAddedDialog openDialog={dispDialog} handleClose={() => handleClose()} dataType={props.buttonType} />
             </Grid>
-            <Grid item xs={12} sm={4} md={4} >
+            <Grid item xs={6}>
                 <Button
                     onClick={() => timeStamp('false')}
-                ><AlarmAddRoundedIcon />
+                ><AlarmAddRoundedIcon className={classes.wake} />
                 </Button>
                 <Typography className={classes.text}>{props.buttonType}</Typography>
                 <DataAddedDialog openDialog={dispDialog} handleClose={() => handleClose()} />
             </Grid>
             {(data && sleepData && wakeData) ?
                 <>
-                    <Grid item xs={12} sm={12} md={6} lg={6}><SleepWakeGraph sleepData={sleepData} app={app} /></Grid>
-                    <Grid item xs={12} sm={12} md={6} lg={6}><SleepGraph sleepData={sleepData} wakeData={wakeData} app={app} /></Grid>
-                    <Grid item xs={12} sm={12} md={6} lg={6}><DisplayBurden data={data} app={app} /></Grid>
+                    <Grid item xs={12}><SleepWakeGraph sleepData={sleepData} app={app} /></Grid>
+                    <Grid item xs={12}><SleepGraph sleepData={sleepData} wakeData={wakeData} app={app} /></Grid>
+                    <Grid item xs={12}><DisplayBurden data={data} app={app} /></Grid>
                 </>
                 :
                 <>

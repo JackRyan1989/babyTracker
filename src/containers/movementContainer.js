@@ -9,22 +9,6 @@ import { Button, Grid, Typography } from '@material-ui/core/';
 import moment from 'moment';
 
 const dayStyles = makeStyles(theme => ({
-    sleep: {
-        color: '#7164f9',
-        fontSize: '8rem',
-        [theme.breakpoints.down('sm')]: {
-            border: 'solid lightgrey 1px',
-            borderRadius: '5px',
-        },
-    },
-    wake: {
-        color: '#b23f3f',
-        fontSize: '8rem',
-        [theme.breakpoints.down('sm')]: {
-            border: 'solid lightgrey 1px',
-            borderRadius: '5px',
-        },
-    },
     move: {
         color: '#EE6363',
         fontSize: '8rem',
@@ -35,7 +19,6 @@ const dayStyles = makeStyles(theme => ({
     },
     text: {
         width: '75%',
-        textAlign: 'center',
         color: 'black',
         fontWeight: '300',
         [theme.breakpoints.down('sm')]: {
@@ -52,26 +35,6 @@ const dayStyles = makeStyles(theme => ({
 );
 
 const nightStyles = makeStyles(theme => ({
-    sleep: {
-        right: '260px',
-        color: '#7164f9',
-        backgroundColor: 'grey',
-        fontSize: '8rem',
-        [theme.breakpoints.down('sm')]: {
-            border: 'solid lightgrey 1px',
-            borderRadius: '5px',
-        },
-    },
-    wake: {
-        right: '260px',
-        color: '#b23f3f',
-        backgroundColor: 'grey',
-        fontSize: '8rem',
-        [theme.breakpoints.down('sm')]: {
-            border: 'solid lightgrey 1px',
-            borderRadius: '5px',
-        },
-    },
     move: {
         color: '#EE6363',
         backgroundColor: 'grey',
@@ -149,14 +112,16 @@ export default function MoveContainer(props) {
 
     return (
         <Grid container>
-            <Grid item xs={12} sm={6} md={6} >
+            <Grid item xs={3}></Grid>
+            <Grid item xs={6} >
                 <Button
                     onClick={() => timeStamp()}
-                ><DirectionsRunIcon />
+                ><DirectionsRunIcon className={classes.move} />
                 </Button>
                 <Typography className={classes.text}>Movement</Typography>
                 <DataAddedDialog openDialog={dispDialog} handleClose={() => handleClose()} />
             </Grid>
+            <Grid item xs={3}></Grid>
             {movementData ?
                 <>
                     <Grid item xs={12} sm={12} md={6} lg={6}><MovementGraph movementData={movementData} app={app} /></Grid>

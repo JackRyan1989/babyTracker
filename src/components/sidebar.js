@@ -384,13 +384,13 @@ export default function MiniDrawer(props) {
                         {toggleMove ?
                             <>
                                 <Grid item xs={12}><Typography className={classes.dataAdd}>Movement:</Typography></Grid>
-                                <Grid item xs={12} sm={12} md={6} lg={6}><MoveContainer {...props} app={app} /></Grid>
+                                <Grid item xs={12}><MoveContainer {...props} app={app} /></Grid>
                             </>
                             : null}
                         {toggleSleep ?
                             <>
                                 <Grid item xs={12}><Typography className={classes.dataAdd}>Sleep:</Typography></Grid>
-                                <Grid item xs={12} sm={12} md={6} lg={6}><SleepContainer {...props} app={app}/></Grid>
+                                <Grid item xs={12}><SleepContainer {...props} app={app}/></Grid>
                             </>
                             : null}
                         {toggleTimer ?
