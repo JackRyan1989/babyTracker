@@ -1,22 +1,22 @@
 {
   "files": {
     "main.css": "/babyTracker/static/css/main.5ecd60fb.chunk.css",
-    "main.js": "/babyTracker/static/js/main.b58970ad.chunk.js",
-    "main.js.map": "/babyTracker/static/js/main.b58970ad.chunk.js.map",
+    "main.js": "/babyTracker/static/js/main.59dc7079.chunk.js",
+    "main.js.map": "/babyTracker/static/js/main.59dc7079.chunk.js.map",
     "runtime-main.js": "/babyTracker/static/js/runtime-main.9f0d2acf.js",
     "runtime-main.js.map": "/babyTracker/static/js/runtime-main.9f0d2acf.js.map",
-    "static/js/2.4437d12b.chunk.js": "/babyTracker/static/js/2.4437d12b.chunk.js",
-    "static/js/2.4437d12b.chunk.js.map": "/babyTracker/static/js/2.4437d12b.chunk.js.map",
+    "static/js/2.f18ce5dc.chunk.js": "/babyTracker/static/js/2.f18ce5dc.chunk.js",
+    "static/js/2.f18ce5dc.chunk.js.map": "/babyTracker/static/js/2.f18ce5dc.chunk.js.map",
     "index.html": "/babyTracker/index.html",
-    "precache-manifest.06d335fffcc2d1122b2c62c24ded1347.js": "/babyTracker/precache-manifest.06d335fffcc2d1122b2c62c24ded1347.js",
+    "precache-manifest.4de92bfb5bb2bad58a90e71c63a1e293.js": "/babyTracker/precache-manifest.4de92bfb5bb2bad58a90e71c63a1e293.js",
     "service-worker.js": "/babyTracker/service-worker.js",
     "static/css/main.5ecd60fb.chunk.css.map": "/babyTracker/static/css/main.5ecd60fb.chunk.css.map",
-    "static/js/2.4437d12b.chunk.js.LICENSE.txt": "/babyTracker/static/js/2.4437d12b.chunk.js.LICENSE.txt"
+    "static/js/2.f18ce5dc.chunk.js.LICENSE.txt": "/babyTracker/static/js/2.f18ce5dc.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.9f0d2acf.js",
-    "static/js/2.4437d12b.chunk.js",
+    "static/js/2.f18ce5dc.chunk.js",
     "static/css/main.5ecd60fb.chunk.css",
-    "static/js/main.b58970ad.chunk.js"
+    "static/js/main.59dc7079.chunk.js"
   ]
 }
