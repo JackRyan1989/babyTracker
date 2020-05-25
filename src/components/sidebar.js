@@ -140,6 +140,9 @@ const dayStyles = makeStyles((theme) => ({
             lineHeight: '1.2',
             letterSpacing: '-0.00833em',  
         },
+    },
+    inUse: {
+        color: '#FF7657',
     }
 }));
 
@@ -252,6 +255,9 @@ const nightStyles = makeStyles((theme) => ({
             letterSpacing: '-0.00833em',  
         },
     },
+    inUse: {
+        color: '#FF7657',
+    }
 }));
 
 export default function MiniDrawer(props) {
@@ -352,15 +358,15 @@ export default function MiniDrawer(props) {
                     <Divider />
                     <List>
                         <ListItem button key='addData' onClick={() => toggle('move')}>
-                            <ListItemIcon><DirectionsRunIcon /></ListItemIcon>
+                            <ListItemIcon>{toggleMove ? <DirectionsRunIcon className={classes.inUse} /> : <DirectionsRunIcon/>}</ListItemIcon>
                             <ListItemText primary='Sleep' />
                         </ListItem>
                         <ListItem button key='ViewData' onClick={() => toggle('sleep')}>
-                            <ListItemIcon><LocalHotelIcon /></ListItemIcon>
+                            <ListItemIcon>{toggleSleep ? <LocalHotelIcon className={classes.inUse} /> : <LocalHotelIcon />}</ListItemIcon>
                             <ListItemText primary='Movement' />
                         </ListItem>
                         <ListItem button key='viewTimer' onClick={() => toggle('timer')}>
-                            <ListItemIcon><AccessTimeIcon /></ListItemIcon>
+                            <ListItemIcon>{toggleTimer ? <AccessTimeIcon className={classes.inUse} />: <AccessTimeIcon />}</ListItemIcon>
                             <ListItemText primary='Contractions' />
                         </ListItem>
                         <ListItem button key='downloadData'>
