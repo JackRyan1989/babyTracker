@@ -45,7 +45,7 @@ export default function MovementGraph(props) {
     const movementData = props.movementData;
     const [complete, setComplete] = useState(false);
     const [graphData, setData] = useState(undefined);
-    const app = props.location.app;
+    const app = props.app;
 
     function calculateCounts() {
         if (movementData && ! complete){

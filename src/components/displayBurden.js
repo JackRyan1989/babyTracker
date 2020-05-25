@@ -54,7 +54,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function DisplayBurden(props) {
     const data = props.data;
-    const app = props.location.app;
+    const app = props.app;
 
     function calculateEffort() {
         if (data){

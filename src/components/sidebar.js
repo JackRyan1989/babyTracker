@@ -21,12 +21,8 @@ import DirectionsRunIcon from '@material-ui/icons/DirectionsRun';
 import LocalHotelIcon from '@material-ui/icons/LocalHotel';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import Grid from '@material-ui/core/Grid';
-import AddDataButton from './button';
-import DisplayBurden from '../components/displayBurden';
-import SleepGraph from '../components/sleepGraph';
-import SleepWakeGraph from '../components/sleepWakeGraph';
-import MovementGraph from '../components/movementGraph';
-import MovementListing from '../components/movementList';
+import MoveContainer from '../containers/movementContainer';
+import SleepContainer from '../containers/sleepContainer';
 import DownloadButton from '../components/downloadButton';
 import SimpleTimer from '../components/timer';
 import moment from 'moment';
@@ -261,6 +257,8 @@ const nightStyles = makeStyles((theme) => ({
 }));
 
 export default function MiniDrawer(props) {
+    console.log(props);
+    const app=props.app;
     let classes;
     const now = moment().format('H');
     (now <= 6 || now >= 20 )? classes = nightStyles(): classes = dayStyles()
@@ -386,19 +384,13 @@ export default function MiniDrawer(props) {
                         {toggleMove ?
                             <>
                                 <Grid item xs={12}><Typography className={classes.dataAdd}>Movement:</Typography></Grid>
-                                <Grid item xs={12} sm={4} md={4} className={classes.button}><AddDataButton collection='movementData' sleep='false' buttonType='movement' {...props} /></Grid>
-                                <Grid item xs={12} sm={12} md={6} lg={6}><MovementGraph {...props} movementData={props.movementData} /></Grid>
-                                <Grid item xs={12} sm={12} md={6} lg={6}><MovementListing {...props} movementData={props.movementData} /></Grid>
+                                <Grid item xs={12} sm={12} md={6} lg={6}><MoveContainer {...props} app={app} /></Grid>
                             </>
                             : null}
                         {toggleSleep ?
                             <>
                                 <Grid item xs={12}><Typography className={classes.dataAdd}>Sleep:</Typography></Grid>
-                                <Grid item xs={12} sm={4} md={4} className={classes.button}><AddDataButton collection='sleepData' sleep='true' buttonType='sleep' {...props} /></Grid>
-                                <Grid item xs={12} sm={4} md={4} className={classes.button}><AddDataButton collection='sleepData' sleep='false' buttonType='wake' {...props} /></Grid>
-                                <Grid item xs={12} sm={12} md={6} lg={6}><SleepWakeGraph {...props} sleepData={props.sleepData} /></Grid>
-                                <Grid item xs={12} sm={12} md={6} lg={6}><SleepGraph {...props} sleepData={props.sleepData} wakeData={props.wakeData} /></Grid>
-                                <Grid item xs={12} sm={12} md={6} lg={6}><DisplayBurden {...props} data={props.data} /></Grid>
+                                <Grid item xs={12} sm={12} md={6} lg={6}><SleepContainer {...props} app={app}/></Grid>
                             </>
                             : null}
                         {toggleTimer ?

@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { RemoteMongoClient } from "mongodb-stitch-browser-sdk";
 import { makeStyles } from '@material-ui/core/styles';
-import NightsStayIcon from '@material-ui/icons/NightsStay';
-import AlarmAddRoundedIcon from '@material-ui/icons/AlarmAddRounded';
 import DirectionsRunIcon from '@material-ui/icons/DirectionsRun';
-import { Button, Typography } from '@material-ui/core/';
-import DataAddedDialog from './dataAddedDialog';
+import MovementGraph from '../components/movementGraph';
+import MovementListing from '../components/movementList';
+import DataAddedDialog from '../components/dataAddedDialog';
+import { Button, Grid, Typography } from '@material-ui/core/';
 import moment from 'moment';
 
 const dayStyles = makeStyles(theme => ({
@@ -100,18 +101,35 @@ const nightStyles = makeStyles(theme => ({
 })
 );
 
-
-export default function AddDataButton(props) {
+export default function MoveContainer(props) {
     let classes;
     const now = moment().format('H');
-    (now <= 6 || now >= 20 )? classes = nightStyles(): classes = dayStyles();
+    (now <= 6 || now >= 20) ? classes = nightStyles() : classes = dayStyles();
     const [dispDialog, setDialog] = useState(false);
+    const [movementData, setMove] = useState(undefined);
+    const [dataAdded, setDataAdded] = useState(true);
+    const app = props.app;
+
+    useEffect(() => {
+        if (dataAdded === true) {
+            const options = { 'sort': { "current_date": -1 }, };
+            const mongodb = app.getServiceClient(RemoteMongoClient.factory, "mongodb-atlas");
+            const moveCollection = mongodb.db("baldyData").collection("movementData");
+            moveCollection.find({}, options).toArray()
+                .then((data) => {
+                    setMove(data);
+                })
+                .catch((err) => err);
+            setDataAdded(false);
+        }
+    }, [app, dataAdded]);
+
     const handleClose = () => {
         setDialog(false);
-      };
+    };
     const timeStamp = () => {
         const mongodb = props.location.mongodbClient;
-        const data = mongodb.db("baldyData").collection(props.collection);
+        const data = mongodb.db("baldyData").collection('movementData');
         const userID = props.location.user;
         const now = {
             month: moment().format('MMMM'),
@@ -119,22 +137,35 @@ export default function AddDataButton(props) {
             year: moment().format('YYYY'),
             time: moment().format('h:mm:ss a'),
         };
-        setDialog(true);
         data.insertOne({
-            sleep: props.sleep,
+            sleep: 'false',
             timeStamp: now,
             user: userID
         }).catch(console.error);
+        setDialog(true);
+        setDataAdded(true);
+        setMove(undefined);
     };
 
     return (
-        <div>
-            <Button
-                onClick = {timeStamp}
-            >{props.buttonType === 'sleep' ? <NightsStayIcon className={classes.sleep} /> : props.buttonType === 'wake' ? <AlarmAddRoundedIcon className={classes.wake} /> : props.buttonType === 'movement' ? <DirectionsRunIcon className={classes.move} /> : null }
-            </Button>
-            <Typography className={classes.text}>{props.buttonType}</Typography>
-            <DataAddedDialog openDialog={dispDialog} handleClose={handleClose} dataType={props.buttonType} />
-        </div>
+        <Grid container>
+            <Grid item xs={12} sm={6} md={6} >
+                <Button
+                    onClick={() => timeStamp()}
+                ><DirectionsRunIcon />
+                </Button>
+                <Typography className={classes.text}>Movement</Typography>
+                <DataAddedDialog openDialog={dispDialog} handleClose={() => handleClose()} />
+            </Grid>
+            {movementData ?
+                <>
+                    <Grid item xs={12} sm={12} md={6} lg={6}><MovementGraph movementData={movementData} app={app} /></Grid>
+                    <Grid item xs={12} sm={12} md={6} lg={6}><MovementListing movementData={movementData} app={app} /></Grid>
+                </>
+                :
+                <>
+                    <Grid item xs={12} sm={12} md={6} lg={6}><Typography>Loading...</Typography></Grid>
+                </>}
+        </Grid>
     )
 }

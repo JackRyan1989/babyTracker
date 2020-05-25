@@ -83,7 +83,7 @@ export default function ContractionLog(props) {
     const dataAdded = props.dataAdded;
 
     useEffect(() => {
-        if ((update === true) || (dataAdded === true) ) {
+        if ((update === true) || (dataAdded === true)) {
             contractionCollection.find({}).toArray()
                 .then((data) => {
                     setContractData(data);

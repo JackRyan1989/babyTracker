@@ -44,7 +44,7 @@ const useStyles = makeStyles(theme => ({
 export default function SleepWakeGraph(props) {
     const [complete, setComplete] = useState(false);
     const [graphData, setData] = useState(undefined);
-    const app = props.location.app;
+    const app = props.app;
     const sleepData = props.sleepData;
 
     function calculateCounts() {

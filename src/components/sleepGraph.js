@@ -45,7 +45,7 @@ export default function SleepGraph(props) {
     const wakeData = props.wakeData;
     const [complete, setComplete] = useState(false);
     const [data, setData] = useState(undefined);
-    const app = props.location.app;
+    const app = props.app;
     
     function calculateDuration() {
         if (sleepData && wakeData && ! complete){

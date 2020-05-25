@@ -1,10 +1,7 @@
 import React, { Component } from "react";
-import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
 import moment from 'moment';
 import { withStyles } from '@material-ui/core/styles';
-import { Typography } from "@material-ui/core";
-import { Paper } from "@material-ui/core";
+import { Button, Grid, Paper,Typography } from "@material-ui/core";
 import ContractionLog from './contractionLog';
 
 const useStyles = theme => ({
