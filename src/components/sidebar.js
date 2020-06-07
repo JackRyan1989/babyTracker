@@ -20,6 +20,7 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import DirectionsRunIcon from '@material-ui/icons/DirectionsRun';
 import LocalHotelIcon from '@material-ui/icons/LocalHotel';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
+import FastfoodIcon from '@material-ui/icons/Fastfood';
 import Grid from '@material-ui/core/Grid';
 import MoveContainer from '../containers/movementContainer';
 import SleepContainer from '../containers/sleepContainer';
@@ -257,7 +258,6 @@ const nightStyles = makeStyles((theme) => ({
 }));
 
 export default function MiniDrawer(props) {
-    console.log(props);
     const app=props.app;
     let classes;
     const now = moment().format('H');
@@ -276,6 +276,8 @@ export default function MiniDrawer(props) {
     const [toggleSleep, setToggleSleep] = useState(false);
     const [toggleMove, setToggleMove] = useState(true);
     const [toggleTimer, setToggleTimer] = useState(false);
+    const [togglePoop, setTogglePoop] = useState(false);
+    const [toggleEat, setToggleEat] = useState(false);
     const [redirect, setRedirect] = useState(false);
     const [target, setTarget] = useState(null);
 
@@ -286,16 +288,36 @@ export default function MiniDrawer(props) {
                 setToggleMove(true);
                 setToggleSleep(false);
                 setToggleTimer(false);
+                setToggleEat(false);
+                setTogglePoop(false);
             break;
             case 'sleep':
                 setToggleMove(false);
                 setToggleSleep(true);
                 setToggleTimer(false);
+                setToggleEat(false);
+                setTogglePoop(false);
             break;
             case 'timer':
                 setToggleMove(false);
                 setToggleSleep(false);
                 setToggleTimer(true);
+                setToggleEat(false);
+                setTogglePoop(false);
+            break;
+            case 'eat':
+                setToggleMove(false);
+                setToggleSleep(false);
+                setToggleTimer(false);
+                setToggleEat(true);
+                setTogglePoop(false);
+            break;
+            case 'poop':
+                setToggleMove(false);
+                setToggleSleep(false);
+                setToggleTimer(false);
+                setToggleEat(false);
+                setTogglePoop(true);
             break;
         }
 
@@ -367,6 +389,14 @@ export default function MiniDrawer(props) {
                             <ListItemIcon>{toggleTimer ? <AccessTimeIcon className={classes.inUse} />: <AccessTimeIcon />}</ListItemIcon>
                             <ListItemText primary='Contractions' />
                         </ListItem>
+                        <ListItem button key='viewEat' onClick={() => toggle('eat')}>
+                            <ListItemIcon>{toggleEat ?  <FastfoodIcon className={classes.inUse} />: <FastfoodIcon />}</ListItemIcon>
+                            <ListItemText primary='Breastfeeding' />
+                        </ListItem>
+                        <ListItem button key='viewPoop' onClick={() => toggle('poop')}>
+                            <ListItemIcon>{togglePoop ? <div className={classes.inUse}>&#128169;</div>: <div>&#128169;</div>}</ListItemIcon>
+                            <ListItemText primary='Peepee Poopoo' />
+                        </ListItem>
                         <ListItem button key='downloadData'>
                             <ListItemIcon><DownloadButton {...props} data={props.data} movementData={props.movementData} /></ListItemIcon>
                             <ListItemText primary='Download Data' />
@@ -402,6 +432,18 @@ export default function MiniDrawer(props) {
                             </>  
                             : null  
                          }
+                         {toggleEat ?
+                            <>
+                                <Grid item xs={12}><Typography className={classes.dataAdd}>Breastfeeding:</Typography></Grid>
+                                <Grid item xs={12}><MoveContainer {...props} app={app} /></Grid>
+                            </>
+                            : null}
+                            {togglePoop ?
+                            <>
+                                <Grid item xs={12}><Typography className={classes.dataAdd}>Diaper Change:</Typography></Grid>
+                                <Grid item xs={12}><MoveContainer {...props} app={app} /></Grid>
+                            </>
+                            : null}
                     </Grid>
                 </main>
             </div>
