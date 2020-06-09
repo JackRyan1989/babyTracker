@@ -4,6 +4,7 @@ import { RemoteMongoClient } from "mongodb-stitch-browser-sdk";
 import { withStyles } from '@material-ui/core/styles';
 import EatButton from '../components/eatButton';
 import EatLog from '../components/eatLog';
+import Typography from '@material-ui/core/Typography';
 
 const useStyles = theme => ({
     eatContainer: {
@@ -43,7 +44,7 @@ class EatContainer extends Component {
         this.state = {
             clicked: false,
             whichBoob: [],
-            feedingTimes: [],
+            feedingTimes: undefined,
             dataSent: false,
             duplicate: false,
             leftBoob: false,
@@ -77,7 +78,7 @@ class EatContainer extends Component {
             )
                 .catch(console.error);
             this.setState({
-                feedingTimes: [...this.state.feedingTimes, date, time],
+                //feedingTimes: [...this.state.feedingTimes, date, time],
                 dataSent: true,
             });
         } else {
@@ -97,13 +98,20 @@ class EatContainer extends Component {
         eatCollection.find({}, options).toArray()
             .then((data) => {
                 data.forEach((elem) => {
-                    console.log(elem);
                     date.push(elem.date);
                     boobs.push(elem.boob);
                     time.push(elem.time);
                 })
+                let keys = [...date];
+                let vals = [...time];
+                let val = [];
+                let resObj = {};
+                keys.forEach((key, i) =>  { 
+                    val.push(vals[i]);
+                    resObj[key] = val;
+                });
                 this.setState({
-                    feedingTimes: [...date, ...time],
+                    feedingTimes: resObj,
                 })
             })
             .catch((err) => err);
@@ -114,7 +122,7 @@ class EatContainer extends Component {
         return (
             <>
                 <EatButton onClick={this.buttonClicked} submitData={this.submitBoobData} duplicate={this.state.duplicate} leftBoob={this.state.leftBoob} rightBoob={this.state.rightBoob} />
-                <EatLog data={this.state.feedingTimes} />
+                {this.state.feedingTimes ? <EatLog data={this.state.feedingTimes} /> : <Typography>Loading...</Typography>} 
             </>
         )
 
