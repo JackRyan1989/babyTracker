@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
   }));
 
   export default function EatButton(props) {
-      console.log(props);
+      //console.log(props);
     const styles = useStyles();
     return (
         <div className={styles.root}>

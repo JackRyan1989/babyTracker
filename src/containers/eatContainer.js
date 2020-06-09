@@ -57,26 +57,27 @@ class EatContainer extends Component {
             clicked: true,
             whichBoob: [...this.state.whichBoob, boob],
         });
-        (boob === 'left'? this.setState({leftBoob: true}): this.setState({rightBoob: true}));
-        
+        (boob === 'left' ? this.setState({ leftBoob: true }) : this.setState({ rightBoob: true }));
+
     };
 
     submitBoobData = () => {
         const mongodb = this.state.app.getServiceClient(RemoteMongoClient.factory, "mongodb-atlas");
         const eatCollection = mongodb.db("baldyData").collection("eat");
         if (this.state.dataSent === false) {
-            const now = {
-                month: moment().format('MMMM'),
-                date: moment().format('dddd Do'),
-                year: moment().format('YYYY'),
-                time: moment().format('h:mm:ss a'),
-            };
+            const month = moment().format('MMMM');
+            const day = moment().format('dddd Do');
+            const date = `${month}, ${day}`;
+            const time = moment().format('h:mm:ss a');
             eatCollection.insertOne({
-                timeStamp: now,
-                boobUsed: this.state.whichBoob,   
-            }).catch(console.error);
+                    date: date, 
+                    time: time,
+                    boob: this.state.whichBoob,
+                }
+            )
+                .catch(console.error);
             this.setState({
-                feedingTimes: [...this.state.feedingTimes, now['time'], now['date'], now['month'], now['year']],
+                feedingTimes: [...this.state.feedingTimes, date, time],
                 dataSent: true,
             });
         } else {
@@ -84,28 +85,36 @@ class EatContainer extends Component {
                 duplicate: true,
             })
         }
-
     };
 
     componentDidMount() {
         const mongodb = this.state.app.getServiceClient(RemoteMongoClient.factory, "mongodb-atlas");
         const eatCollection = mongodb.db("baldyData").collection("eat");
         const options = { 'sort': { "current_date": -1 }, };
-        // eatCollection.find({}, options).toArray()
-        //         .then((data) => {
-        //             this.setState({
-        //                 feedingTimes: [...this.state.feedingTimes, data],
-        //             })
-        //         })
-        //         .catch((err) => err);
+        let date = [];
+        let boobs = [];
+        let time = []; 
+        eatCollection.find({}, options).toArray()
+            .then((data) => {
+                data.forEach((elem) => {
+                    console.log(elem);
+                    date.push(elem.date);
+                    boobs.push(elem.boob);
+                    time.push(elem.time);
+                })
+                this.setState({
+                    feedingTimes: [...date, ...time],
+                })
+            })
+            .catch((err) => err);
     }
 
 
     render() {
         return (
             <>
-                <EatButton onClick={this.buttonClicked} submitData={this.submitBoobData} duplicate={this.state.duplicate} leftBoob = {this.state.leftBoob} rightBoob={this.state.rightBoob}/>
-                <EatLog data={this.state.feedingTimes}/>
+                <EatButton onClick={this.buttonClicked} submitData={this.submitBoobData} duplicate={this.state.duplicate} leftBoob={this.state.leftBoob} rightBoob={this.state.rightBoob} />
+                <EatLog data={this.state.feedingTimes} />
             </>
         )
 
