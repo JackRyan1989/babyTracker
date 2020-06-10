@@ -32,16 +32,6 @@ const useStyles = makeStyles((theme) => ({
     listItem: {
         padding: '2.5%',
     },
-    subList: {
-        color: 'black',
-        backgroundColor: "#bfbaff",
-        margin: '2.5%',
-        borderRadius: '2px',
-        padding: '2.5%',
-        '&:hover': {
-            background: "whitesmoke",
-        },
-    }
 }));
 
 export default function EatButton(props) {

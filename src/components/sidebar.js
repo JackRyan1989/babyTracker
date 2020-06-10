@@ -25,6 +25,7 @@ import Grid from '@material-ui/core/Grid';
 import MoveContainer from '../containers/movementContainer';
 import SleepContainer from '../containers/sleepContainer';
 import EatContainer from '../containers/eatContainer';
+import DiaperContainer from '../containers/diaperContainer';
 import DownloadButton from '../components/downloadButton';
 import SimpleTimer from '../components/timer';
 import moment from 'moment';
@@ -442,7 +443,7 @@ export default function MiniDrawer(props) {
                             {togglePoop ?
                             <>
                                 <Grid item xs={12}><Typography className={classes.dataAdd}>Diaper Change:</Typography></Grid>
-                                <Grid item xs={12}><MoveContainer {...props} app={app} /></Grid>
+                                <Grid item xs={12}><DiaperContainer {...props} app={app} /></Grid>
                             </>
                             : null}
                     </Grid>
