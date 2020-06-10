@@ -1,10 +1,12 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Collapse from '@material-ui/core/Collapse';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import Typography from '@material-ui/core/Typography';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 
 const useStyles = makeStyles((theme) => ({
@@ -14,17 +16,18 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     nested: {
+        width: '75%',
         marginLeft: '2%',
         marginTop: '1%',
         color: '#0a0202',
-        backgroundColor: '#f9bca4',
+        border: 'solid black 1px',
         borderRadius: '2px',
         '&:hover': {
             background: "whitesmoke",
         },
     },
     list: {
-        width: '25%',
+        width: '75%',
     },
     listItem: {
         padding: '2.5%',
@@ -49,27 +52,22 @@ export default function EatButton(props) {
     });
     let dayArray = Array.from(set);
     let daysArray = dayArray.reverse();
-    const [open, setOpen] = React.useState(false);
-
-    const handleClick = () => {
-        setOpen(!open);
-    };
-
+    
     return (
         <div className={styles.root}>
-            <List
-                component="nav"
-                aria-labelledby="nested-list-subheader"
-                className={styles.list}
-            >
-                {daysArray.map((elem) => {
-                    return (
-                        <>
-                            <ListItem button id={elem} onClick={handleClick} className={styles.subList}>
-                                <ListItemText primary={elem} />
-                                {open ? <ExpandLess /> : <ExpandMore />}
-                            </ListItem>
-                            <Collapse in={open} timeout="auto" unmountOnExit>
+            <Typography className={styles.heading}>Data List</Typography>
+            {daysArray.map((elem) => {
+                return (
+                    <>
+                        <ExpansionPanel className={styles.list}>
+                            <ExpansionPanelSummary
+                                expandIcon={<ExpandMore />}
+                                aria-controls={elem}
+                                id={`${elem}-header`}
+                            >
+                                <Typography>{elem}</Typography>
+                            </ExpansionPanelSummary>
+                            <ExpansionPanelDetails>
                                 <List component="div">
                                     {props.data.map((element) => {
                                         if (element.date === elem) {
@@ -90,12 +88,11 @@ export default function EatButton(props) {
                                         }
                                     })}
                                 </List>
-                            </Collapse>
-                        </>
-                    )
-                }
-                )}
-            </List>
+                            </ExpansionPanelDetails>
+                        </ExpansionPanel>
+                    </>
+                )
+            })}
         </div >
     )
 

@@ -7,15 +7,27 @@ const useStyles = makeStyles((theme) => ({
     root: {
       '& > *': {
         margin: theme.spacing(1),
+        padding: '2.5%',
+        border: 'solid black 1px',
       },
     },
     boobButton: {
        color: '#010101',
        backgroundColor: 'white',
+       margin: '2.5%',
        '&:hover': {
         backgroundColor: 'lightgrey',
      },
     },
+    sendButton: {
+      color: '#010101',
+      width: '75%',
+      backgroundColor: 'white',
+      margin: '2.5%',
+      '&:hover': {
+       backgroundColor: 'lightgrey',
+    },
+   },
     boobButtonSelected: {
         color: '#010101',
         backgroundColor: '#f59e8f',
@@ -45,7 +57,7 @@ return (
     <div className={styles.root}>
         {props.leftBoob ? <Button className={styles.boobButtonSelected} onClick={() => props.onClick('left')}>Left Boob</Button> : <Button className={styles.boobButton} onClick={() => props.onClick('left')}>Left Boob</Button>}
         {props.rightBoob ? <Button className={styles.boobButtonSelected} onClick={() => props.onClick('right')}>Right Boob</Button> : <Button className={styles.boobButton} onClick={() => props.onClick('right')}>Right Boob</Button>}
-        <Button className={styles.boobButton} onClick={() => props.submitData()}>Send Data</Button>
+        <Button className={styles.sendButton} onClick={() => props.submitData()}>Send Data</Button>
         {props.dataSent && !props.duplicate ? <Typography className={styles.sentText}>Data saved!</Typography> : null}
         {props.duplicate ? <Typography className={styles.warningText}>Data already submitted!</Typography> : null}
     </div>
