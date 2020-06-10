@@ -27,7 +27,15 @@ const useStyles = makeStyles((theme) => ({
         padding:'2%',
         borderRadius: '10px',
         textAlign: 'center',
-    }
+    },
+    sentText: {
+      color: 'black',
+      backgroundColor: '#9eee8b',
+      width: '50%',
+      padding:'2%',
+      borderRadius: '10px',
+      textAlign: 'center',
+  },
   }));
   
 
@@ -38,6 +46,7 @@ return (
         {props.leftBoob ? <Button className={styles.boobButtonSelected} onClick={() => props.onClick('left')}>Left Boob</Button> : <Button className={styles.boobButton} onClick={() => props.onClick('left')}>Left Boob</Button>}
         {props.rightBoob ? <Button className={styles.boobButtonSelected} onClick={() => props.onClick('right')}>Right Boob</Button> : <Button className={styles.boobButton} onClick={() => props.onClick('right')}>Right Boob</Button>}
         <Button className={styles.boobButton} onClick={() => props.submitData()}>Send Data</Button>
+        {props.dataSent && !props.duplicate ? <Typography className={styles.sentText}>Data saved!</Typography> : null}
         {props.duplicate ? <Typography className={styles.warningText}>Data already submitted!</Typography> : null}
     </div>
 )

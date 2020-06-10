@@ -43,7 +43,6 @@ class EatContainer extends Component {
         super(props);
         this.state = {
             clicked: false,
-            whichBoob: [],
             feedingTimes: undefined,
             dataSent: false,
             duplicate: false,
@@ -55,16 +54,22 @@ class EatContainer extends Component {
 
     buttonClicked = (boob) => {
         this.setState({
-            clicked: true,
-            whichBoob: [...this.state.whichBoob, boob],
+            clicked: !this.state.clicked
         });
-        (boob === 'left' ? this.setState({ leftBoob: true }) : this.setState({ rightBoob: true }));
-
+        (boob === 'left' ? this.setState({ leftBoob: !this.state.leftBoob }) : this.setState({ rightBoob: !this.state.rightBoob }));
     };
 
     submitBoobData = () => {
         const mongodb = this.state.app.getServiceClient(RemoteMongoClient.factory, "mongodb-atlas");
         const eatCollection = mongodb.db("baldyData").collection("eat");
+        let leftBoob;
+        let rightBoob;
+        if (this.state.leftBoob) {
+            leftBoob = 'left';
+        }
+        if (this.state.rightBoob) {
+            rightBoob = 'right';
+        }
         if (this.state.dataSent === false) {
             const month = moment().format('MMMM');
             const day = moment().format('dddd Do');
@@ -73,13 +78,15 @@ class EatContainer extends Component {
             eatCollection.insertOne({
                     date: date, 
                     time: time,
-                    boob: this.state.whichBoob,
+                    boob: [leftBoob, rightBoob],
                 }
             )
                 .catch(console.error);
             this.setState({
                 //feedingTimes: [...this.state.feedingTimes, date, time],
                 dataSent: true,
+                leftBoob: false,
+                rightBoob: false,
             });
         } else {
             this.setState({
@@ -92,26 +99,11 @@ class EatContainer extends Component {
         const mongodb = this.state.app.getServiceClient(RemoteMongoClient.factory, "mongodb-atlas");
         const eatCollection = mongodb.db("baldyData").collection("eat");
         const options = { 'sort': { "current_date": -1 }, };
-        let date = [];
-        let boobs = [];
-        let time = []; 
         eatCollection.find({}, options).toArray()
             .then((data) => {
-                data.forEach((elem) => {
-                    date.push(elem.date);
-                    boobs.push(elem.boob);
-                    time.push(elem.time);
-                })
-                let keys = [...date];
-                let vals = [...time];
-                let val = [];
-                let resObj = {};
-                keys.forEach((key, i) =>  { 
-                    val.push(vals[i]);
-                    resObj[key] = val;
-                });
+                let array = Object.keys(data).map(key => data[key]);
                 this.setState({
-                    feedingTimes: resObj,
+                    feedingTimes: array,
                 })
             })
             .catch((err) => err);
@@ -121,7 +113,7 @@ class EatContainer extends Component {
     render() {
         return (
             <>
-                <EatButton onClick={this.buttonClicked} submitData={this.submitBoobData} duplicate={this.state.duplicate} leftBoob={this.state.leftBoob} rightBoob={this.state.rightBoob} />
+                <EatButton onClick={this.buttonClicked} submitData={this.submitBoobData} duplicate={this.state.duplicate} leftBoob={this.state.leftBoob} rightBoob={this.state.rightBoob} dataSent={this.state.dataSent} />
                 {this.state.feedingTimes ? <EatLog data={this.state.feedingTimes} /> : <Typography>Loading...</Typography>} 
             </>
         )
