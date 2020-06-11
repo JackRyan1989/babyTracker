@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     nested: {
-        width: '75%',
+        width: '100%',
         marginLeft: '2%',
         marginTop: '1%',
         color: '#0a0202',
@@ -28,9 +28,12 @@ const useStyles = makeStyles((theme) => ({
     },
     list: {
         width: '75%',
-    },
+     },
+    sublistItem: {
+         marginLeft: '1%',
+     },
     listItem: {
-        padding: '2.5%',
+        padding: '1%',
     },
 }));
 
@@ -67,7 +70,7 @@ export default function EatButton(props) {
                                                         <ListItemText className={styles.listItem} primary={element.time} />
                                                         {element.boob.map((boob) => {
                                                             return (
-                                                                <ListItemText className={styles.listItem} primary={boob} />
+                                                                <ListItemText className={styles.sublistItem} primary={boob}/>
                                                             )
                                                         })}
                                                     </ListItem>

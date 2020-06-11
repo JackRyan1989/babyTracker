@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     nested: {
-        width: '75%',
+        width: '100%',
         marginLeft: '2%',
         marginTop: '1%',
         color: '#0a0202',
@@ -30,7 +30,10 @@ const useStyles = makeStyles((theme) => ({
         width: '75%',
     },
     listItem: {
-        padding: '2.5%',
+        padding: '1%',
+    },
+    sublistItem: {
+        marginLeft: '1%',
     },
 }));
 
@@ -67,7 +70,7 @@ export default function DiaperButton(props) {
                                                         <ListItemText className={styles.listItem} primary={element.time} />
                                                         {element.waste.map((wasteItem) => {
                                                             return (
-                                                                <ListItemText className={styles.listItem} primary={wasteItem} />
+                                                            <ListItemText className={styles.listItem} primary={wasteItem}/>
                                                             )
                                                         })}
                                                     </ListItem>
