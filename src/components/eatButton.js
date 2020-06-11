@@ -8,7 +8,7 @@ const useStyles = makeStyles((theme) => ({
       '& > *': {
         margin: theme.spacing(1),
         padding: '2.5%',
-        border: 'solid black 1px',
+        border: 'solid lightgrey 1px',
       },
     },
     boobButton: {

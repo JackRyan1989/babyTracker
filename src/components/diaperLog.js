@@ -29,12 +29,14 @@ const useStyles = makeStyles((theme) => ({
     list: {
         width: '75%',
     },
-    listItem: {
-        padding: '1%',
-    },
     sublistItem: {
         marginLeft: '1%',
+        fontSize: '12px',
+        padding: '1%',
     },
+   listItem: {
+       padding: '3%',
+   },
 }));
 
 export default function DiaperButton(props) {
@@ -70,7 +72,7 @@ export default function DiaperButton(props) {
                                                         <ListItemText className={styles.listItem} primary={element.time} />
                                                         {element.waste.map((wasteItem) => {
                                                             return (
-                                                            <ListItemText className={styles.listItem} primary={wasteItem}/>
+                                                                <ListItemText className={styles.listItem}> <Typography className={styles.sublistItem}>{wasteItem}</Typography></ListItemText>
                                                             )
                                                         })}
                                                     </ListItem>
