@@ -21,11 +21,13 @@ import DirectionsRunIcon from '@material-ui/icons/DirectionsRun';
 import LocalHotelIcon from '@material-ui/icons/LocalHotel';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import FastfoodIcon from '@material-ui/icons/Fastfood';
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import Grid from '@material-ui/core/Grid';
 import MoveContainer from '../containers/movementContainer';
 import SleepContainer from '../containers/sleepContainer';
 import EatContainer from '../containers/eatContainer';
 import DiaperContainer from '../containers/diaperContainer';
+import BloodPressureContainer from '../containers/bloodPressureContainer';
 import DownloadButton from '../components/downloadButton';
 import SimpleTimer from '../components/timer';
 import moment from 'moment';
@@ -116,7 +118,7 @@ const dayStyles = makeStyles((theme) => ({
             fontSize: '3.75rem',
             fontWeight: '300',
             lineHeight: '1.2',
-            letterSpacing: '-0.00833em',  
+            letterSpacing: '-0.00833em',
         },
     },
     dataAdd: {
@@ -137,7 +139,7 @@ const dayStyles = makeStyles((theme) => ({
             fontSize: '3.75rem',
             fontWeight: '300',
             lineHeight: '1.2',
-            letterSpacing: '-0.00833em',  
+            letterSpacing: '-0.00833em',
         },
     },
     inUse: {
@@ -230,7 +232,7 @@ const nightStyles = makeStyles((theme) => ({
             fontSize: '3.75rem',
             fontWeight: '300',
             lineHeight: '1.2',
-            letterSpacing: '-0.00833em',  
+            letterSpacing: '-0.00833em',
         },
     },
     dataAdd: {
@@ -251,7 +253,7 @@ const nightStyles = makeStyles((theme) => ({
             fontSize: '3.75rem',
             fontWeight: '300',
             lineHeight: '1.2',
-            letterSpacing: '-0.00833em',  
+            letterSpacing: '-0.00833em',
         },
     },
     inUse: {
@@ -260,10 +262,10 @@ const nightStyles = makeStyles((theme) => ({
 }));
 
 export default function MiniDrawer(props) {
-    const app=props.app;
+    const app = props.app;
     let classes;
     const now = moment().format('H');
-    (now <= 6 || now >= 20 )? classes = nightStyles(): classes = dayStyles()
+    (now <= 6 || now >= 20) ? classes = nightStyles() : classes = dayStyles()
     const theme = useTheme();
     const [open, setOpen] = useState(false);
 
@@ -280,47 +282,61 @@ export default function MiniDrawer(props) {
     const [toggleTimer, setToggleTimer] = useState(false);
     const [togglePoop, setTogglePoop] = useState(false);
     const [toggleEat, setToggleEat] = useState(false);
+    const [toggleBP, setToggleBP] = useState(false);
     const [redirect, setRedirect] = useState(false);
     const [target, setTarget] = useState(null);
 
     function toggle(type) {
         // Probably do a switch
-        switch (type){
+        switch (type) {
             case 'move':
                 setToggleMove(true);
                 setToggleSleep(false);
                 setToggleTimer(false);
                 setToggleEat(false);
                 setTogglePoop(false);
-            break;
+                setToggleBP(false);
+                break;
             case 'sleep':
                 setToggleMove(false);
                 setToggleSleep(true);
                 setToggleTimer(false);
                 setToggleEat(false);
                 setTogglePoop(false);
-            break;
+                setToggleBP(false);
+                break;
             case 'timer':
                 setToggleMove(false);
                 setToggleSleep(false);
                 setToggleTimer(true);
                 setToggleEat(false);
                 setTogglePoop(false);
-            break;
+                setToggleBP(false);
+                break;
             case 'eat':
                 setToggleMove(false);
                 setToggleSleep(false);
                 setToggleTimer(false);
                 setToggleEat(true);
                 setTogglePoop(false);
-            break;
+                setToggleBP(false);
+                break;
             case 'poop':
                 setToggleMove(false);
                 setToggleSleep(false);
                 setToggleTimer(false);
                 setToggleEat(false);
                 setTogglePoop(true);
-            break;
+                setToggleBP(false);
+                break;
+            case 'bp':
+                setToggleMove(false);
+                setToggleSleep(false);
+                setToggleTimer(false);
+                setToggleEat(false);
+                setTogglePoop(false);
+                setToggleBP(true);
+                break;
         }
 
     }
@@ -380,30 +396,34 @@ export default function MiniDrawer(props) {
                     <Divider />
                     <List>
                         <ListItem button key='addData' onClick={() => toggle('move')}>
-                            <ListItemIcon>{toggleMove ? <DirectionsRunIcon className={classes.inUse} /> : <DirectionsRunIcon/>}</ListItemIcon>
+                            <ListItemIcon>{toggleMove ? <DirectionsRunIcon className={classes.inUse} /> : <DirectionsRunIcon />}</ListItemIcon>
                             <ListItemText primary='Sleep' />
+                        </ListItem>
+                        <ListItem button key='viewBP' onClick={() => toggle('bp')}>
+                            <ListItemIcon>{toggleBP ? <FavoriteBorderIcon className={classes.inUse} /> : <FavoriteBorderIcon />}</ListItemIcon>
+                            <ListItemText primary='Blood Pressure' />
+                        </ListItem>
+                        <ListItem button key='viewTimer' onClick={() => toggle('timer')}>
+                            <ListItemIcon>{toggleTimer ? <AccessTimeIcon className={classes.inUse} /> : <AccessTimeIcon />}</ListItemIcon>
+                            <ListItemText primary='Contractions' />
                         </ListItem>
                         <ListItem button key='ViewData' onClick={() => toggle('sleep')}>
                             <ListItemIcon>{toggleSleep ? <LocalHotelIcon className={classes.inUse} /> : <LocalHotelIcon />}</ListItemIcon>
                             <ListItemText primary='Movement' />
                         </ListItem>
-                        <ListItem button key='viewTimer' onClick={() => toggle('timer')}>
-                            <ListItemIcon>{toggleTimer ? <AccessTimeIcon className={classes.inUse} />: <AccessTimeIcon />}</ListItemIcon>
-                            <ListItemText primary='Contractions' />
-                        </ListItem>
                         <ListItem button key='viewEat' onClick={() => toggle('eat')}>
-                            <ListItemIcon>{toggleEat ?  <FastfoodIcon className={classes.inUse} />: <FastfoodIcon />}</ListItemIcon>
+                            <ListItemIcon>{toggleEat ? <FastfoodIcon className={classes.inUse} /> : <FastfoodIcon />}</ListItemIcon>
                             <ListItemText primary='Breastfeeding' />
                         </ListItem>
                         <ListItem button key='viewPoop' onClick={() => toggle('poop')}>
-                            <ListItemIcon>{togglePoop ? <div className={classes.inUse}>&#128169;</div>: <div>&#128169;</div>}</ListItemIcon>
+                            <ListItemIcon>{togglePoop ? <div className={classes.inUse}>&#128169;</div> : <div>&#128169;</div>}</ListItemIcon>
                             <ListItemText primary='Peepee Poopoo' />
                         </ListItem>
                         <ListItem button key='downloadData'>
                             <ListItemIcon><DownloadButton {...props} data={props.data} movementData={props.movementData} /></ListItemIcon>
                             <ListItemText primary='Download Data' />
                         </ListItem>
-                        <Divider/>
+                        <Divider />
                         <ListItem button key='logout' onClick={() => logout()}>
                             <ListItemIcon><LockIcon /></ListItemIcon>
                             <ListItemText primary='Log Out' />
@@ -422,7 +442,7 @@ export default function MiniDrawer(props) {
                         {toggleSleep ?
                             <>
                                 <Grid item xs={12}><Typography className={classes.dataAdd}>Sleep:</Typography></Grid>
-                                <Grid item xs={12}><SleepContainer {...props} app={app}/></Grid>
+                                <Grid item xs={12}><SleepContainer {...props} app={app} /></Grid>
                             </>
                             : null}
                         {toggleTimer ?
@@ -431,19 +451,25 @@ export default function MiniDrawer(props) {
                                 <Grid item lg={1}></Grid>
                                 <Grid item xs={12} sm={12} md={10} lg={10}><SimpleTimer {...props} /></Grid>
                                 <Grid item lg={1}></Grid>
-                            </>  
-                            : null  
-                         }
-                         {toggleEat ?
+                            </>
+                            : null
+                        }
+                        {toggleEat ?
                             <>
                                 <Grid item xs={12}><Typography className={classes.dataAdd}>Breastfeeding:</Typography></Grid>
                                 <Grid item xs={12}><EatContainer {...props} app={app} /></Grid>
                             </>
                             : null}
-                            {togglePoop ?
+                        {togglePoop ?
                             <>
                                 <Grid item xs={12}><Typography className={classes.dataAdd}>Diaper Change:</Typography></Grid>
                                 <Grid item xs={12}><DiaperContainer {...props} app={app} /></Grid>
+                            </>
+                            : null}
+                        {toggleBP ?
+                            <>
+                                <Grid item xs={12}><Typography className={classes.dataAdd}>Ash's Blood Pressure:</Typography></Grid>
+                                <Grid item xs={12}><BloodPressureContainer {...props} app={app} /></Grid>
                             </>
                             : null}
                     </Grid>
