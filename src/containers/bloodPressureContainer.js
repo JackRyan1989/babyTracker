@@ -35,18 +35,39 @@ class DiaperContainer extends Component {
             clicked: false,
             dataSent: false,
             duplicate: false,
-            diastolic: null,
-            systolic: null,
-            pulse: null,
-            date: null,
-            time: null,
+            diastolic: "",
+            systolic: "",
+            pulse: "",
+            date: "",
+            time: "",
             app: this.props.app,
+            dError: false,
+            sError: false,
+            pError: false,
         }
     };
 
     enterValue = (e) => {
+        let id = e.target.id;
+        let val = e.target.value;
+        let letters = /^[A-Za-z]+$/;
+        if (val.match(letters) && id === 'diastolic'){
+            this.setState({dError: true})
+        } else {
+            this.setState({dError: false})
+        }
+        if (val.match(letters) && id === 'systolic'){
+            this.setState({sError: true})
+        } else {
+            this.setState({sError: false})
+        }
+        if (val.match(letters) && id === 'pulse'){
+            this.setState({pError: true})
+        } else {
+            this.setState({pError: false})
+        }
         this.setState({
-            [e.target.id]: e.target.value,
+            [id]: val,
         })
     }
 
@@ -68,6 +89,9 @@ class DiaperContainer extends Component {
                 .catch(console.error);
             this.setState({
                 dataSent: true,
+                pulse: "",
+                diastolic: "",
+                systolic: "",
             });
         } else {
             this.setState({
@@ -93,7 +117,7 @@ class DiaperContainer extends Component {
     render() {
         return (
             <>
-                <BloodPressureButton submitData={this.submitData} enterValue={this.enterValue} duplicate={this.state.duplicate} dataSent={this.state.dataSent} />
+                <BloodPressureButton diastolic={this.state.diastolic} systolic={this.state.systolic} pulse={this.state.pulse} submitData={this.submitData} enterValue={this.enterValue} duplicate={this.state.duplicate} dataSent={this.state.dataSent} dError={this.state.dError} pError={this.state.pError} sError={this.state.sError} />
                 {this.state.data ? <BPLog data={this.state.data} /> : <Typography>Loading...</Typography>}
             </>
         )

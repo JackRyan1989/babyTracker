@@ -17,8 +17,7 @@ const useStyles = makeStyles((theme) => ({
     },
     nested: {
         width: '100%',
-        marginLeft: '2%',
-        marginTop: '1%',
+        marginLeft: '1%',
         color: '#0a0202',
         border: 'solid black 1px',
         borderRadius: '2px',
@@ -29,69 +28,71 @@ const useStyles = makeStyles((theme) => ({
     list: {
         width: '75%',
     },
-    sublistItem: {
-        marginLeft: '1%',
-        fontSize: '12px',
+    listItem: {
         padding: '1%',
     },
-    listItem: {
-        padding: '3%',
-    },
+    warning: {
+        padding: '1%',
+        color: 'red',
+    }
 }));
 
 export default function DiaperButton(props) {
     const styles = useStyles();
     let data = props.data;
-    console.log(props.data);
+    let set = new Set();
+    data.map((day) => {
+        set.add(day.day)
+    });
+    let dayArray = Array.from(set);
+    let daysArray = dayArray.reverse();
 
     return (
-        <>
-            <Typography>Placeholder</Typography>
-            <Typography>{props.data.day} at {props.data.time}</Typography>
-            <Typography>{props.data.systolic}</Typography>
-            <Typography>{props.data.diastolic}</Typography>
-            <Typography>{props.data.pulse}</Typography>
-        </>
-        // <div className={styles.root}>
-        //     <Typography className={styles.heading}>Data List</Typography>
-        //     {daysArray.map((elem) => {
-        //         return (
-        //             <>
-        //                 <ExpansionPanel className={styles.list}>
-        //                     <ExpansionPanelSummary
-        //                         expandIcon={<ExpandMore />}
-        //                         aria-controls={elem}
-        //                         id={`${elem}-header`}
-        //                     >
-        //                         <Typography>{elem}</Typography>
-        //                     </ExpansionPanelSummary>
-        //                     <ExpansionPanelDetails>
-        //                         <List component="div">
-        //                             {props.data.map((element) => {
-        //                                 if (element.date === elem) {
-        //                                     return (
-        //                                         <>
-        //                                             <ListItem button className={styles.nested}>
-        //                                                 <ListItemText className={styles.listItem} primary={element.time} />
-        //                                                 {element.waste.map((wasteItem) => {
-        //                                                     return (
-        //                                                         <ListItemText className={styles.listItem}> <Typography className={styles.sublistItem}>{wasteItem}</Typography></ListItemText>
-        //                                                     )
-        //                                                 })}
-        //                                             </ListItem>
-        //                                         </>
-        //                                     )
-        //                                 } else {
-        //                                     return null
-        //                                 }
-        //                             })}
-        //                         </List>
-        //                     </ExpansionPanelDetails>
-        //                 </ExpansionPanel>
-        //             </>
-        //         )
-        //     })}
-        //</div >
+        <div className={styles.root}>
+            <Typography className={styles.heading}>Data List</Typography>
+            {daysArray.map((eachDay) => {
+                return (
+                    <>
+                        <ExpansionPanel className={styles.list}>
+                            <ExpansionPanelSummary
+                                expandIcon={<ExpandMore />}
+                                aria-controls={eachDay}
+                                id={`${eachDay}-header`}
+                            >
+                                <Typography>{eachDay}</Typography>
+                            </ExpansionPanelSummary>
+                            {data.map((elem) => {
+                                if (elem.day === eachDay) {
+                                    return (
+                                        <>
+                                            <ExpansionPanelDetails>
+                                                <List component="div" className={styles.nested}>
+                                                    <ListItem button>
+                                                        <ListItemText className={styles.listItem}>{elem.time}</ListItemText>
+                                                    </ListItem>
+                                                    <ListItem button>
+                                                        {(elem.systolic >= 130) ? <ListItemText className={styles.warning}> Systolic BP: {elem.systolic}</ListItemText> : <ListItemText className={styles.listItem}> Systolic BP: {elem.systolic}</ListItemText>}
+                                                    </ListItem>
+                                                    <ListItem button>
+                                                        {(elem.diastolic >= 90) ? <ListItemText className={styles.warning} >Diastolic BP: {elem.diastolic}</ListItemText> : <ListItemText className={styles.listItem} >Diastolic BP: {elem.diastolic}</ListItemText>}
+                                                    </ListItem>
+                                                    <ListItem button>
+                                                        {(elem.pulse >= 100) ? <ListItemText className={styles.warning} >Pulse: {elem.pulse}</ListItemText> : <ListItemText className={styles.listItem} >Pulse: {elem.pulse}</ListItemText>}
+                                                    </ListItem>
+                                                </List>
+                                            </ExpansionPanelDetails>
+                                        </>
+                                    )
+                                } else {
+                                    return null
+                                }
+                            })}
+                        </ExpansionPanel>
+                    </>
+
+                )
+            })}
+        </div >
     )
 
 };
