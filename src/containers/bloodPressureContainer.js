@@ -71,6 +71,18 @@ class DiaperContainer extends Component {
         })
     }
 
+    grabData = () => {
+        const mongodb = this.state.app.getServiceClient(RemoteMongoClient.factory, "mongodb-atlas");
+        const bpCollection = mongodb.db("baldyData").collection("bloodPressure");
+        const options = { 'sort': { "current_date": -1 }, };
+        bpCollection.find({}, options).toArray()
+            .then((res) => {
+                this.setState({
+                    data: res,
+                })
+            })
+            .catch((err) => err);
+    }
 
     submitData = () => {
         const mongodb = this.state.app.getServiceClient(RemoteMongoClient.factory, "mongodb-atlas");
@@ -86,13 +98,19 @@ class DiaperContainer extends Component {
                 systolic: this.state.systolic,
             }
             )
-                .catch(console.error);
+            .catch(console.error);
             this.setState({
                 dataSent: true,
                 pulse: "",
                 diastolic: "",
                 systolic: "",
             });
+            this.grabData();
+            this.timer = setTimeout(() => {
+                this.setState({
+                    dataSent: false,
+                });
+            }, 2500);
         } else {
             this.setState({
                 duplicate: true,
@@ -101,16 +119,7 @@ class DiaperContainer extends Component {
     };
 
     componentDidMount() {
-        const mongodb = this.state.app.getServiceClient(RemoteMongoClient.factory, "mongodb-atlas");
-        const bpCollection = mongodb.db("baldyData").collection("bloodPressure");
-        const options = { 'sort': { "current_date": -1 }, };
-        bpCollection.find({}, options).toArray()
-            .then((res) => {
-                this.setState({
-                    data: res,
-                })
-            })
-            .catch((err) => err);
+        this.grabData();
     }
 
 

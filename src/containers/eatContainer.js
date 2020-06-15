@@ -52,6 +52,20 @@ class EatContainer extends Component {
         }
     };
 
+    grabData = () => {
+        const mongodb = this.state.app.getServiceClient(RemoteMongoClient.factory, "mongodb-atlas");
+        const eatCollection = mongodb.db("baldyData").collection("eat");
+        const options = { 'sort': { "current_date": -1 }, };
+        eatCollection.find({}, options).toArray()
+            .then((data) => {
+                let array = Object.keys(data).map(key => data[key]);
+                this.setState({
+                    feedingTimes: array,
+                })
+            })
+            .catch((err) => err);
+    }
+
     buttonClicked = (boob) => {
         this.setState({
             clicked: !this.state.clicked
@@ -83,11 +97,16 @@ class EatContainer extends Component {
             )
                 .catch(console.error);
             this.setState({
-                //feedingTimes: [...this.state.feedingTimes, date, time],
                 dataSent: true,
                 leftBoob: false,
                 rightBoob: false,
             });
+            this.grabData();
+            this.timer = setTimeout(() => {
+                this.setState({
+                    dataSent: false,
+                });
+            }, 2500);
         } else {
             this.setState({
                 duplicate: true,
@@ -96,17 +115,7 @@ class EatContainer extends Component {
     };
 
     componentDidMount() {
-        const mongodb = this.state.app.getServiceClient(RemoteMongoClient.factory, "mongodb-atlas");
-        const eatCollection = mongodb.db("baldyData").collection("eat");
-        const options = { 'sort': { "current_date": -1 }, };
-        eatCollection.find({}, options).toArray()
-            .then((data) => {
-                let array = Object.keys(data).map(key => data[key]);
-                this.setState({
-                    feedingTimes: array,
-                })
-            })
-            .catch((err) => err);
+        this.grabData();
     }
 
 

@@ -59,6 +59,20 @@ class DiaperContainer extends Component {
         (waste === 'poop' ? this.setState({ poop: !this.state.poop }) : this.setState({ pee: !this.state.pee }));
     };
 
+    grabData = () => {
+        const mongodb = this.state.app.getServiceClient(RemoteMongoClient.factory, "mongodb-atlas");
+        const diaperCollection = mongodb.db("baldyData").collection("diaper");
+        const options = { 'sort': { "current_date": -1 }, };
+        diaperCollection.find({}, options).toArray()
+            .then((data) => {
+                let array = Object.keys(data).map(key => data[key]);
+                this.setState({
+                    diaperTimes: array,
+                })
+            })
+            .catch((err) => err);
+    }
+
     submitBoobData = () => {
         const mongodb = this.state.app.getServiceClient(RemoteMongoClient.factory, "mongodb-atlas");
         const diaperCollection = mongodb.db("baldyData").collection("diaper");
@@ -83,11 +97,16 @@ class DiaperContainer extends Component {
             )
                 .catch(console.error);
             this.setState({
-                //feedingTimes: [...this.state.feedingTimes, date, time],
                 dataSent: true,
                 poop: false,
                 pee: false,
             });
+            this.grabData();
+            this.timer = setTimeout(() => {
+                this.setState({
+                    dataSent: false,
+                });
+            }, 2500);
         } else {
             this.setState({
                 duplicate: true,
@@ -96,17 +115,7 @@ class DiaperContainer extends Component {
     };
 
     componentDidMount() {
-        const mongodb = this.state.app.getServiceClient(RemoteMongoClient.factory, "mongodb-atlas");
-        const diaperCollection = mongodb.db("baldyData").collection("diaper");
-        const options = { 'sort': { "current_date": -1 }, };
-        diaperCollection.find({}, options).toArray()
-            .then((data) => {
-                let array = Object.keys(data).map(key => data[key]);
-                this.setState({
-                    diaperTimes: array,
-                })
-            })
-            .catch((err) => err);
+        this.grabData();
     }
 
 
