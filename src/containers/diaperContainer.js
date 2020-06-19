@@ -52,11 +52,10 @@ class DiaperContainer extends Component {
         }
     };
 
-    buttonClicked = (waste) => {
+    buttonClicked = (event) => {
         this.setState({
-            clicked: !this.state.clicked
+            [event.target.name]: event.target.checked
         });
-        (waste === 'poop' ? this.setState({ poop: !this.state.poop }) : this.setState({ pee: !this.state.pee }));
     };
 
     grabData = () => {
@@ -85,15 +84,17 @@ class DiaperContainer extends Component {
             pee = 'pee';
         }
         if (this.state.dataSent === false) {
+            const userID = this.props.location.user;
             const month = moment().format('MMMM');
             const day = moment().format('dddd Do');
             const date = `${month}, ${day}`;
             const time = moment().format('h:mm:ss a');
             diaperCollection.insertOne({
-                    date: date, 
-                    time: time,
-                    waste: [poop, pee],
-                }
+                user: userID,
+                date: date,
+                time: time,
+                waste: [poop, pee],
+            }
             )
                 .catch(console.error);
             this.setState({
@@ -122,8 +123,8 @@ class DiaperContainer extends Component {
     render() {
         return (
             <>
-                <DiaperButton onClick={this.buttonClicked} submitData={this.submitBoobData} duplicate={this.state.duplicate} poop={this.state.poop} pee={this.state.pee} dataSent={this.state.dataSent} />
-                {this.state.diaperTimes ? <DiaperLog data={this.state.diaperTimes} /> : <Typography>Loading...</Typography>} 
+                <DiaperButton onChange={this.buttonClicked} submitData={this.submitBoobData} duplicate={this.state.duplicate} poop={this.state.poop} pee={this.state.pee} dataSent={this.state.dataSent} />
+                {this.state.diaperTimes ? <DiaperLog data={this.state.diaperTimes} /> : <Typography>Loading...</Typography>}
             </>
         )
 

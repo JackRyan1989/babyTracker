@@ -66,11 +66,10 @@ class EatContainer extends Component {
             .catch((err) => err);
     }
 
-    buttonClicked = (boob) => {
+    buttonClicked = (event) => {
         this.setState({
-            clicked: !this.state.clicked
+            [event.target.name]: event.target.checked
         });
-        (boob === 'left' ? this.setState({ leftBoob: !this.state.leftBoob }) : this.setState({ rightBoob: !this.state.rightBoob }));
     };
 
     submitBoobData = () => {
@@ -85,15 +84,17 @@ class EatContainer extends Component {
             rightBoob = 'right';
         }
         if (this.state.dataSent === false) {
+            const userID = this.props.location.user;
             const month = moment().format('MMMM');
             const day = moment().format('dddd Do');
             const date = `${month}, ${day}`;
             const time = moment().format('h:mm:ss a');
             eatCollection.insertOne({
-                    date: date, 
-                    time: time,
-                    boob: [leftBoob, rightBoob],
-                }
+                user: userID,
+                date: date,
+                time: time,
+                boob: [leftBoob, rightBoob],
+            }
             )
                 .catch(console.error);
             this.setState({
@@ -122,8 +123,8 @@ class EatContainer extends Component {
     render() {
         return (
             <>
-                <EatButton onClick={this.buttonClicked} submitData={this.submitBoobData} duplicate={this.state.duplicate} leftBoob={this.state.leftBoob} rightBoob={this.state.rightBoob} dataSent={this.state.dataSent} />
-                {this.state.feedingTimes ? <EatLog data={this.state.feedingTimes} /> : <Typography>Loading...</Typography>} 
+                <EatButton onChange={this.buttonClicked} submitData={this.submitBoobData} duplicate={this.state.duplicate} leftBoob={this.state.leftBoob} rightBoob={this.state.rightBoob} dataSent={this.state.dataSent} />
+                {this.state.feedingTimes ? <EatLog data={this.state.feedingTimes} /> : <Typography>Loading...</Typography>}
             </>
         )
 
