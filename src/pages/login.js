@@ -305,15 +305,6 @@ function Login() {
                     >
                         Sign In
                 </Button>
-                    {/* <Link to={{
-                        pathname: '/signup',
-                        app,
-                        client,
-                        db,
-                        mongodbClient,
-                    }}
-                    className={classes.link}
-                    >First time user? Click here to Sign Up</Link> */}
                 </Paper>
             </Container>
         )

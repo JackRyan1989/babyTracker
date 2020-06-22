@@ -14,6 +14,7 @@ import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import LockIcon from '@material-ui/icons/Lock';
+import WorkIcon from '@material-ui/icons/Work';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
@@ -28,6 +29,7 @@ import SleepContainer from '../containers/sleepContainer';
 import EatContainer from '../containers/eatContainer';
 import DiaperContainer from '../containers/diaperContainer';
 import BloodPressureContainer from '../containers/bloodPressureContainer';
+import EffortContainer from '../containers/effortContainer';
 import DownloadButton from '../components/downloadButton';
 import SimpleTimer from '../components/timer';
 import moment from 'moment';
@@ -283,11 +285,11 @@ export default function MiniDrawer(props) {
     const [togglePoop, setTogglePoop] = useState(false);
     const [toggleEat, setToggleEat] = useState(false);
     const [toggleBP, setToggleBP] = useState(false);
+    const [toggleEffort, setToggleEffort] = useState(false);
     const [redirect, setRedirect] = useState(false);
     const [target, setTarget] = useState(null);
 
     function toggle(type) {
-        // Probably do a switch
         switch (type) {
             case 'move':
                 setToggleMove(true);
@@ -296,6 +298,7 @@ export default function MiniDrawer(props) {
                 setToggleEat(false);
                 setTogglePoop(false);
                 setToggleBP(false);
+                setToggleEffort(false);
                 break;
             case 'sleep':
                 setToggleMove(false);
@@ -304,6 +307,7 @@ export default function MiniDrawer(props) {
                 setToggleEat(false);
                 setTogglePoop(false);
                 setToggleBP(false);
+                setToggleEffort(false);
                 break;
             case 'timer':
                 setToggleMove(false);
@@ -312,6 +316,7 @@ export default function MiniDrawer(props) {
                 setToggleEat(false);
                 setTogglePoop(false);
                 setToggleBP(false);
+                setToggleEffort(false);
                 break;
             case 'eat':
                 setToggleMove(false);
@@ -320,6 +325,7 @@ export default function MiniDrawer(props) {
                 setToggleEat(true);
                 setTogglePoop(false);
                 setToggleBP(false);
+                setToggleEffort(false);
                 break;
             case 'poop':
                 setToggleMove(false);
@@ -328,6 +334,7 @@ export default function MiniDrawer(props) {
                 setToggleEat(false);
                 setTogglePoop(true);
                 setToggleBP(false);
+                setToggleEffort(false);
                 break;
             case 'bp':
                 setToggleMove(false);
@@ -336,6 +343,16 @@ export default function MiniDrawer(props) {
                 setToggleEat(false);
                 setTogglePoop(false);
                 setToggleBP(true);
+                setToggleEffort(false);
+                break;
+            case 'effort':
+                setToggleMove(false);
+                setToggleSleep(false);
+                setToggleTimer(false);
+                setToggleEat(false);
+                setTogglePoop(false);
+                setToggleBP(false);
+                setToggleEffort(true);
                 break;
         }
 
@@ -397,7 +414,7 @@ export default function MiniDrawer(props) {
                     <List>
                         <ListItem button key='addData' onClick={() => toggle('move')}>
                             <ListItemIcon>{toggleMove ? <DirectionsRunIcon className={classes.inUse} /> : <DirectionsRunIcon />}</ListItemIcon>
-                            <ListItemText primary='Sleep' />
+                            <ListItemText primary='Movement' />
                         </ListItem>
                         <ListItem button key='viewBP' onClick={() => toggle('bp')}>
                             <ListItemIcon>{toggleBP ? <FavoriteBorderIcon className={classes.inUse} /> : <FavoriteBorderIcon />}</ListItemIcon>
@@ -409,7 +426,7 @@ export default function MiniDrawer(props) {
                         </ListItem>
                         <ListItem button key='ViewData' onClick={() => toggle('sleep')}>
                             <ListItemIcon>{toggleSleep ? <LocalHotelIcon className={classes.inUse} /> : <LocalHotelIcon />}</ListItemIcon>
-                            <ListItemText primary='Movement' />
+                            <ListItemText primary='Sleep' />
                         </ListItem>
                         <ListItem button key='viewEat' onClick={() => toggle('eat')}>
                             <ListItemIcon>{toggleEat ? <FastfoodIcon className={classes.inUse} /> : <FastfoodIcon />}</ListItemIcon>
@@ -419,8 +436,12 @@ export default function MiniDrawer(props) {
                             <ListItemIcon>{togglePoop ? <div className={classes.inUse}>&#128169;</div> : <div>&#128169;</div>}</ListItemIcon>
                             <ListItemText primary='Peepee Poopoo' />
                         </ListItem>
+                        <ListItem button key='viewEffort' onClick={() => toggle('effort')}>
+                            <ListItemIcon>{toggleEffort ? <WorkIcon className={classes.inUse} /> : <WorkIcon />} </ListItemIcon>
+                            <ListItemText primary='Effort' />
+                        </ListItem>
                         <ListItem button key='downloadData'>
-                            <ListItemIcon><DownloadButton {...props} data={props.data} movementData={props.movementData} /></ListItemIcon>
+                            <ListItemIcon><DownloadButton {...props} /></ListItemIcon>
                             <ListItemText primary='Download Data' />
                         </ListItem>
                         <Divider />
@@ -472,6 +493,13 @@ export default function MiniDrawer(props) {
                                 <Grid item xs={12}><BloodPressureContainer {...props} app={app} /></Grid>
                             </>
                             : null}
+                        {toggleEffort ?
+                            <>
+                                <Grid item xs={12}><Typography className={classes.dataAdd}>Effort:</Typography></Grid>
+                                <Grid item xs={12}><EffortContainer {...props} app={app} /></Grid>
+                            </>
+                            : null
+                        }
                     </Grid>
                 </main>
             </div>

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { RemoteMongoClient } from "mongodb-stitch-browser-sdk";
-import DisplayBurden from '../components/displayBurden';
 import SleepGraph from '../components/sleepGraph';
 import SleepWakeGraph from '../components/sleepWakeGraph';
 import { Button, Grid, Typography } from '@material-ui/core';
@@ -89,7 +88,6 @@ export default function SleepContainer(props) {
     let classes;
     const now = moment().format('H');
     (now <= 6 || now >= 20) ? classes = nightStyles() : classes = dayStyles();
-    const [data, setData] = useState(undefined);
     const [sleepData, setSleep] = useState(undefined);
     const [wakeData, setWake] = useState(undefined);
     const [dispDialog, setDialog] = useState(false);
@@ -111,11 +109,6 @@ export default function SleepContainer(props) {
             sleepCollection.find(wakeQuery, options).toArray()
                 .then((data) => {
                     setWake(data);
-                })
-                .catch((err) => err);
-            sleepCollection.find({}).toArray()
-                .then((data) => {
-                    setData(data);
                 })
                 .catch((err) => err);
             setDataAdded(false);
@@ -144,7 +137,6 @@ export default function SleepContainer(props) {
         setDialog(true);
         setDataAdded(true);
         setSleep(undefined);
-        setData(undefined);
         setWake(undefined);
     };
 
@@ -168,11 +160,10 @@ export default function SleepContainer(props) {
                 <Typography className={classes.text}>{props.buttonType}</Typography>
                 <DataAddedDialog openDialog={dispDialog} handleClose={() => handleClose()} />
             </Grid>
-            {(data && sleepData && wakeData) ?
+            {(sleepData && wakeData) ?
                 <>
                     <Grid item xs={12}><SleepWakeGraph sleepData={sleepData} app={app} /></Grid>
                     <Grid item xs={12}><SleepGraph sleepData={sleepData} wakeData={wakeData} app={app} /></Grid>
-                    <Grid item xs={12}><DisplayBurden data={data} app={app} /></Grid>
                 </>
                 :
                 <>

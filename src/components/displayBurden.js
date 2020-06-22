@@ -54,8 +54,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function DisplayBurden(props) {
     const data = props.data;
-    const app = props.app;
-
+    
     function calculateEffort() {
         if (data){
             let jackCount = 0;
@@ -97,7 +96,7 @@ export default function DisplayBurden(props) {
 return (
     <>
         <Paper elevation={3} className={classes.container}>
-            <Typography className={classes.heading}>Effort</Typography>
+            <Typography className={classes.heading}>{props.effortType}</Typography>
             <Pie data={pieData}/>
         </Paper>
     </>
