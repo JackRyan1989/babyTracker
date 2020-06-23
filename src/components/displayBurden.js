@@ -2,7 +2,7 @@ import React from 'react';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import {Pie} from 'react-chartjs-2';
+import { Pie } from 'react-chartjs-2';
 
 const useStyles = makeStyles(theme => ({
     container: {
@@ -54,20 +54,39 @@ const useStyles = makeStyles(theme => ({
 
 export default function DisplayBurden(props) {
     const data = props.data;
-    
+
     function calculateEffort() {
-        if (data){
-            let jackCount = 0;
-            for (let i = 0; i < data.length; i++){
-                if (data[i].user === '5e698b195dabe06755978529') {
-                    jackCount++;
+        let jackCount = 0;
+        let totalCount = 0;
+        if (props.effortType === 'Overall Effort') {
+            let dataArray = [props.sleepData, props.eatData, props.poopData];
+            for (let g = 0; g < dataArray.length; g++) {
+                for (let i = 0; i < dataArray[g].length; i++) {
+                    console.log(dataArray[g][i].user);
+                    if (dataArray[g][i].user) {
+                        totalCount++;
+                    }
+                    if (dataArray[g][i].user === '5e698b195dabe06755978529') {
+                        jackCount++;
+                    }
                 }
             }
-            let jackEff = (jackCount/data.length)*100;
+            let jackEff = (jackCount / totalCount) * 100;
             let ashEff = 100 - jackEff;
             return [ashEff.toFixed(2), jackEff.toFixed(2)];
         } else {
-            return [0, 0]; 
+            if (data) {
+                for (let i = 0; i < data.length; i++) {
+                    if (data[i].user === '5e698b195dabe06755978529') {
+                        jackCount++;
+                    }
+                }
+                let jackEff = (jackCount / data.length) * 100;
+                let ashEff = 100 - jackEff;
+                return [ashEff.toFixed(2), jackEff.toFixed(2)];
+            } else {
+                return [0, 0];
+            }
         }
     }
 
@@ -82,24 +101,24 @@ export default function DisplayBurden(props) {
         datasets: [{
             data: [ashEffort, jackEffort],
             backgroundColor: [
-            '#FF6384',
-            '#36A2EB',
+                '#FF6384',
+                '#36A2EB',
             ],
             hoverBackgroundColor: [
-            '#FF6384',
-            '#36A2EB',
+                '#FF6384',
+                '#36A2EB',
             ]
         }]
     };
 
 
-return (
-    <>
-        <Paper elevation={3} className={classes.container}>
-            <Typography className={classes.heading}>{props.effortType}</Typography>
-            <Pie data={pieData}/>
-        </Paper>
-    </>
-)
+    return (
+        <>
+            <Paper elevation={3} className={classes.container}>
+                <Typography className={classes.heading}>{props.effortType}</Typography>
+                <Pie data={pieData} />
+            </Paper>
+        </>
+    )
 
 }

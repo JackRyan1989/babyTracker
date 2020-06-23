@@ -33,14 +33,13 @@ export default function EffortContainer(props) {
                 })
                 .catch((err) => err);
             setDataAdded(false);
-            //setData([sleepData, eatData, poopData]);
         }
     }, [dataAdded]);
 
     return (
         <Grid container>
-            {data ?
-                <Grid item xs={12}><DisplayBurden data={data} effortType={`Overall Effort`} /></Grid>
+            {sleepData && eatData && poopData ?
+                <Grid item xs={12}><DisplayBurden sleepData={sleepData} eatData={eatData} poopData={poopData} effortType={`Overall Effort`} /></Grid>
                 : <Grid item xs={12} sm={12} md={6} lg={6}><Typography>No Overall Effort Available</Typography></Grid>
             }
             {sleepData ?
