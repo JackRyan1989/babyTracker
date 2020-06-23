@@ -48,13 +48,19 @@ export default function DownloadButton(props) {
             let userRow = [];
             let sleepRow = [];
             let timeRow = [];
+            let moveUserRow = [];
+            let moveTimeRow = [];
+            let eatUserRow =[];
+            let eatTimeRow = [];
+            let eatWhatRow  = [];
+            let diaperUserRow = [];
+            let diaperTimeRow = [];
+            let diaperWasteRow = [];
             sleepData.forEach(function (row) {
                 userRow.push(row.user);
                 sleepRow.push(row.sleep);
                 timeRow.push(`${row.timeStamp.date} ${row.timeStamp.month} ${row.timeStamp.time} ${row.timeStamp.year}`)
             })
-            let moveUserRow = [];
-            let moveTimeRow = [];
             movementData.forEach(function (row) {
                 moveUserRow.push(row.user)
                 moveTimeRow.push(`${row.timeStamp.date} ${row.timeStamp.month} ${row.timeStamp.time} ${row.timeStamp.year}`)

@@ -71,6 +71,11 @@ export default function EatButton(props) {
           label="Right Boob"
           className={styles.formItem}
         />
+        <FormControlLabel
+          control={<Checkbox checked={props.bottle} onChange={props.onChange} name="bottle" />}
+          label="Bottle"
+          className={styles.formItem}
+        />
       </FormGroup>
       <Button className={styles.sendButton} onClick={() => props.submitData()}>Send Data</Button>
       {props.dataSent && !props.duplicate ? <Typography className={styles.sentText}>Data saved!</Typography> : null}

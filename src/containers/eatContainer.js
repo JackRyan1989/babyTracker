@@ -48,6 +48,7 @@ class EatContainer extends Component {
             duplicate: false,
             leftBoob: false,
             rightBoob: false,
+            bottle: false,
             app: this.props.app,
         }
     };
@@ -77,11 +78,15 @@ class EatContainer extends Component {
         const eatCollection = mongodb.db("baldyData").collection("eat");
         let leftBoob;
         let rightBoob;
+        let bottle;
         if (this.state.leftBoob) {
             leftBoob = 'left';
         }
         if (this.state.rightBoob) {
             rightBoob = 'right';
+        }
+        if (this.state.bottle) {
+            bottle = 'bottle';
         }
         if (this.state.dataSent === false) {
             const userID = this.props.location.user;
@@ -93,7 +98,7 @@ class EatContainer extends Component {
                 user: userID,
                 date: date,
                 time: time,
-                boob: [leftBoob, rightBoob],
+                boob: [leftBoob, rightBoob, bottle],
             }
             )
                 .catch(console.error);
@@ -101,6 +106,7 @@ class EatContainer extends Component {
                 dataSent: true,
                 leftBoob: false,
                 rightBoob: false,
+                bottle: false,
             });
             this.grabData();
             this.timer = setTimeout(() => {
@@ -123,7 +129,7 @@ class EatContainer extends Component {
     render() {
         return (
             <>
-                <EatButton onChange={this.buttonClicked} submitData={this.submitBoobData} duplicate={this.state.duplicate} leftBoob={this.state.leftBoob} rightBoob={this.state.rightBoob} dataSent={this.state.dataSent} />
+                <EatButton onChange={this.buttonClicked} submitData={this.submitBoobData} duplicate={this.state.duplicate} leftBoob={this.state.leftBoob} rightBoob={this.state.rightBoob} bottle={this.state.bottle} dataSent={this.state.dataSent} />
                 {this.state.feedingTimes ? <EatLog data={this.state.feedingTimes} /> : <Typography>Loading...</Typography>}
             </>
         )
