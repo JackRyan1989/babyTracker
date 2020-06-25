@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import download from 'downloadjs';
 import GetAppIcon from '@material-ui/icons/GetApp';
 import { RemoteMongoClient } from "mongodb-stitch-browser-sdk";
@@ -16,57 +16,60 @@ export default function DownloadButton(props) {
         const movementCollection = mongodb.db("baldyData").collection("movementData");
         const poopCollection = mongodb.db("baldyData").collection("diaper");
         const eatCollection = mongodb.db("baldyData").collection("eat");
-        const options = { 'sort': { "current_date": -1 }, };
-        sleepCollection.find({}, options).toArray()
+        sleepCollection.find({}).toArray()
             .then((res) => {
                 setSleep(res)
             })
             .catch((err) => err);
-        movementCollection.find({}, options).toArray()
-        .then((res) => {
-            setMove(res)
-        })
-        .catch((err) => err);
-        poopCollection.find({}, options).toArray()
+        movementCollection.find({}).toArray()
+            .then((res) => {
+                setMove(res)
+            })
+            .catch((err) => err);
+        poopCollection.find({}).toArray()
             .then((res) => {
                 setPoop(res)
             })
             .catch((err) => err);
-        eatCollection.find({}, options).toArray()
-        .then((res) => {
-            setEat(res)
-        })
-        .catch((err) => err);
+        eatCollection.find({}).toArray()
+            .then((res) => {
+                setEat(res)
+            })
+            .catch((err) => err);
     }
 
     useEffect(() => {
         grabData();
     }, [])
 
+    const makeDataArr = (data) => {
+        let newArr  = [];
+        data.forEach((row) => {
+                for (let key in row) {
+                    if (row.hasOwnProperty(key)) {
+                        if (key === 'timeStamp') {
+                            for (let k in row[key]) {
+                                newArr.push(row[key][k]);
+                            }
+                        } else {
+                            newArr.push(row[key]);
+                        }
+                    }
+                }
+            })
+        return newArr;
+    }
+
     const downloadFile = () => {
         if (sleepData && movementData && eatData && poopData) {
-            let userRow = [];
-            let sleepRow = [];
-            let timeRow = [];
-            let moveUserRow = [];
-            let moveTimeRow = [];
-            let eatUserRow =[];
-            let eatTimeRow = [];
-            let eatWhatRow  = [];
-            let diaperUserRow = [];
-            let diaperTimeRow = [];
-            let diaperWasteRow = [];
-            sleepData.forEach(function (row) {
-                userRow.push(row.user);
-                sleepRow.push(row.sleep);
-                timeRow.push(`${row.timeStamp.date} ${row.timeStamp.month} ${row.timeStamp.time} ${row.timeStamp.year}`)
-            })
-            movementData.forEach(function (row) {
-                moveUserRow.push(row.user)
-                moveTimeRow.push(`${row.timeStamp.date} ${row.timeStamp.month} ${row.timeStamp.time} ${row.timeStamp.year}`)
-            })
-            let dataArray = [userRow, ['X'], sleepRow, ['XX'], timeRow, ['XXX'], moveUserRow, ['XXXX'], moveTimeRow]
-            let csvContent = "data:text/csv;charset=utf-8," + dataArray.map(e => e.join(", \n"));
+            let dataArray = [sleepData, movementData, eatData, poopData];
+            let newDataArray = [];
+            let spacer = 'xxxx';
+            for (let i = 0; i < dataArray.length; i++) {
+                let item = makeDataArr(dataArray[i]);
+                newDataArray.push(item, spacer);
+            }
+            let csvContent = "data:text/csv;charset=utf-8," + newDataArray;
 
             download(csvContent, "dezzySleepData.csv", 'csv');
         } else {
@@ -76,7 +79,7 @@ export default function DownloadButton(props) {
     }
 
     return (
-            <div onClick={() => downloadFile()}><GetAppIcon/></div>
+        <div onClick={() => downloadFile()}><GetAppIcon /></div>
     )
 
 }
