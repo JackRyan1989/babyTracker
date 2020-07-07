@@ -30,5 +30,4 @@ Added a tracker for Ash's blood pressure, when we feed him/change his diaper, an
 
 Anyway, here's some pics.
 
-![Imgur](https://media.giphy.com/media/H6WXQ50N2Ulb1toDF0/giphy.gif)  ![Imgur](https://i.imgur.com/1n0iCSw.png?1) 
-![Imgur](https://i.imgur.com/NIOMOfD.png?1)  ![Imgur](https://i.imgur.com/Z39gRhF.png)
+![Imgur](https://media.giphy.com/media/l1Zl9N5kqsDb3yWKYS/giphy.gif) 
