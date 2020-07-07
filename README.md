@@ -24,7 +24,11 @@ The basic Python scripts for importing the .csv, cleaning the data and performin
 
 I still need to figure out the best way to determine when his sleep patterns become regular. Like, I need to define 'regular' and find an appropriate statistical formula to implement to determine this.
 
+Update 7/6/2020
+
+Added a tracker for Ash's blood pressure, when we feed him/change his diaper, and a contraction timer along with revised effort graphs. I think I'm pretty happy with how it functions right now. It's totally usable, fairly reactive, and doesn't crash (much). Once we have some data I'll get back to Python.
+
 Anyway, here's some pics.
 
-![Imgur](https://i.imgur.com/ciHPbgY.png?1)  ![Imgur](https://i.imgur.com/1n0iCSw.png?1) 
+![Imgur](https://giphy.com/gifs/H6WXQ50N2Ulb1toDF0)  ![Imgur](https://i.imgur.com/1n0iCSw.png?1) 
 ![Imgur](https://i.imgur.com/NIOMOfD.png?1)  ![Imgur](https://i.imgur.com/Z39gRhF.png)
