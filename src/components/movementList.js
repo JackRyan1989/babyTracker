@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 
 const useStyles = makeStyles(theme => ({
     container: {
+        display: 'grid',
+        placeItems: 'center',
         backgroundColor: '#eceff1',
         padding: '5px',
         border: 'none',
@@ -36,9 +39,9 @@ const useStyles = makeStyles(theme => ({
         },
     },
     Mond: {
+        width: '100%',
         color: '#110F2B',
         textAlign: 'center',
-        padding: '0.5%',
         [theme.breakpoints.down('sm')]: {
             fontSize: '.75em',
         },
@@ -50,9 +53,9 @@ const useStyles = makeStyles(theme => ({
         },
     },
     Tues: {
+        width: '100%',
         color: '#231F59',
         textAlign: 'center',
-        padding: '0.5%',
         [theme.breakpoints.down('sm')]: {
             fontSize: '.75em',
         },
@@ -64,9 +67,9 @@ const useStyles = makeStyles(theme => ({
         },
     },
     Wedn: {
+        width: '100%',
         color: '#352F87',
         textAlign: 'center',
-        padding: '0.5%',
         [theme.breakpoints.down('sm')]: {
             fontSize: '.75em',
         },
@@ -78,9 +81,9 @@ const useStyles = makeStyles(theme => ({
         },
     },
     Thur: {
+        width: '100%',
         color: '#473FB6',
         textAlign: 'center',
-        padding: '0.5%',
         [theme.breakpoints.down('sm')]: {
             fontSize: '.75em',
         },
@@ -92,9 +95,9 @@ const useStyles = makeStyles(theme => ({
         },
     },
     Frid: {
+        width: '100%',
         color: '#6358FB',
         textAlign: 'center',
-        padding: '0.5%',
         [theme.breakpoints.down('sm')]: {
             fontSize: '.75em',
         },
@@ -106,9 +109,9 @@ const useStyles = makeStyles(theme => ({
         },
     },
     Satu: {
+        width: '100%',
         color: '#1A1742',
         textAlign: 'center',
-        padding: '0.5%',
         [theme.breakpoints.down('sm')]: {
             fontSize: '.75em',
         },
@@ -120,9 +123,9 @@ const useStyles = makeStyles(theme => ({
         },
     },
     Sund: {
+        width: '100%',
         color: '#5147CD',
         textAlign: 'center',
-        padding: '0.5%',
         [theme.breakpoints.down('sm')]: {
             fontSize: '.75em',
         },
@@ -132,20 +135,42 @@ const useStyles = makeStyles(theme => ({
         [theme.breakpoints.up('lg')]: {
             fontSize: '1.15em',
         },
-    }
+    },
 }));
 
 export default function MovementListing(props) {
     const movementData = props.movementData;
+    const recentData = movementData.slice(movementData.length - 10);
+    const [data, setData] = useState(recentData);
+    const [showAll, setShow] = useState(false);
     const classes = useStyles();
 
+    const toggleData = () => {
+        setShow(!showAll);
+    }
+
+    useEffect(() => {
+        if (showAll) {
+            setData(movementData);
+        } else {
+            setData(recentData);
+        }
+    }, [showAll])
+    
     return (
         <Paper elevation={3} className={classes.container}>
                 <Typography className={classes.heading}>Movement List</Typography>
-                {movementData ? movementData.map(function(item){
+                <Button variant="contained" disableElevation size="small" className={classes.showButton} onClick={()=> toggleData()}>{showAll ? "Hide" : "Show All Data"}</Button>
+                {movementData ? data.map(function(item){
                     let day = item.timeStamp.date.substring(0, 4);
-                    return <div><Typography className={classes[day]}>{item.timeStamp.time}, {item.timeStamp.date} {item.timeStamp.month} {item.timeStamp.year} </Typography></div>
-                }) : <Typography>Loading...</Typography>} 
+                    return (
+                        <div>
+                            <Typography className={classes[day]}>{item.timeStamp.time}, {item.timeStamp.date} {item.timeStamp.month} {item.timeStamp.year} </Typography>
+                        </div>
+
+                    )
+                })
+                : <Typography>Loading...</Typography>} 
         </Paper>
     )
 
