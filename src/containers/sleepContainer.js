@@ -136,10 +136,7 @@ export default function SleepContainer(props) {
             year: moment().format('YYYY'),
             time: moment().format('h:mm:ss a'),
         };
-        if (sleep === 'true' && lastItem.sleep === 'true') {
-            setAsleepAlert(true);
-            setDialog(true);
-        } else {
+        if ((sleep === 'true' && lastItem === undefined) || (sleep === 'false') || (sleep === 'true' && lastItem.sleep === 'false')) {
             data.insertOne({
                 sleep: sleep,
                 timeStamp: now,
@@ -150,7 +147,10 @@ export default function SleepContainer(props) {
             setSleep(undefined);
             setWake(undefined);
             setAsleepAlert(false);
-        }
+        } else if (sleep === 'true' && lastItem.sleep === 'true') {
+            setAsleepAlert(true);
+            setDialog(true);
+        };
     };
 
 
