@@ -10,29 +10,33 @@ import { useTheme } from '@material-ui/core/styles';
 import moment from 'moment';
 
 export default function DataAddedDialog(props) {
-    const [open, setOpen] = useState(false);
-    const theme = useTheme();
-    const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
-    const dataType = props.dataType;
+  const [open, setOpen] = useState(false);
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const dataType = props.dataType;
+  const asleepAlert = props.asleepAlert;
+  console.log(asleepAlert);
 
-    useEffect(() =>{
-        setOpen(props.openDialog);
-    }, [props.openDialog]);
-  
-    let thisMoment = moment().format('MMMM Do YYYY, h:mm:ss a');
+  useEffect(() => {
+    setOpen(props.openDialog);
+  }, [props.openDialog]);
 
-    return (
-        <div>
-          <Dialog
-            fullScreen={fullScreen}
-            open={open}
-            onClose={props.handleClose}
-            aria-labelledby="responsive-dialog-title"
-          >
-            <DialogTitle id="responsive-dialog-title">{"Data Added!"}</DialogTitle>
+  let thisMoment = moment().format('MMMM Do YYYY, h:mm:ss a');
+
+  return (
+    <div>
+      <Dialog
+        fullScreen={fullScreen}
+        open={open}
+        onClose={props.handleClose}
+        aria-labelledby="Data added dialog alert"
+      >
+        {asleepAlert ?
+          <>
+            <DialogTitle id="Data added dialog alert">{"Ezra is asleep!"}</DialogTitle>
             <DialogContent>
               <DialogContentText>
-                Baldy {dataType} at {thisMoment}.
+                Ezra is already asleep!.
               </DialogContentText>
             </DialogContent>
             <DialogActions>
@@ -40,7 +44,23 @@ export default function DataAddedDialog(props) {
                 Close!
               </Button>
             </DialogActions>
-          </Dialog>
-        </div>
-      );
-    }
+          </>
+          :
+          <>
+          <DialogTitle id="Data added dialog alert">{"Data Added!"}</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Ezra {dataType} at {thisMoment}.
+              </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button autoFocus onClick={props.handleClose} color="primary">
+              Close!
+              </Button>
+          </DialogActions>
+          </>
+        }
+      </Dialog>
+    </div>
+  );
+}

@@ -90,8 +90,10 @@ export default function SleepContainer(props) {
     (now <= 6 || now >= 20) ? classes = nightStyles() : classes = dayStyles();
     const [sleepData, setSleep] = useState(undefined);
     const [wakeData, setWake] = useState(undefined);
+    const [allData, setData] = useState(undefined);
     const [dispDialog, setDialog] = useState(false);
     const [dataAdded, setDataAdded] = useState(true);
+    const [asleepAlert, setAsleepAlert] = useState(false);
     const app = props.app;
 
     useEffect(() => {
@@ -101,6 +103,10 @@ export default function SleepContainer(props) {
             const sleepQuery = { "sleep": 'true' };
             const mongodb = app.getServiceClient(RemoteMongoClient.factory, "mongodb-atlas");
             const sleepCollection = mongodb.db("baldyData").collection("sleepData");
+            sleepCollection.find({}, options).toArray()
+                .then((data)=>{
+                    setData(data);
+                })
             sleepCollection.find(sleepQuery, options).toArray()
                 .then((data) => {
                     setSleep(data);
@@ -120,6 +126,7 @@ export default function SleepContainer(props) {
     };
 
     const timeStamp = (sleep) => {
+        let lastItem = allData.pop();
         const mongodb = props.location.mongodbClient;
         const data = mongodb.db("baldyData").collection('sleepData');
         const userID = props.location.user;
@@ -129,15 +136,21 @@ export default function SleepContainer(props) {
             year: moment().format('YYYY'),
             time: moment().format('h:mm:ss a'),
         };
-        data.insertOne({
-            sleep: sleep,
-            timeStamp: now,
-            user: userID
-        }).catch(console.error);
-        setDialog(true);
-        setDataAdded(true);
-        setSleep(undefined);
-        setWake(undefined);
+        if (sleep === 'true' && lastItem.sleep === 'true') {
+            setAsleepAlert(true);
+            setDialog(true);
+        } else {
+            data.insertOne({
+                sleep: sleep,
+                timeStamp: now,
+                user: userID
+            }).catch(console.error);
+            setDialog(true);
+            setDataAdded(true);
+            setSleep(undefined);
+            setWake(undefined);
+            setAsleepAlert(false);
+        }
     };
 
 
@@ -150,7 +163,7 @@ export default function SleepContainer(props) {
                 ><NightsStayIcon className={classes.sleep} />
                 </Button>
                 <Typography className={classes.text}>{props.buttonType}</Typography>
-                <DataAddedDialog openDialog={dispDialog} handleClose={() => handleClose()} dataType={props.buttonType} />
+                <DataAddedDialog openDialog={dispDialog} handleClose={() => handleClose()} dataType={props.buttonType} asleepAlert={asleepAlert} />
             </Grid>
             <Grid item xs={6}>
                 <Button
@@ -158,12 +171,12 @@ export default function SleepContainer(props) {
                 ><AlarmAddRoundedIcon className={classes.wake} />
                 </Button>
                 <Typography className={classes.text}>{props.buttonType}</Typography>
-                <DataAddedDialog openDialog={dispDialog} handleClose={() => handleClose()} />
+                <DataAddedDialog openDialog={dispDialog} handleClose={() => handleClose()} asleepAlert={asleepAlert}/>
             </Grid>
             {(sleepData && wakeData) ?
                 <>
                     <Grid item xs={12}><SleepWakeGraph sleepData={sleepData} app={app} /></Grid>
-                    <Grid item xs={12}><SleepGraph sleepData={sleepData} wakeData={wakeData} app={app} /></Grid>
+                    <Grid item xs={12}><SleepGraph sleepData={sleepData} wakeData={wakeData} data={allData} app={app} /></Grid>
                 </>
                 :
                 <>

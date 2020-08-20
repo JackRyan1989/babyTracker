@@ -41,17 +41,25 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function SleepGraph(props) {
-    const sleepData = props.sleepData;
-    const wakeData = props.wakeData;
+    const allData = props.data;
     const [complete, setComplete] = useState(false);
     const [data, setData] = useState(undefined);
     const app = props.app;
     
     function calculateDuration() {
-        if (sleepData && wakeData && ! complete){
+        if (allData && ! complete){
             let hours = [];
             let days = [];
+            let sleepData = [];
+            let wakeData = [];
             let length;
+            for (let i = 0; i < allData.length; i++) {
+                if (allData[i].sleep === "true") {
+                    sleepData.push(allData[i])
+                } else {
+                    wakeData.push(allData[i]);
+                }
+            };
             if (sleepData.length !== wakeData.length) {
                 sleepData.length < wakeData.length ? length = sleepData.length : length = wakeData.length;
             } else {
@@ -113,7 +121,7 @@ export default function SleepGraph(props) {
         return (
             <Paper elevation={3} className={classes.container}>
                 <Typography className={classes.heading}>Sleep Timeline</Typography>
-                {sleepData && wakeData ? <Line data={data}/> :<Typography>Loading...</Typography>}
+                {allData ? <Line data={data}/> :<Typography>Loading...</Typography>}
             </Paper>
         );
 }
