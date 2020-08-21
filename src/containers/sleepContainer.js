@@ -126,7 +126,7 @@ export default function SleepContainer(props) {
     };
 
     const timeStamp = (sleep) => {
-        let lastItem = allData.pop();
+        let lastItem = allData[allData.length - 1];
         const mongodb = props.location.mongodbClient;
         const data = mongodb.db("baldyData").collection('sleepData');
         const userID = props.location.user;
@@ -136,7 +136,7 @@ export default function SleepContainer(props) {
             year: moment().format('YYYY'),
             time: moment().format('h:mm:ss a'),
         };
-        if ((sleep === 'true' && lastItem === undefined) || (sleep === 'false') || (sleep === 'true' && lastItem.sleep === 'false')) {
+        if ((sleep === 'true' && lastItem === undefined) || (sleep !== lastItem.sleep)) {
             data.insertOne({
                 sleep: sleep,
                 timeStamp: now,
@@ -147,7 +147,7 @@ export default function SleepContainer(props) {
             setSleep(undefined);
             setWake(undefined);
             setAsleepAlert(false);
-        } else if (sleep === 'true' && lastItem.sleep === 'true') {
+        } else if (sleep === lastItem.sleep) {
             setAsleepAlert(true);
             setDialog(true);
         };
@@ -163,7 +163,7 @@ export default function SleepContainer(props) {
                 ><NightsStayIcon className={classes.sleep} />
                 </Button>
                 <Typography className={classes.text}>{props.buttonType}</Typography>
-                <DataAddedDialog openDialog={dispDialog} handleClose={() => handleClose()} dataType={props.buttonType} asleepAlert={asleepAlert} />
+                <DataAddedDialog openDialog={dispDialog} handleClose={() => handleClose()} dataType={props.buttonType} asleepAlert={asleepAlert} message={"Ezra needs to wake up or go to sleep!"} />
             </Grid>
             <Grid item xs={6}>
                 <Button
@@ -171,7 +171,7 @@ export default function SleepContainer(props) {
                 ><AlarmAddRoundedIcon className={classes.wake} />
                 </Button>
                 <Typography className={classes.text}>{props.buttonType}</Typography>
-                <DataAddedDialog openDialog={dispDialog} handleClose={() => handleClose()} asleepAlert={asleepAlert}/>
+                <DataAddedDialog openDialog={dispDialog} handleClose={() => handleClose()} dataType={props.buttonType} asleepAlert={asleepAlert} message={"Ezra needs to wake up or go to sleep!"}/>
             </Grid>
             {(sleepData && wakeData) ?
                 <>

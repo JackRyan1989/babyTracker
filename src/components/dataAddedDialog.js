@@ -15,7 +15,6 @@ export default function DataAddedDialog(props) {
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const dataType = props.dataType;
   const asleepAlert = props.asleepAlert;
-  console.log(asleepAlert);
 
   useEffect(() => {
     setOpen(props.openDialog);
@@ -33,10 +32,10 @@ export default function DataAddedDialog(props) {
       >
         {asleepAlert ?
           <>
-            <DialogTitle id="Data added dialog alert">{"Ezra is asleep!"}</DialogTitle>
+            <DialogTitle id="Data added dialog alert">Data already added!</DialogTitle>
             <DialogContent>
               <DialogContentText>
-                Ezra is already asleep!.
+              {props.message} 
               </DialogContentText>
             </DialogContent>
             <DialogActions>
