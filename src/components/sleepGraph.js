@@ -73,7 +73,7 @@ export default function SleepGraph(props) {
                 let dur = (moment
                     .duration(moment(endTime, 'h:mm:ss a')
                     .diff(moment(startTime, 'h:mm:ss a')))
-                    .asMinutes());
+                    .asHours());
                 hours.push(dur);
             }
             const graphData = {

@@ -104,7 +104,7 @@ export default function SleepContainer(props) {
             const mongodb = app.getServiceClient(RemoteMongoClient.factory, "mongodb-atlas");
             const sleepCollection = mongodb.db("baldyData").collection("sleepData");
             sleepCollection.find({}, options).toArray()
-                .then((data)=>{
+                .then((data) => {
                     setData(data);
                 })
             sleepCollection.find(sleepQuery, options).toArray()
@@ -156,32 +156,38 @@ export default function SleepContainer(props) {
 
 
     return (
-        <Grid container>
-            <Grid item xs={6}>
-                <Button
-                    onClick={() => timeStamp('true')}
-                ><NightsStayIcon className={classes.sleep} />
-                </Button>
-                <Typography className={classes.text}>{props.buttonType}</Typography>
-                <DataAddedDialog openDialog={dispDialog} handleClose={() => handleClose()} dataType={props.buttonType} asleepAlert={asleepAlert} message={"Ezra needs to wake up or go to sleep!"} />
+        <>
+            {allData ?
+                allData[allData.length - 1].sleep ? <Typography>Ezra is asleep.</Typography> : <Typography>Ezra is awake.</Typography> :
+                <Typography>...</Typography>
+            }
+            <Grid container>
+                <Grid item xs={6}>
+                    <Button
+                        onClick={() => timeStamp('true')}
+                    ><NightsStayIcon className={classes.sleep} />
+                    </Button>
+                    <Typography className={classes.text}>{props.buttonType}</Typography>
+                    <DataAddedDialog openDialog={dispDialog} handleClose={() => handleClose()} dataType={props.buttonType} asleepAlert={asleepAlert} message={"Ezra needs to wake up or go to sleep!"} />
+                </Grid>
+                <Grid item xs={6}>
+                    <Button
+                        onClick={() => timeStamp('false')}
+                    ><AlarmAddRoundedIcon className={classes.wake} />
+                    </Button>
+                    <Typography className={classes.text}>{props.buttonType}</Typography>
+                    <DataAddedDialog openDialog={dispDialog} handleClose={() => handleClose()} dataType={props.buttonType} asleepAlert={asleepAlert} message={"Ezra needs to wake up or go to sleep!"} />
+                </Grid>
+                {(sleepData && wakeData) ?
+                    <>
+                        <Grid item xs={12}><SleepWakeGraph sleepData={sleepData} app={app} /></Grid>
+                        <Grid item xs={12}><SleepGraph sleepData={sleepData} wakeData={wakeData} data={allData} app={app} /></Grid>
+                    </>
+                    :
+                    <>
+                        <Grid item xs={12} sm={12} md={6} lg={6}><Typography>Loading...</Typography></Grid>
+                    </>}
             </Grid>
-            <Grid item xs={6}>
-                <Button
-                    onClick={() => timeStamp('false')}
-                ><AlarmAddRoundedIcon className={classes.wake} />
-                </Button>
-                <Typography className={classes.text}>{props.buttonType}</Typography>
-                <DataAddedDialog openDialog={dispDialog} handleClose={() => handleClose()} dataType={props.buttonType} asleepAlert={asleepAlert} message={"Ezra needs to wake up or go to sleep!"}/>
-            </Grid>
-            {(sleepData && wakeData) ?
-                <>
-                    <Grid item xs={12}><SleepWakeGraph sleepData={sleepData} app={app} /></Grid>
-                    <Grid item xs={12}><SleepGraph sleepData={sleepData} wakeData={wakeData} data={allData} app={app} /></Grid>
-                </>
-                :
-                <>
-                    <Grid item xs={12} sm={12} md={6} lg={6}><Typography>Loading...</Typography></Grid>
-                </>}
-        </Grid>
+        </>
     )
 };
