@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "9bd48b225a4ca136a2f5678d48efb65d",
+    "revision": "3ea3ecf76751851ec408150689b59a45",
     "url": "/babyTracker/index.html"
   },
   {
-    "revision": "e56b2202a7843b6730c0",
+    "revision": "1a2ef8b46428f8b63f4d",
     "url": "/babyTracker/static/css/main.5ecd60fb.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/babyTracker/static/js/2.db153d7f.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "e56b2202a7843b6730c0",
-    "url": "/babyTracker/static/js/main.2e21e211.chunk.js"
+    "revision": "1a2ef8b46428f8b63f4d",
+    "url": "/babyTracker/static/js/main.3aecd649.chunk.js"
   },
   {
     "revision": "d9c71700a2de10ad40f1",
