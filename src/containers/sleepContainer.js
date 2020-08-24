@@ -158,7 +158,7 @@ export default function SleepContainer(props) {
     return (
         <>
             {allData ?
-                allData[allData.length - 1].sleep ? <Typography>Ezra is asleep.</Typography> : <Typography>Ezra is awake.</Typography> :
+                allData[allData.length - 1].sleep === "true" ? <Typography>Ezra is asleep.</Typography> : <Typography>Ezra is awake.</Typography> :
                 <Typography>...</Typography>
             }
             <Grid container>
