@@ -69,12 +69,19 @@ export default function SleepGraph(props) {
                 let day = `${sleepData[i].timeStamp.month}, ${sleepData[i].timeStamp.date}` 
                 days.push(day)
                 let startTime = sleepData[i].timeStamp.time;
+                console.log(startTime);
                 let endTime = wakeData[i].timeStamp.time;
+                console.log(endTime);
                 let dur = (moment
                     .duration(moment(endTime, 'h:mm:ss a')
                     .diff(moment(startTime, 'h:mm:ss a')))
                     .asHours());
-                hours.push(dur);
+                if (dur < 0) {
+                    let newDur = dur + 24;
+                    hours.push(newDur)
+                } else {
+                    hours.push(dur);
+                }
             }
             const graphData = {
                 labels: days,
